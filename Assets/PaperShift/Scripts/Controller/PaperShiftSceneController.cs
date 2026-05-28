@@ -1,6 +1,7 @@
 using PaperShift.Model;
 using PaperShift.Presenter;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PaperShift.Controller
 {
@@ -26,6 +27,8 @@ namespace PaperShift.Controller
 
         public void ShowScreen(PaperShiftScreen screen)
         {
+            PaperShiftScreenView activeView = null;
+
             foreach (var view in ScreenViews)
             {
                 if (view == null)
@@ -33,8 +36,36 @@ namespace PaperShift.Controller
                     continue;
                 }
 
-                view.gameObject.SetActive(view.Screen == screen);
+                var isActive = view.Screen == screen;
+                view.gameObject.SetActive(isActive);
+                if (isActive)
+                {
+                    activeView = view;
+                }
             }
+
+            if (activeView != null)
+            {
+                ResetScrollRects(activeView.transform);
+            }
+        }
+
+        private static void ResetScrollRects(Transform root)
+        {
+            Canvas.ForceUpdateCanvases();
+
+            foreach (var scroll in root.GetComponentsInChildren<ScrollRect>(true))
+            {
+                scroll.StopMovement();
+                scroll.verticalNormalizedPosition = 1f;
+                scroll.horizontalNormalizedPosition = 0f;
+                if (scroll.content != null)
+                {
+                    scroll.content.anchoredPosition = Vector2.zero;
+                }
+            }
+
+            Canvas.ForceUpdateCanvases();
         }
     }
 }

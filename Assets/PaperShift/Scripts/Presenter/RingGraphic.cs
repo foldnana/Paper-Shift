@@ -24,6 +24,16 @@ namespace PaperShift.Presenter
             }
         }
 
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            thickness = Mathf.Clamp(thickness, 4f, 40f);
+            accentStartDegrees = Mathf.Clamp(accentStartDegrees, 0f, 360f);
+            accentDegrees = Mathf.Clamp(accentDegrees, 0f, 360f);
+            segments = Mathf.Clamp(segments, 24, 128);
+            SetVerticesDirty();
+        }
+
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();

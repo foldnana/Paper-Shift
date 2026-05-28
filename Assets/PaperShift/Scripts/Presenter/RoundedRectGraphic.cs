@@ -20,6 +20,14 @@ namespace PaperShift.Presenter
             }
         }
 
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            cornerRadius = Mathf.Max(0f, cornerRadius);
+            cornerSegments = Mathf.Clamp(cornerSegments, 1, 16);
+            SetVerticesDirty();
+        }
+
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();

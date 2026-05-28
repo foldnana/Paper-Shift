@@ -20,7 +20,6 @@ namespace PaperShift.Editor
         private const float Width = PaperShiftTheme.ReferenceWidth;
         private const float Height = PaperShiftTheme.ReferenceHeight;
         private const float PageWidth = 441f;
-        private const float MarginX = 62f;
         private const float TopPadding = 56f;
         private const float ContentTop = 110f;
         private const float WorkContentTop = 112f;
@@ -157,9 +156,6 @@ namespace PaperShift.Editor
 
             canvasObject.AddComponent<GraphicRaycaster>();
 
-            var root = CreateRect(canvasObject.transform, "Game Frame");
-            Stretch(root, 0f, 0f, 0f, 0f);
-
             return canvas;
         }
 
@@ -180,7 +176,7 @@ namespace PaperShift.Editor
         private static void BuildCreateScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_CreateLaborer", PaperShiftScreen.Create, PaperShiftTheme.PageBlue);
-            AddTopLine(view.transform, "创建劳动者", model.Worker.Coin, "‹", null);
+            AddTopLine(view.transform, "创建劳动者", model.Worker.Coin, "<", null);
 
             var scrollContent = CreateScroll(view.transform, "Create Scroll", ContentTop, FlowScrollHeight, PageWidth);
             var createCard = CreatePaperCard(scrollContent, "Create Worker Card", PageWidth, 926f, true);
@@ -260,7 +256,7 @@ namespace PaperShift.Editor
         private static void BuildTagsScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_SelectTags", PaperShiftScreen.Tags, PaperShiftTheme.PageBlue);
-            AddTopLine(view.transform, "选择李小满的标签", model.Worker.Coin, "⚙", null);
+            AddTopLine(view.transform, "选择李小满的标签", model.Worker.Coin, "...", null);
 
             var scrollContent = CreateScroll(view.transform, "Tags Scroll", ContentTop, 758f, PageWidth);
             var tagCard = CreatePaperCard(scrollContent, "Tag Choices Card", PageWidth, 758f, false);
@@ -271,10 +267,18 @@ namespace PaperShift.Editor
             layout.childControlHeight = true;
             layout.childControlWidth = true;
             layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = false;
 
+            var selectedCount = 0;
             foreach (var tag in model.AvailableTags)
             {
-                CreateTagChoiceRow(list, tag);
+                var selected = model.SelectedTags.Exists(candidate => candidate.Name == tag.Name);
+                if (selected)
+                {
+                    selectedCount++;
+                }
+
+                CreateTagChoiceRow(list, tag, selected);
             }
 
             var refreshArea = CreateRect(view.transform, "Refresh Area");
@@ -283,25 +287,24 @@ namespace PaperShift.Editor
             CreateButton(refreshArea, "Free Refresh", "免费刷新  1", -105f, 26f, 198f, 66f, PaperShiftTheme.White, PaperShiftTheme.Ink, null);
             CreateButton(refreshArea, "Super Refresh", "超级刷新\n时代变更，获得更好的标签!", 106f, 26f, 220f, 66f, PaperShiftTheme.Purple, Color.white, null, 16);
 
-            CreateButton(view.transform, "Confirm Tags Button", "请选择3个标签，0/3", 0f, 882f, PageWidth, 64f, PaperShiftTheme.GrayButton, PaperShiftTheme.Hex("#505050"), controller.ShowResume, 23, false);
+            CreateButton(view.transform, "Confirm Tags Button", "确认标签 " + selectedCount + "/3", 0f, 882f, PageWidth, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, controller.ShowResume);
         }
 
         private static void BuildResumeScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_EditResume", PaperShiftScreen.Resume, PaperShiftTheme.PageBlue);
-            AddTopLine(view.transform, "编辑简历", model.Worker.Coin, "‹", null);
+            AddTopLine(view.transform, "编辑简历", model.Worker.Coin, "<", null);
 
             var content = CreateScroll(view.transform, "Resume Scroll", ContentTop, FlowScrollHeight, PageWidth);
             var card = CreatePaperCard(content, "Resume Summary Card", PageWidth, 810f, false);
 
-            var ribbon = CreateRounded(card.transform, "Generation Ribbon", PaperShiftTheme.Blue, 4f);
-            AnchorTopLeft(ribbon, 90f, 32f, -4f, 0f);
-            ribbon.localEulerAngles = new Vector3(0f, 0f, -45f);
+            var ribbon = CreateRounded(card.transform, "Generation Badge", PaperShiftTheme.Blue, 10f);
+            AnchorTopLeft(ribbon, 64f, 28f, 24f, 26f);
             AddText(ribbon, "Label", "第1代", 14, Color.white, TextAnchor.MiddleCenter);
 
             var header = CreateRect(card.transform, "Header");
             AnchorTopLeft(header, PageWidth - 48f, 104f, 24f, 22f);
-            AddText(header, "Name", "李 小满\n<size=18>女 24 岁 现代城市</size>", 24, PaperShiftTheme.Ink, TextAnchor.MiddleLeft);
+            AddText(header, "Name", "李 小满\n<size=18>女 24 岁 现代城市</size>", 24, PaperShiftTheme.Ink, TextAnchor.MiddleLeft, new RectOffset(76, 0, 0, 0));
             CreateAvatarLock(header, new Vector2(322f, -6f), PortraitKind.Worker, false, 92f);
 
             var intent = CreateRounded(card.transform, "Resume Intent", PaperShiftTheme.White, 14f);
@@ -328,6 +331,7 @@ namespace PaperShift.Editor
             lineLayout.childControlHeight = true;
             lineLayout.childControlWidth = true;
             lineLayout.childForceExpandWidth = true;
+            lineLayout.childForceExpandHeight = false;
             foreach (var resumeLine in model.ResumeLines)
             {
                 CreateResumeLine(lineList, resumeLine);
@@ -356,18 +360,18 @@ namespace PaperShift.Editor
         private static void BuildJobSearchScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_JobSearch", PaperShiftScreen.JobSearch, PaperShiftTheme.PageBlue);
-            AddTopLine(view.transform, "求职", string.Empty, "⚙", controller.ShowNews, "!!\n新闻");
+            AddTopLine(view.transform, "求职", string.Empty, "...", controller.ShowNews, "!!\n新闻");
 
             var content = CreateScroll(view.transform, "Job Search Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "Self Candidate Card", model.JobSearchSelf, 386f, false, false);
             CreateCandidateCard(content, "Interview Job Card", model.JobOffer, 330f, true, false);
-            AddCalendarAndActions(view.transform, "2026", "5", "面试第2轮", controller.ShowInterviewFailure, "↻\n再投一家", controller.ShowJobSearch);
+            AddCalendarAndActions(view.transform, "2026", "5", "面试第2轮", controller.ShowInterviewFailure, "再投\n一家", controller.ShowJobSearch);
         }
 
         private static void BuildFailureScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_InterviewFailure", PaperShiftScreen.InterviewFailure, PaperShiftTheme.PageBlue);
-            AddTopLine(view.transform, "求职", string.Empty, "⚙", controller.ShowNews, "!!\n新闻");
+            AddTopLine(view.transform, "求职", string.Empty, "...", controller.ShowNews, "!!\n新闻");
 
             var content = CreateScroll(view.transform, "Failure Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "Failure Self Card", model.FailureSelf, 371f, false, false);
@@ -385,18 +389,18 @@ namespace PaperShift.Editor
         private static void BuildWorkScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_Work", PaperShiftScreen.Work, PaperShiftTheme.PagePurple);
-            AddTopLine(view.transform, "打工", string.Empty, "⚙", controller.ShowBudget, "预算\n分配");
+            AddTopLine(view.transform, "打工", string.Empty, "...", controller.ShowBudget, "预算\n分配");
 
             var content = CreateScroll(view.transform, "Work Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "Work Self Card", model.WorkSelf, 335f, false, false);
             CreateCandidateCard(content, "Current Job Card", model.WorkJob, 330f, true, false);
-            AddCalendarAndActions(view.transform, "2031", "6", "再干一月", controller.ShowWork, "￥\n分配", controller.ShowBudget);
+            AddCalendarAndActions(view.transform, "2031", "6", "再干一月", controller.ShowWork, "钱\n分配", controller.ShowBudget);
         }
 
         private static void BuildBudgetScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_Budget", PaperShiftScreen.Budget, PaperShiftTheme.PageBlue);
-            AddTopLine(view.transform, "工资分配", "12,600", "‹", null);
+            AddTopLine(view.transform, "工资分配", "12,600", "<", null);
 
             var content = CreateScroll(view.transform, "Budget Scroll", WorkContentTop, Height - WorkContentTop, PageWidth);
             var card = CreatePaperCard(content, "Budget Card", PageWidth, 795f, false);
@@ -419,6 +423,7 @@ namespace PaperShift.Editor
             barsLayout.childControlHeight = true;
             barsLayout.childControlWidth = true;
             barsLayout.childForceExpandWidth = true;
+            barsLayout.childForceExpandHeight = false;
             foreach (var item in model.Budget.Items)
             {
                 CreateBudgetSlider(bars, item);
@@ -444,9 +449,10 @@ namespace PaperShift.Editor
             notesLayout.childControlHeight = true;
             notesLayout.childControlWidth = true;
             notesLayout.childForceExpandWidth = true;
+            notesLayout.childForceExpandHeight = false;
             foreach (var note in model.Budget.Notes)
             {
-                CreateTagChoiceRow(notes, note, 64f, 120f);
+                CreateTagChoiceRow(notes, note, false, 64f, 120f);
             }
 
             CreateFlowButton(content, "Save Budget Button", "保存，下月开干", PaperShiftTheme.Blue, Color.white, controller.ShowWork);
@@ -455,12 +461,12 @@ namespace PaperShift.Editor
         private static void BuildNewsScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_NewsModal", PaperShiftScreen.News, PaperShiftTheme.PagePurple);
-            AddTopLine(view.transform, "打工", string.Empty, "⚙", null, "!!\n新闻");
+            AddTopLine(view.transform, "打工", string.Empty, "...", null, "!!\n新闻");
 
             var content = CreateScroll(view.transform, "News Background Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "News Self Card", model.NewsSelf, 335f, false, false);
             CreateCandidateCard(content, "News Job Card", model.NewsJob, 330f, false, false);
-            AddCalendarAndActions(view.transform, "2033", "4", "再干一月", controller.ShowWork, "￥\n分配", controller.ShowBudget);
+            AddCalendarAndActions(view.transform, "2033", "4", "再干一月", controller.ShowWork, "钱\n分配", controller.ShowBudget);
 
             var mask = CreateRounded(view.transform, "Modal Mask", PaperShiftTheme.Hex("#201a2a", 0.66f), 0f);
             Stretch(mask, 0f, 0f, 0f, 0f);
@@ -487,7 +493,7 @@ namespace PaperShift.Editor
         private static void BuildRetirementScreen(Transform canvasTransform, PaperShiftGameModel model)
         {
             var view = CreateScreen(canvasTransform, "Screen_Retirement", PaperShiftScreen.Retirement, PaperShiftTheme.PageBlue);
-            AddTopLine(view.transform, "退休结算", model.Retirement.Coin, "⚙", null);
+            AddTopLine(view.transform, "退休结算", model.Retirement.Coin, "...", null);
 
             var content = CreateScroll(view.transform, "Retirement Scroll", FamilyContentTop, Height - FamilyContentTop, PageWidth);
 
@@ -609,6 +615,7 @@ namespace PaperShift.Editor
             heirLayout.childControlHeight = true;
             heirLayout.childControlWidth = true;
             heirLayout.childForceExpandWidth = true;
+            heirLayout.childForceExpandHeight = false;
             foreach (var heir in model.Retirement.Heirs)
             {
                 CreateHeirRow(heirList, heir);
@@ -636,7 +643,7 @@ namespace PaperShift.Editor
             SetTop(line, PageWidth, 46f, 0f, TopPadding);
 
             var round = CreateButton(line, "Header Icon", icon, -200f, 3f, 40f, 40f, PaperShiftTheme.White, PaperShiftTheme.Hex("#505963"), null, 24, false);
-            round.name = icon == "‹" ? "Back Button" : "Settings Button";
+            round.name = icon == "<" ? "Back Button" : "Settings Button";
 
             AddText(line, "Title", title, 22, PaperShiftTheme.Hex("#273447"), TextAnchor.MiddleLeft, new RectOffset(52, 0, 0, 0));
 
@@ -685,15 +692,22 @@ namespace PaperShift.Editor
             AddText(row, "Edit", "✎", 21, PaperShiftTheme.Blue, TextAnchor.MiddleRight, new RectOffset(0, 12, 0, 0));
         }
 
-        private static RectTransform CreateTagChoiceRow(Transform parent, TagData tag, float height = 83f, float ticketColumnWidth = 154f)
+        private static RectTransform CreateTagChoiceRow(Transform parent, TagData tag, bool selected = false, float height = 83f, float ticketColumnWidth = 154f)
         {
-            var row = CreateRounded(parent, "Tag Row " + tag.Name, PaperShiftTheme.White, 10f);
+            var row = CreateRounded(parent, "Tag Row " + tag.Name, selected ? PaperShiftTheme.Hex("#e9f7ff") : PaperShiftTheme.White, 10f);
             row.gameObject.AddComponent<LayoutElement>().preferredHeight = height;
             row.gameObject.AddComponent<Button>().targetGraphic = row.gameObject.GetComponent<Graphic>();
+            if (selected)
+            {
+                AddOutline(row.gameObject, PaperShiftTheme.Blue, 2f);
+                var picked = CreateRounded(row, "Selected Badge", PaperShiftTheme.Blue, 9f);
+                AnchorTopRight(picked, 44f, 22f, 10f, 8f);
+                AddText(picked, "Text", "已选", 13, Color.white, TextAnchor.MiddleCenter);
+            }
 
             var ticketSlot = CreateRect(row, "Ticket Slot");
             AnchorTopLeft(ticketSlot, ticketColumnWidth, height, 14f, 0f);
-            CreateTicket(ticketSlot, tag.Name, tag.Rarity, true);
+            CreateTicket(ticketSlot, tag.Name, tag.Rarity, true, 20, 44f, true);
 
             var description = string.IsNullOrEmpty(tag.Description) ? tag.Name : tag.Description;
             AddText(row, "Description", description, 15, PaperShiftTheme.MutedInk, TextAnchor.MiddleLeft, new RectOffset(Mathf.RoundToInt(ticketColumnWidth + 18f), 8, 0, 0));
@@ -823,6 +837,7 @@ namespace PaperShift.Editor
                 logLayout.childControlHeight = true;
                 logLayout.childControlWidth = true;
                 logLayout.childForceExpandWidth = true;
+                logLayout.childForceExpandHeight = false;
                 foreach (var line in data.EventLines)
                 {
                     var logLine = CreateRounded(log, "Log Line", PaperShiftTheme.Hex("#e2d1ff", 0.82f), 6f);
@@ -960,13 +975,14 @@ namespace PaperShift.Editor
             AddText(row, "Value", value, valueSize, PaperShiftTheme.Ink, TextAnchor.MiddleCenter, new RectOffset(Mathf.RoundToInt(labelWidth), 6, 0, 0));
         }
 
-        private static RectTransform CreateTicket(Transform parent, string label, TagRarity rarity, bool autoWidth, int fontSize = 20, float fixedHeight = 44f)
+        private static RectTransform CreateTicket(Transform parent, string label, TagRarity rarity, bool autoWidth, int fontSize = 20, float fixedHeight = 44f, bool showRarityNote = false)
         {
             var color = rarity == TagRarity.Rare ? PaperShiftTheme.BlueTicket : rarity == TagRarity.SuperRare ? PaperShiftTheme.PurpleTicket : PaperShiftTheme.White;
             var border = rarity == TagRarity.Rare ? PaperShiftTheme.Hex("#315e77") : rarity == TagRarity.SuperRare ? PaperShiftTheme.Hex("#5a367b") : PaperShiftTheme.Hex("#42474b");
             var ticket = CreateRounded(parent, "Ticket " + label, color, 7f);
             var visualWidth = Mathf.Clamp(30f + label.Length * fontSize, 72f, 150f);
-            SetCenter(ticket, autoWidth ? visualWidth : 120f, fixedHeight, 0f, 0f);
+            var ticketWidth = autoWidth ? visualWidth : 120f;
+            SetCenter(ticket, ticketWidth, fixedHeight, 0f, 0f);
             var layout = ticket.gameObject.AddComponent<LayoutElement>();
             layout.preferredHeight = fixedHeight;
             layout.preferredWidth = autoWidth ? visualWidth : -1f;
@@ -975,6 +991,14 @@ namespace PaperShift.Editor
             if (rarity != TagRarity.Normal)
             {
                 AddText(ticket, "Star", "★", 15, Color.white, TextAnchor.UpperLeft, new RectOffset(5, 0, 3, 0));
+                if (showRarityNote)
+                {
+                    var noteText = rarity == TagRarity.SuperRare ? "超稀有!" : "稀有!";
+                    var noteWidth = rarity == TagRarity.SuperRare ? 62f : 46f;
+                    var note = CreateRounded(ticket, "Rarity Note", rarity == TagRarity.SuperRare ? PaperShiftTheme.Purple : PaperShiftTheme.Blue, 9f);
+                    AnchorTopRight(note, noteWidth, 20f, -12f, -12f);
+                    AddText(note, "Text", noteText, 12, Color.white, TextAnchor.MiddleCenter);
+                }
             }
 
             AddText(ticket, "Label", label, fontSize, PaperShiftTheme.Hex("#3b3f43"), TextAnchor.MiddleCenter, new RectOffset(rarity == TagRarity.Normal ? 8 : 18, 8, 0, 0));
@@ -1008,7 +1032,7 @@ namespace PaperShift.Editor
             layout.childAlignment = TextAnchor.MiddleLeft;
 
             CreateMinus(pair);
-            CreateTicket(pair, tag.Name, tag.Rarity, true, 17, 40f);
+            CreateTicket(pair, tag.Name, tag.Rarity, true, 17, 40f, true);
         }
 
         private static RectTransform CreateAvatarLock(Transform parent, Vector2 anchoredPosition, PortraitKind portrait, bool locked, float size = 96f)
@@ -1272,6 +1296,15 @@ namespace PaperShift.Editor
             rect.pivot = new Vector2(1f, 0f);
             rect.sizeDelta = new Vector2(width, height);
             rect.anchoredPosition = new Vector2(-right, bottom);
+        }
+
+        private static void AnchorTopRight(RectTransform rect, float width, float height, float right, float top)
+        {
+            rect.anchorMin = new Vector2(1f, 1f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.pivot = new Vector2(1f, 1f);
+            rect.sizeDelta = new Vector2(width, height);
+            rect.anchoredPosition = new Vector2(-right, -top);
         }
 
         private static void SetBottomLeft(RectTransform rect, float width, float height, float left, float bottom)

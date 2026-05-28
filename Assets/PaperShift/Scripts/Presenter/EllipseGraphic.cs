@@ -9,6 +9,13 @@ namespace PaperShift.Presenter
     {
         [SerializeField, Range(12, 96)] private int segments = 40;
 
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            segments = Mathf.Clamp(segments, 12, 96);
+            SetVerticesDirty();
+        }
+
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();
