@@ -37,7 +37,7 @@ namespace PaperShift.Editor
             defaultFont = AssetDatabase.LoadAssetAtPath<Font>(UiFontPath);
             if (defaultFont == null)
             {
-                defaultFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
+                defaultFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             }
             var model = PaperShiftGameModel.CreatePrototype();
 
@@ -679,8 +679,8 @@ namespace PaperShift.Editor
             var bar = CreateRounded(parent, "Choice Bar", PaperShiftTheme.White, 13f);
             AnchorTopLeft(bar, PageWidth - 28f, 74f, left, top);
             AddOutline(bar.gameObject, PaperShiftTheme.Blue, 3f);
-            CreateButton(bar, "Custom Button", "自定义", -95f, 5f, 182f, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, null, 21, false);
-            CreateButton(bar, "Random Button", "·  随机", 92f, 5f, 222f, 64f, PaperShiftTheme.Blue, Color.white, controller.ShowTags, 21, false);
+            CreateButton(bar, "Play Button", "开始游戏", -95f, 5f, 182f, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, controller.BeginCurrentWorkerFlow, 21, false);
+            CreateButton(bar, "Random Button", "·  随机", 92f, 5f, 222f, 64f, PaperShiftTheme.Blue, Color.white, controller.RandomizeWorkerAndStayOnCreate, 21, false);
         }
 
         private static void CreateNameRow(Transform parent, string label, string value)

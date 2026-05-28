@@ -25,6 +25,24 @@ namespace PaperShift.Controller
         public void ShowNews() => ShowScreen(PaperShiftScreen.News);
         public void ShowRetirement() => ShowScreen(PaperShiftScreen.Retirement);
 
+        public void BeginCurrentWorkerFlow()
+        {
+            var presenter = EnsurePresenter();
+            presenter.RollTagsAndShow();
+
+            var binder = EnsurePrototypeBinder(presenter);
+            binder.RefreshAll();
+        }
+
+        public void RandomizeWorkerAndStayOnCreate()
+        {
+            var presenter = EnsurePresenter();
+            presenter.RandomizeWorker();
+            ShowCreate();
+            var binder = EnsurePrototypeBinder(presenter);
+            binder.RefreshAll();
+        }
+
         public void ShowScreen(PaperShiftScreen screen)
         {
             PaperShiftScreenView activeView = null;
@@ -66,6 +84,31 @@ namespace PaperShift.Controller
             }
 
             Canvas.ForceUpdateCanvases();
+        }
+
+        private PaperShiftGamePresenter EnsurePresenter()
+        {
+            var presenter = GetComponent<PaperShiftGamePresenter>();
+            if (presenter == null)
+            {
+                presenter = gameObject.AddComponent<PaperShiftGamePresenter>();
+            }
+
+            presenter.SceneController = this;
+            return presenter;
+        }
+
+        private PaperShiftPrototypeBinder EnsurePrototypeBinder(PaperShiftGamePresenter presenter)
+        {
+            var binder = GetComponent<PaperShiftPrototypeBinder>();
+            if (binder == null)
+            {
+                binder = gameObject.AddComponent<PaperShiftPrototypeBinder>();
+            }
+
+            binder.Presenter = presenter;
+            binder.SceneController = this;
+            return binder;
         }
     }
 }
