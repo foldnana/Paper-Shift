@@ -21,6 +21,12 @@ namespace PaperShift.Editor
         private const float Height = PaperShiftTheme.ReferenceHeight;
         private const float PageWidth = 441f;
         private const float MarginX = 62f;
+        private const float TopPadding = 56f;
+        private const float ContentTop = 110f;
+        private const float WorkContentTop = 112f;
+        private const float FamilyContentTop = 128f;
+        private const float FlowScrollHeight = Height - ContentTop;
+        private const float WorkScrollHeight = 771f;
 
         private static Font defaultFont;
         private static PaperShiftSceneController controller;
@@ -58,10 +64,13 @@ namespace PaperShift.Editor
 
             controller.ScreenViews = screenViews.ToArray();
             controller.InitialScreen = PaperShiftScreen.Create;
+
+            RebuildScreenLayouts(canvas.GetComponent<RectTransform>());
             foreach (var view in screenViews)
             {
                 view.gameObject.SetActive(view.Screen == PaperShiftScreen.Create);
             }
+            ForceLayoutNow(canvas.GetComponent<RectTransform>());
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -70,6 +79,47 @@ namespace PaperShift.Editor
             AssetDatabase.Refresh();
 
             Debug.Log("Paper Shift UI scene rebuilt: " + ScenePath);
+        }
+
+        private static void RebuildScreenLayouts(RectTransform canvasRoot)
+        {
+            foreach (var target in screenViews)
+            {
+                foreach (var view in screenViews)
+                {
+                    view.gameObject.SetActive(view == target);
+                }
+
+                ForceLayoutNow(canvasRoot);
+            }
+        }
+
+        private static void ForceLayoutNow(RectTransform root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            for (var pass = 0; pass < 4; pass++)
+            {
+                Canvas.ForceUpdateCanvases();
+                foreach (var rect in root.GetComponentsInChildren<RectTransform>(false))
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+                }
+
+                foreach (var scroll in root.GetComponentsInChildren<ScrollRect>(false))
+                {
+                    scroll.verticalNormalizedPosition = 1f;
+                    if (scroll.content != null)
+                    {
+                        scroll.content.anchoredPosition = Vector2.zero;
+                    }
+                }
+
+                Canvas.ForceUpdateCanvases();
+            }
         }
 
         private static void CreateCamera()
@@ -132,11 +182,10 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_CreateLaborer", PaperShiftScreen.Create, PaperShiftTheme.PageBlue);
             AddTopLine(view.transform, "创建劳动者", model.Worker.Coin, "‹", null);
 
-            var scrollContent = CreateScroll(view.transform, "Create Scroll", 92f, 704f, PageWidth);
-            var createCard = CreatePaperCard(scrollContent, "Create Worker Card", PageWidth, 672f, true);
+            var scrollContent = CreateScroll(view.transform, "Create Scroll", ContentTop, FlowScrollHeight, PageWidth);
+            var createCard = CreatePaperCard(scrollContent, "Create Worker Card", PageWidth, 926f, true);
 
             var avatar = CreateAvatarLock(createCard.transform, new Vector2(334f, -170f), PortraitKind.Worker, true);
-            avatar.SetAsLastSibling();
 
             var eraGrid = CreateRect(createCard.transform, "Era Picker");
             AnchorTopLeft(eraGrid, PageWidth - 28f, 132f, 14f, 18f);
@@ -156,10 +205,10 @@ namespace PaperShift.Editor
             }
 
             var rows = CreateRect(createCard.transform, "Profile Rows");
-            AnchorTopLeft(rows, PageWidth - 28f, 408f, 14f, 164f);
+            AnchorTopLeft(rows, PageWidth - 28f, 654f, 14f, 164f);
             var rowLayout = rows.gameObject.AddComponent<VerticalLayoutGroup>();
             rowLayout.spacing = 6f;
-            rowLayout.childControlHeight = false;
+            rowLayout.childControlHeight = true;
             rowLayout.childControlWidth = true;
             rowLayout.childForceExpandWidth = true;
             rowLayout.childForceExpandHeight = false;
@@ -176,20 +225,25 @@ namespace PaperShift.Editor
             CreateInfoRow(rows, "优势", "★ 稀有! " + model.Worker.Advantage, true, 54f, 17, 18);
             CreateInfoRow(rows, "资产", "★ 稀有! " + model.Worker.Asset, true, 54f, 17, 18);
 
-            CreateChoiceBar(createCard.transform, 14f, 600f);
+            CreateChoiceBar(createCard.transform, 14f, 836f);
+            avatar.SetAsLastSibling();
 
-            var nameCard = CreateRect(scrollContent, "Name Card");
-            nameCard.gameObject.AddComponent<LayoutElement>().preferredHeight = 120f;
+            var nameSlot = CreateRect(scrollContent, "Name Card Slot");
+            nameSlot.gameObject.AddComponent<LayoutElement>().preferredHeight = 126f;
+
+            var nameCard = CreateRect(nameSlot, "Name Card");
+            AnchorTopLeft(nameCard, PageWidth, 112f, 0f, 14f);
             var nameLayout = nameCard.gameObject.AddComponent<HorizontalLayoutGroup>();
             nameLayout.spacing = 8f;
             nameLayout.childControlHeight = true;
-            nameLayout.childControlWidth = false;
+            nameLayout.childControlWidth = true;
             nameLayout.childForceExpandHeight = true;
+            nameLayout.childForceExpandWidth = false;
 
             var fields = CreateRounded(nameCard, "Name Fields", PaperShiftTheme.White, 16f);
             fields.gameObject.AddComponent<LayoutElement>().preferredWidth = PageWidth - 92f;
             var fieldsLayout = fields.gameObject.AddComponent<VerticalLayoutGroup>();
-            fieldsLayout.childControlHeight = false;
+            fieldsLayout.childControlHeight = true;
             fieldsLayout.childControlWidth = true;
             fieldsLayout.childForceExpandWidth = true;
             fieldsLayout.childForceExpandHeight = false;
@@ -200,7 +254,7 @@ namespace PaperShift.Editor
             dice.gameObject.AddComponent<LayoutElement>().preferredWidth = 84f;
             CreateDiceIcon(dice, "Dice", new Vector2(48f, 48f), Vector2.zero);
 
-            CreateButton(view.transform, "Next Button", "下一步", 0f, 892f, PageWidth, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, controller.ShowTags);
+            CreateFlowButton(scrollContent, "Next Button", "下一步", PaperShiftTheme.White, PaperShiftTheme.Ink, controller.ShowTags);
         }
 
         private static void BuildTagsScreen(Transform canvasTransform, PaperShiftGameModel model)
@@ -208,13 +262,13 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_SelectTags", PaperShiftScreen.Tags, PaperShiftTheme.PageBlue);
             AddTopLine(view.transform, "选择李小满的标签", model.Worker.Coin, "⚙", null);
 
-            var scrollContent = CreateScroll(view.transform, "Tags Scroll", 92f, 686f, PageWidth);
-            var tagCard = CreatePaperCard(scrollContent, "Tag Choices Card", PageWidth, 552f, false);
+            var scrollContent = CreateScroll(view.transform, "Tags Scroll", ContentTop, 758f, PageWidth);
+            var tagCard = CreatePaperCard(scrollContent, "Tag Choices Card", PageWidth, 758f, false);
             var list = CreateRect(tagCard.transform, "Tag List");
             Stretch(list, 16f, 16f, 16f, 16f);
             var layout = list.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.spacing = 11f;
-            layout.childControlHeight = false;
+            layout.childControlHeight = true;
             layout.childControlWidth = true;
             layout.childForceExpandWidth = true;
 
@@ -224,12 +278,12 @@ namespace PaperShift.Editor
             }
 
             var refreshArea = CreateRect(view.transform, "Refresh Area");
-            SetTop(refreshArea, PageWidth - 32f, 92f, 0f, 786f);
+            SetTop(refreshArea, PageWidth - 32f, 93f, 0f, 789f);
             AddText(refreshArea, "Refresh Title", "换一组标签", 14, PaperShiftTheme.Ink, TextAnchor.UpperLeft, new RectOffset(0, 0, 0, 0));
             CreateButton(refreshArea, "Free Refresh", "免费刷新  1", -105f, 26f, 198f, 66f, PaperShiftTheme.White, PaperShiftTheme.Ink, null);
             CreateButton(refreshArea, "Super Refresh", "超级刷新\n时代变更，获得更好的标签!", 106f, 26f, 220f, 66f, PaperShiftTheme.Purple, Color.white, null, 16);
 
-            CreateButton(view.transform, "Confirm Tags Button", "请选择3个标签，0/3", 0f, 892f, PageWidth, 64f, PaperShiftTheme.GrayButton, PaperShiftTheme.Hex("#505050"), controller.ShowResume, 23, false);
+            CreateButton(view.transform, "Confirm Tags Button", "请选择3个标签，0/3", 0f, 882f, PageWidth, 64f, PaperShiftTheme.GrayButton, PaperShiftTheme.Hex("#505050"), controller.ShowResume, 23, false);
         }
 
         private static void BuildResumeScreen(Transform canvasTransform, PaperShiftGameModel model)
@@ -237,7 +291,7 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_EditResume", PaperShiftScreen.Resume, PaperShiftTheme.PageBlue);
             AddTopLine(view.transform, "编辑简历", model.Worker.Coin, "‹", null);
 
-            var content = CreateScroll(view.transform, "Resume Scroll", 92f, 790f, PageWidth);
+            var content = CreateScroll(view.transform, "Resume Scroll", ContentTop, FlowScrollHeight, PageWidth);
             var card = CreatePaperCard(content, "Resume Summary Card", PageWidth, 810f, false);
 
             var ribbon = CreateRounded(card.transform, "Generation Ribbon", PaperShiftTheme.Blue, 4f);
@@ -258,18 +312,20 @@ namespace PaperShift.Editor
             AnchorTopLeft(intentTags, PageWidth - 72f, 44f, 12f, 40f);
             var intentLayout = intentTags.gameObject.AddComponent<HorizontalLayoutGroup>();
             intentLayout.spacing = 7f;
-            intentLayout.childControlWidth = false;
-            intentLayout.childControlHeight = false;
+            intentLayout.childControlWidth = true;
+            intentLayout.childControlHeight = true;
+            intentLayout.childForceExpandWidth = false;
+            intentLayout.childForceExpandHeight = false;
             for (var i = 0; i < model.ResumeIntent.Count; i++)
             {
-                CreateTicket(intentTags, model.ResumeIntent[i], i == 0 ? TagRarity.Rare : TagRarity.Normal, false);
+                CreateTicket(intentTags, model.ResumeIntent[i], i == 0 ? TagRarity.Rare : TagRarity.Normal, true);
             }
 
             var lineList = CreateRect(card.transform, "Resume Lines");
             AnchorTopLeft(lineList, PageWidth - 48f, 326f, 24f, 238f);
             var lineLayout = lineList.gameObject.AddComponent<VerticalLayoutGroup>();
             lineLayout.spacing = 6f;
-            lineLayout.childControlHeight = false;
+            lineLayout.childControlHeight = true;
             lineLayout.childControlWidth = true;
             lineLayout.childForceExpandWidth = true;
             foreach (var resumeLine in model.ResumeLines)
@@ -278,16 +334,15 @@ namespace PaperShift.Editor
             }
 
             var selectedTags = CreateRect(card.transform, "Selected Tags");
-            AnchorTopLeft(selectedTags, PageWidth - 48f, 92f, 24f, 580f);
-            var selectedLayout = selectedTags.gameObject.AddComponent<HorizontalLayoutGroup>();
-            selectedLayout.spacing = 10f;
-            selectedLayout.childControlWidth = false;
-            selectedLayout.childControlHeight = false;
-            selectedLayout.childForceExpandHeight = false;
+            AnchorTopLeft(selectedTags, PageWidth - 48f, 108f, 24f, 574f);
+            var selectedLayout = selectedTags.gameObject.AddComponent<GridLayoutGroup>();
+            selectedLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            selectedLayout.constraintCount = 2;
+            selectedLayout.cellSize = new Vector2((PageWidth - 64f) * 0.5f, 44f);
+            selectedLayout.spacing = new Vector2(10f, 10f);
             foreach (var tag in model.SelectedTags)
             {
-                CreateMinus(selectedTags);
-                CreateTicket(selectedTags, tag.Name, tag.Rarity, true);
+                CreateSelectedTag(selectedTags, tag);
             }
 
             var risk = CreateRounded(card.transform, "Resume Risk Footer", PaperShiftTheme.White, 22f);
@@ -295,7 +350,7 @@ namespace PaperShift.Editor
             AddText(risk, "Label", "简历包装风险", 17, PaperShiftTheme.Ink, TextAnchor.MiddleLeft, new RectOffset(22, 0, 0, 0));
             AddText(risk, "Count", "<size=40>2/5</size>  <size=13>已包装</size>", 18, PaperShiftTheme.Ink, TextAnchor.MiddleRight, new RectOffset(0, 22, 0, 0));
 
-            CreateButton(view.transform, "Send Resume Button", "投递简历", 0f, 892f, PageWidth, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, controller.ShowJobSearch);
+            CreateFlowButton(content, "Send Resume Button", "投递简历", PaperShiftTheme.White, PaperShiftTheme.Ink, controller.ShowJobSearch);
         }
 
         private static void BuildJobSearchScreen(Transform canvasTransform, PaperShiftGameModel model)
@@ -303,8 +358,8 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_JobSearch", PaperShiftScreen.JobSearch, PaperShiftTheme.PageBlue);
             AddTopLine(view.transform, "求职", string.Empty, "⚙", controller.ShowNews, "!!\n新闻");
 
-            var content = CreateScroll(view.transform, "Job Search Scroll", 92f, 760f, PageWidth);
-            CreateCandidateCard(content, "Self Candidate Card", model.JobSearchSelf, 335f, false, false);
+            var content = CreateScroll(view.transform, "Job Search Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
+            CreateCandidateCard(content, "Self Candidate Card", model.JobSearchSelf, 386f, false, false);
             CreateCandidateCard(content, "Interview Job Card", model.JobOffer, 330f, true, false);
             AddCalendarAndActions(view.transform, "2026", "5", "面试第2轮", controller.ShowInterviewFailure, "↻\n再投一家", controller.ShowJobSearch);
         }
@@ -314,9 +369,9 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_InterviewFailure", PaperShiftScreen.InterviewFailure, PaperShiftTheme.PageBlue);
             AddTopLine(view.transform, "求职", string.Empty, "⚙", controller.ShowNews, "!!\n新闻");
 
-            var content = CreateScroll(view.transform, "Failure Scroll", 92f, 760f, PageWidth);
-            CreateCandidateCard(content, "Failure Self Card", model.FailureSelf, 335f, false, false);
-            CreateCandidateCard(content, "Rejected Job Card", model.FailureOffer, 240f, false, true);
+            var content = CreateScroll(view.transform, "Failure Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
+            CreateCandidateCard(content, "Failure Self Card", model.FailureSelf, 371f, false, false);
+            CreateCandidateCard(content, "Rejected Job Card", model.FailureOffer, 330f, false, true);
 
             var banner = CreateRounded(view.transform, "Failure Banner", PaperShiftTheme.Hex("#c3c3c3", 0.88f), 0f);
             SetTop(banner, Width, 126f, 0f, 376f);
@@ -332,7 +387,7 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_Work", PaperShiftScreen.Work, PaperShiftTheme.PagePurple);
             AddTopLine(view.transform, "打工", string.Empty, "⚙", controller.ShowBudget, "预算\n分配");
 
-            var content = CreateScroll(view.transform, "Work Scroll", 92f, 760f, PageWidth);
+            var content = CreateScroll(view.transform, "Work Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "Work Self Card", model.WorkSelf, 335f, false, false);
             CreateCandidateCard(content, "Current Job Card", model.WorkJob, 330f, true, false);
             AddCalendarAndActions(view.transform, "2031", "6", "再干一月", controller.ShowWork, "￥\n分配", controller.ShowBudget);
@@ -343,8 +398,8 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_Budget", PaperShiftScreen.Budget, PaperShiftTheme.PageBlue);
             AddTopLine(view.transform, "工资分配", "12,600", "‹", null);
 
-            var content = CreateScroll(view.transform, "Budget Scroll", 92f, 790f, PageWidth);
-            var card = CreatePaperCard(content, "Budget Card", PageWidth, 660f, false);
+            var content = CreateScroll(view.transform, "Budget Scroll", WorkContentTop, Height - WorkContentTop, PageWidth);
+            var card = CreatePaperCard(content, "Budget Card", PageWidth, 795f, false);
             var ribbon = CreateRounded(card.transform, "Ribbon", PaperShiftTheme.Blue, 0f);
             AnchorTopLeft(ribbon, PageWidth, 76f, 0f, 0f);
             AddText(ribbon, "Label", "拖动分配这个月工资", 23, Color.white, TextAnchor.MiddleCenter);
@@ -361,7 +416,7 @@ namespace PaperShift.Editor
             AnchorTopLeft(bars, PageWidth - 44f, 166f, 22f, 226f);
             var barsLayout = bars.gameObject.AddComponent<VerticalLayoutGroup>();
             barsLayout.spacing = 9f;
-            barsLayout.childControlHeight = false;
+            barsLayout.childControlHeight = true;
             barsLayout.childControlWidth = true;
             barsLayout.childForceExpandWidth = true;
             foreach (var item in model.Budget.Items)
@@ -386,7 +441,7 @@ namespace PaperShift.Editor
             AnchorTopLeft(notes, PageWidth - 44f, 212f, 22f, 548f);
             var notesLayout = notes.gameObject.AddComponent<VerticalLayoutGroup>();
             notesLayout.spacing = 8f;
-            notesLayout.childControlHeight = false;
+            notesLayout.childControlHeight = true;
             notesLayout.childControlWidth = true;
             notesLayout.childForceExpandWidth = true;
             foreach (var note in model.Budget.Notes)
@@ -394,7 +449,7 @@ namespace PaperShift.Editor
                 CreateTagChoiceRow(notes, note, 64f, 120f);
             }
 
-            CreateButton(view.transform, "Save Budget Button", "保存，下月开干", 0f, 892f, PageWidth, 64f, PaperShiftTheme.Blue, Color.white, controller.ShowWork);
+            CreateFlowButton(content, "Save Budget Button", "保存，下月开干", PaperShiftTheme.Blue, Color.white, controller.ShowWork);
         }
 
         private static void BuildNewsScreen(Transform canvasTransform, PaperShiftGameModel model)
@@ -402,9 +457,9 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_NewsModal", PaperShiftScreen.News, PaperShiftTheme.PagePurple);
             AddTopLine(view.transform, "打工", string.Empty, "⚙", null, "!!\n新闻");
 
-            var content = CreateScroll(view.transform, "News Background Scroll", 92f, 760f, PageWidth);
-            CreateCandidateCard(content, "News Self Card", model.NewsSelf, 280f, false, false);
-            CreateCandidateCard(content, "News Job Card", model.NewsJob, 300f, false, false);
+            var content = CreateScroll(view.transform, "News Background Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
+            CreateCandidateCard(content, "News Self Card", model.NewsSelf, 335f, false, false);
+            CreateCandidateCard(content, "News Job Card", model.NewsJob, 330f, false, false);
             AddCalendarAndActions(view.transform, "2033", "4", "再干一月", controller.ShowWork, "￥\n分配", controller.ShowBudget);
 
             var mask = CreateRounded(view.transform, "Modal Mask", PaperShiftTheme.Hex("#201a2a", 0.66f), 0f);
@@ -434,13 +489,13 @@ namespace PaperShift.Editor
             var view = CreateScreen(canvasTransform, "Screen_Retirement", PaperShiftScreen.Retirement, PaperShiftTheme.PageBlue);
             AddTopLine(view.transform, "退休结算", model.Retirement.Coin, "⚙", null);
 
-            var content = CreateScroll(view.transform, "Retirement Scroll", 92f, 868f, PageWidth);
+            var content = CreateScroll(view.transform, "Retirement Scroll", FamilyContentTop, Height - FamilyContentTop, PageWidth);
 
             var ribbon = CreateRounded(content, "Life End Ribbon", PaperShiftTheme.Blue, 0f);
             ribbon.gameObject.AddComponent<LayoutElement>().preferredHeight = 76f;
             AddText(ribbon, "Label", "这一代打工人生结束了", 23, Color.white, TextAnchor.MiddleCenter);
 
-            var life = CreatePaperCard(content, "Life Summary", PageWidth, 308f, false);
+            var life = CreatePaperCard(content, "Life Summary", PageWidth, 376f, false);
             AddText(life.transform, "Reason Title", "退场原因：到龄退休", 22, PaperShiftTheme.Ink, TextAnchor.UpperCenter, new RectOffset(0, 0, 12, 0));
             var settlement = CreateSettlement(life.transform, "Retirement Settlement", new[]
             {
@@ -466,31 +521,36 @@ namespace PaperShift.Editor
             }
 
             var parents = CreateRect(content, "Parents");
-            parents.gameObject.AddComponent<LayoutElement>().preferredHeight = 142f;
+            parents.gameObject.AddComponent<LayoutElement>().preferredHeight = 132f;
             var parentLayout = parents.gameObject.AddComponent<HorizontalLayoutGroup>();
             parentLayout.spacing = 10f;
-            parentLayout.childControlWidth = false;
-            parentLayout.childControlHeight = false;
+            parentLayout.childControlWidth = true;
+            parentLayout.childControlHeight = true;
+            parentLayout.childForceExpandWidth = false;
+            parentLayout.childForceExpandHeight = false;
             parentLayout.childAlignment = TextAnchor.MiddleCenter;
             CreatePersonTile(parents, "李小满", PortraitKind.Worker);
             CreatePersonTile(parents, "陆远", PortraitKind.Male);
 
             var gen = CreateRounded(content, "Generation Pill", PaperShiftTheme.White, 14f);
-            gen.gameObject.AddComponent<LayoutElement>().preferredHeight = 30f;
+            gen.gameObject.AddComponent<LayoutElement>().preferredHeight = 24f;
             AddText(gen, "Label", "第 2 代", 16, PaperShiftTheme.Blue, TextAnchor.MiddleCenter);
 
             var children = CreateRect(content, "Children Row");
-            children.gameObject.AddComponent<LayoutElement>().preferredHeight = 86f;
+            children.gameObject.AddComponent<LayoutElement>().preferredHeight = 74f;
             var childLayout = children.gameObject.AddComponent<HorizontalLayoutGroup>();
             childLayout.spacing = 10f;
-            childLayout.childControlWidth = false;
-            childLayout.childControlHeight = false;
+            childLayout.childControlWidth = true;
+            childLayout.childControlHeight = true;
+            childLayout.childForceExpandWidth = false;
+            childLayout.childForceExpandHeight = false;
             childLayout.childAlignment = TextAnchor.MiddleCenter;
             for (var i = 0; i < 4; i++)
             {
                 var child = CreateRounded(children, "Child Option " + (i + 1), PaperShiftTheme.White, 12f);
-                child.gameObject.AddComponent<LayoutElement>().preferredWidth = 74f;
-                child.gameObject.AddComponent<LayoutElement>().preferredHeight = 74f;
+                var childElement = child.gameObject.AddComponent<LayoutElement>();
+                childElement.preferredWidth = 74f;
+                childElement.preferredHeight = 74f;
                 if (i == 0)
                 {
                     AddOutline(child.gameObject, PaperShiftTheme.Ink, 3f);
@@ -498,7 +558,7 @@ namespace PaperShift.Editor
                 CreatePortrait(child, PortraitKind.Baby, new Vector2(54f, 54f), Vector2.zero);
             }
 
-            var childCard = CreatePaperCard(content, "Child Detail Card", PageWidth, 540f, false);
+            var childCard = CreatePaperCard(content, "Child Detail Card", PageWidth, 653f, false);
             var childHead = CreateRect(childCard.transform, "Child Head");
             AnchorTopLeft(childHead, PageWidth - 36f, 80f, 18f, 18f);
             CreatePortrait(childHead, PortraitKind.Baby, new Vector2(68f, 68f), new Vector2(34f, -40f));
@@ -518,12 +578,12 @@ namespace PaperShift.Editor
             }
 
             var tags = CreateRect(childCard.transform, "Child Tags");
-            AnchorTopLeft(tags, PageWidth - 36f, 80f, 18f, 232f);
-            var tagLayout = tags.gameObject.AddComponent<HorizontalLayoutGroup>();
-            tagLayout.spacing = 7f;
-            tagLayout.childControlWidth = false;
-            tagLayout.childControlHeight = false;
-            tagLayout.childAlignment = TextAnchor.MiddleCenter;
+            AnchorTopLeft(tags, PageWidth - 36f, 100f, 18f, 232f);
+            var tagLayout = tags.gameObject.AddComponent<GridLayoutGroup>();
+            tagLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            tagLayout.constraintCount = 3;
+            tagLayout.cellSize = new Vector2((PageWidth - 52f) / 3f, 44f);
+            tagLayout.spacing = new Vector2(7f, 7f);
             foreach (var tag in model.Retirement.ChildTags)
             {
                 CreateTicket(tags, tag.Name, tag.Rarity, false);
@@ -536,17 +596,17 @@ namespace PaperShift.Editor
                 ("养育投入：见识", "20%", PaperShiftTheme.Purple),
                 ("影响", "下一代学习+，体魄+", PaperShiftTheme.Ink)
             });
-            AnchorTopLeft(nurture, PageWidth - 36f, 142f, 18f, 324f);
-            AddText(childCard.transform, "Quality Chance", "20% 几率能培养成优质后代", 18, PaperShiftTheme.Ink, TextAnchor.MiddleCenter, new RectOffset(0, 0, 460, 0));
-            CreateButton(childCard.transform, "Cultivate Button", "培养", 0f, 470f, PageWidth - 36f, 54f, PaperShiftTheme.Blue, Color.white, null, 21);
+            AnchorTopLeft(nurture, PageWidth - 36f, 142f, 18f, 350f);
+            AddText(childCard.transform, "Quality Chance", "20% 几率能培养成优质后代", 18, PaperShiftTheme.Ink, TextAnchor.MiddleCenter, new RectOffset(0, 0, 515, 74));
+            CreateButton(childCard.transform, "Cultivate Button", "培养", 0f, 565f, PageWidth - 36f, 64f, PaperShiftTheme.Blue, Color.white, null, 21);
 
-            var inherit = CreatePaperCard(content, "Inheritance Card", PageWidth, 300f, false);
+            var inherit = CreatePaperCard(content, "Inheritance Card", PageWidth, 447f, false);
             AddText(inherit.transform, "Title", "退休财产分配", 22, PaperShiftTheme.Ink, TextAnchor.UpperCenter, new RectOffset(0, 0, 12, 0));
             var heirList = CreateRect(inherit.transform, "Heir List");
-            AnchorTopLeft(heirList, PageWidth - 36f, 160f, 18f, 54f);
+            AnchorTopLeft(heirList, PageWidth - 36f, 226f, 18f, 54f);
             var heirLayout = heirList.gameObject.AddComponent<VerticalLayoutGroup>();
             heirLayout.spacing = 8f;
-            heirLayout.childControlHeight = false;
+            heirLayout.childControlHeight = true;
             heirLayout.childControlWidth = true;
             heirLayout.childForceExpandWidth = true;
             foreach (var heir in model.Retirement.Heirs)
@@ -560,7 +620,7 @@ namespace PaperShift.Editor
                 ("可留下标签", "AI先行者 / 会算账", PaperShiftTheme.Ink),
                 ("可能留下负担", "房贷剩余 12万", PaperShiftTheme.Red)
             });
-            AnchorTopLeft(inheritSettlement, PageWidth - 36f, 92f, 18f, 204f);
+            AnchorTopLeft(inheritSettlement, PageWidth - 36f, 92f, 18f, 292f);
 
             var rank = CreateRect(content, "Rank Text");
             rank.gameObject.AddComponent<LayoutElement>().preferredHeight = 38f;
@@ -573,7 +633,7 @@ namespace PaperShift.Editor
         private static void AddTopLine(Transform screen, string title, string coin, string icon, UnityAction smallAction, string smallButtonText = null)
         {
             var line = CreateRect(screen, "Topline");
-            SetTop(line, PageWidth, 46f, 0f, 34f);
+            SetTop(line, PageWidth, 46f, 0f, TopPadding);
 
             var round = CreateButton(line, "Header Icon", icon, -200f, 3f, 40f, 40f, PaperShiftTheme.White, PaperShiftTheme.Hex("#505963"), null, 24, false);
             round.name = icon == "‹" ? "Back Button" : "Settings Button";
@@ -651,8 +711,10 @@ namespace PaperShift.Editor
             AnchorTopLeft(chips, PageWidth - 120f, 24f, 68f, 30f);
             var chipLayout = chips.gameObject.AddComponent<HorizontalLayoutGroup>();
             chipLayout.spacing = 5f;
-            chipLayout.childControlWidth = false;
-            chipLayout.childControlHeight = false;
+            chipLayout.childControlWidth = true;
+            chipLayout.childControlHeight = true;
+            chipLayout.childForceExpandWidth = false;
+            chipLayout.childForceExpandHeight = false;
             for (var i = 0; i < data.Actions.Length; i++)
             {
                 CreateActionChip(chips, data.Actions[i], data.ActiveIndex == i, data.Tones[i]);
@@ -758,7 +820,7 @@ namespace PaperShift.Editor
                 AnchorBottom(log, PageWidth - 24f, logHeight, 0f, includeProgress ? 76f : 18f);
                 var logLayout = log.gameObject.AddComponent<VerticalLayoutGroup>();
                 logLayout.spacing = 3f;
-                logLayout.childControlHeight = false;
+                logLayout.childControlHeight = true;
                 logLayout.childControlWidth = true;
                 logLayout.childForceExpandWidth = true;
                 foreach (var line in data.EventLines)
@@ -802,11 +864,11 @@ namespace PaperShift.Editor
             AddText(head, "Text", year, 13, Color.white, TextAnchor.MiddleCenter);
             AddText(calendar, "Month", month, 31, PaperShiftTheme.Ink, TextAnchor.LowerCenter, new RectOffset(0, 0, 22, 0));
 
-            var primaryWidth = secondary == null ? PageWidth - 82f : PageWidth - 160f;
-            CreateButton(screen, "Primary Bottom Action", primary, secondary == null ? 38f : -39f, 897f, primaryWidth, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, primaryAction);
+            var primaryWidth = secondary == null ? 347f : 269f;
+            CreateButton(screen, "Primary Bottom Action", primary, secondary == null ? 41f : 2f, 897f, primaryWidth, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, primaryAction);
             if (secondary != null)
             {
-                CreateButton(screen, "Secondary Bottom Action", secondary, 189f, 897f, 64f, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, secondaryAction, 13);
+                CreateButton(screen, "Secondary Bottom Action", secondary, 183f, 897f, 64f, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, secondaryAction, 13);
             }
         }
 
@@ -817,7 +879,7 @@ namespace PaperShift.Editor
             var layout = settlement.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.padding = new RectOffset(12, 12, 8, 8);
             layout.spacing = 0f;
-            layout.childControlHeight = false;
+            layout.childControlHeight = true;
             layout.childControlWidth = true;
             layout.childForceExpandWidth = true;
             foreach (var row in rows)
@@ -875,9 +937,9 @@ namespace PaperShift.Editor
         private static void CreateHeirRow(Transform parent, HeirData heir)
         {
             var row = CreateRounded(parent, "Heir " + heir.Name, PaperShiftTheme.White, 12f);
-            row.gameObject.AddComponent<LayoutElement>().preferredHeight = 48f;
-            CreatePortrait(row, PortraitKind.Baby, new Vector2(38f, 38f), new Vector2(30f, -24f));
-            AddText(row, "Name", heir.Name + "\n<size=13><color=#667777>" + heir.Trait + "</color></size>", 15, PaperShiftTheme.Ink, TextAnchor.MiddleLeft, new RectOffset(66, 64, 0, 0));
+            row.gameObject.AddComponent<LayoutElement>().preferredHeight = 70f;
+            CreatePortrait(row, PortraitKind.Baby, new Vector2(54f, 54f), new Vector2(30f, -35f));
+            AddText(row, "Name", heir.Name + "\n<size=13><color=#667777>" + heir.Trait + "</color></size>", 15, PaperShiftTheme.Ink, TextAnchor.MiddleLeft, new RectOffset(74, 64, 0, 0));
             AddText(row, "Allocation", heir.Allocation, 16, PaperShiftTheme.Ink, TextAnchor.MiddleRight, new RectOffset(0, 12, 0, 0));
         }
 
@@ -903,9 +965,11 @@ namespace PaperShift.Editor
             var color = rarity == TagRarity.Rare ? PaperShiftTheme.BlueTicket : rarity == TagRarity.SuperRare ? PaperShiftTheme.PurpleTicket : PaperShiftTheme.White;
             var border = rarity == TagRarity.Rare ? PaperShiftTheme.Hex("#315e77") : rarity == TagRarity.SuperRare ? PaperShiftTheme.Hex("#5a367b") : PaperShiftTheme.Hex("#42474b");
             var ticket = CreateRounded(parent, "Ticket " + label, color, 7f);
+            var visualWidth = Mathf.Clamp(30f + label.Length * fontSize, 72f, 150f);
+            SetCenter(ticket, autoWidth ? visualWidth : 120f, fixedHeight, 0f, 0f);
             var layout = ticket.gameObject.AddComponent<LayoutElement>();
             layout.preferredHeight = fixedHeight;
-            layout.preferredWidth = autoWidth ? Mathf.Clamp(30f + label.Length * fontSize, 72f, 150f) : -1f;
+            layout.preferredWidth = autoWidth ? visualWidth : -1f;
             AddOutline(ticket.gameObject, border, 2f);
 
             if (rarity != TagRarity.Normal)
@@ -930,6 +994,21 @@ namespace PaperShift.Editor
             minus.gameObject.GetComponent<LayoutElement>().preferredHeight = 36f;
             AddOutline(minus.gameObject, PaperShiftTheme.Hex("#d1d1d1"), 2f);
             AddText(minus, "Label", "−", 26, PaperShiftTheme.Hex("#b7b7b7"), TextAnchor.MiddleCenter);
+        }
+
+        private static void CreateSelectedTag(Transform parent, TagData tag)
+        {
+            var pair = CreateRect(parent, "Selected Tag " + tag.Name);
+            var layout = pair.gameObject.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 7f;
+            layout.childControlWidth = true;
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+            layout.childAlignment = TextAnchor.MiddleLeft;
+
+            CreateMinus(pair);
+            CreateTicket(pair, tag.Name, tag.Rarity, true, 17, 40f);
         }
 
         private static RectTransform CreateAvatarLock(Transform parent, Vector2 anchoredPosition, PortraitKind portrait, bool locked, float size = 96f)
@@ -1032,6 +1111,17 @@ namespace PaperShift.Editor
             return buttonRect;
         }
 
+        private static RectTransform CreateFlowButton(Transform parent, string name, string label, Color background, Color textColor, UnityAction action, int fontSize = 23, bool blackOutline = true)
+        {
+            var button = CreateButton(parent, name, label, 0f, 0f, PageWidth, 64f, background, textColor, action, fontSize, blackOutline);
+            var layout = button.gameObject.AddComponent<LayoutElement>();
+            layout.preferredWidth = PageWidth;
+            layout.preferredHeight = 64f;
+            layout.flexibleWidth = 0f;
+            layout.flexibleHeight = 0f;
+            return button;
+        }
+
         private static UnityAction TargetAction(PaperShiftScreen screen)
         {
             switch (screen)
@@ -1074,7 +1164,7 @@ namespace PaperShift.Editor
             var layout = content.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.spacing = 14f;
             layout.childControlWidth = true;
-            layout.childControlHeight = false;
+            layout.childControlHeight = true;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
             layout.childAlignment = TextAnchor.UpperCenter;
