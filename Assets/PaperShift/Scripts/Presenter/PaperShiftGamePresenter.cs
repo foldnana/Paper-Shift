@@ -16,6 +16,8 @@ namespace PaperShift.Presenter
         public int StartingTagLimit = 3;
         public PaperShiftRunState State;
         public List<TagDefinition> CurrentTagChoices = new List<TagDefinition>();
+        public int LastInterviewSatisfactionDelta { get; private set; }
+        public int LastInterviewRound { get; private set; }
 
         private PaperShiftGameService service;
         private TriggeredEvent pendingEvent;
@@ -120,20 +122,50 @@ namespace PaperShift.Presenter
         {
             if (service.FindInterviewOffer(State))
             {
+                LastInterviewSatisfactionDelta = 0;
+                LastInterviewRound = 0;
                 ShowJobSearch();
             }
         }
 
-        public void AdvanceInterview()
+        public InterviewStepOutcome AdvanceInterview(out string message)
         {
-            pendingEvent = service.AdvanceInterview(State);
-            if (pendingEvent != null)
+            message = string.Empty;
+            var result = service.AdvanceInterviewStep(State);
+            if (result == null)
             {
-                ShowNews();
-                return;
+                return InterviewStepOutcome.Failed;
             }
 
-            ShowJobSearch();
+            pendingEvent = result.TriggeredEvent;
+            message = result.Message;
+            LastInterviewSatisfactionDelta = result.SatisfactionDelta;
+            LastInterviewRound = State.Interview.Round;
+            switch (result.Outcome)
+            {
+                case InterviewStepOutcome.Event:
+                    ShowNews();
+                    break;
+                case InterviewStepOutcome.Passed:
+                    ShowWork();
+                    break;
+                case InterviewStepOutcome.Failed:
+                    if (SceneController != null)
+                    {
+                        SceneController.ShowInterviewFailure();
+                    }
+                    break;
+                default:
+                    ShowJobSearch();
+                    break;
+            }
+
+            return result.Outcome;
+        }
+
+        public void AdvanceInterview()
+        {
+            AdvanceInterview(out _);
         }
 
         public bool AskInterviewResult(out string message)
@@ -213,6 +245,10 @@ namespace PaperShift.Presenter
             else if (State.HasActiveJob)
             {
                 ShowWork();
+            }
+            else if (State.Phase == PaperShiftPhase.Interview)
+            {
+                ShowJobSearch();
             }
             else
             {

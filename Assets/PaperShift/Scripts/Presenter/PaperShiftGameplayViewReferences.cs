@@ -14,6 +14,8 @@ namespace PaperShift.Presenter
         public Button ReapplyButton;
         public Button StartWorkButton;
         public Button JobProgressButton;
+        public Text CalendarYearText;
+        public Text CalendarMonthText;
 
         public Transform Root
         {

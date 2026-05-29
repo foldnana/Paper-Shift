@@ -199,44 +199,66 @@ namespace PaperShift.Runtime
                 Round = 0,
                 OfferThreshold = pair.Job.OfferThreshold,
                 Salary = salary,
-                Satisfaction = Clamp(20 + MatchIntentWeight(state, pair.Job) / 2, 0, 100)
+                Satisfaction = 0
             };
             state.Phase = PaperShiftPhase.Interview;
             state.AddLog("投递到了 " + pair.Company.DisplayName + " · " + pair.Job.DisplayName + "。");
             return true;
         }
 
-        public TriggeredEvent AdvanceInterview(PaperShiftRunState state)
+        public InterviewStepResult AdvanceInterviewStep(PaperShiftRunState state)
         {
             var company = database.FindCompany(state.Interview.CompanyId);
             var job = database.FindJob(state.Interview.CompanyId, state.Interview.JobId);
             if (company == null || job == null)
             {
-                return null;
+                return InterviewStepResult.Failed("还没有可推进的面试。");
             }
 
             state.Interview.Round++;
+            var satisfactionBefore = state.Interview.Satisfaction;
             var score = ComputeInterviewScore(state, company, job);
             state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + score, 0, 100);
-            state.AddLog("第 " + state.Interview.Round + " 轮面试结束，满意度变为 " + state.Interview.Satisfaction + "。");
+            var satisfactionAfter = state.Interview.Satisfaction;
+            state.AddLog("第" + state.Interview.Round + "轮面试结束，满意度变为 " + state.Interview.Satisfaction + "。");
 
             var triggered = TryTriggerEvent(state, GameEventPhase.Interview, company, job);
             if (triggered != null)
             {
-                return triggered;
+                return InterviewStepResult.Event(triggered, satisfactionBefore, satisfactionAfter);
             }
 
             if (state.Interview.HasOffer)
             {
-                state.AddLog("公司愿意发出 Offer。", EventNoticeType.Banner);
-            }
-            else if (state.Interview.Round >= state.Interview.MaxRounds)
-            {
-                state.AddLog("面试未通过，压力上升。");
-                state.Worker.Stress = Clamp(state.Worker.Stress + 8, 0, 100);
+                var message = "面试通过，" + company.DisplayName + " 发来了 Offer，你已入职 " + job.DisplayName + "。";
+                state.Interview.Satisfaction = Math.Max(state.Interview.Satisfaction, state.Interview.OfferThreshold);
+                AcceptOffer(state);
+                return InterviewStepResult.Passed(message, satisfactionBefore, satisfactionAfter);
             }
 
-            return null;
+            if (state.Interview.Round < state.Interview.MaxRounds && random.Next(0, 100) < EarlyInterviewFailureChance(state, job))
+            {
+                var message = "面试提前结束。面试官认为匹配度不够，你还在求职状态，可以再投一家。";
+                state.Worker.Stress = Clamp(state.Worker.Stress + 6, 0, 100);
+                state.AddLog(message, EventNoticeType.Banner);
+                return InterviewStepResult.Failed(message, satisfactionBefore, satisfactionAfter);
+            }
+
+            if (state.Interview.Round >= state.Interview.MaxRounds)
+            {
+                var message = "面试失败。对方认为匹配度不够，你还在求职状态，可以再投一家。";
+                state.Worker.Stress = Clamp(state.Worker.Stress + 8, 0, 100);
+                state.AddLog(message, EventNoticeType.Banner);
+                return InterviewStepResult.Failed(message, satisfactionBefore, satisfactionAfter);
+            }
+
+            return InterviewStepResult.Continue("第" + state.Interview.Round + "轮面试结束，满意度变为 " + state.Interview.Satisfaction + "，等待下一轮面试。", satisfactionBefore, satisfactionAfter);
+        }
+
+        public TriggeredEvent AdvanceInterview(PaperShiftRunState state)
+        {
+            var result = AdvanceInterviewStep(state);
+            return result == null ? null : result.TriggeredEvent;
         }
 
         public bool AcceptOffer(PaperShiftRunState state)
@@ -585,6 +607,17 @@ namespace PaperShift.Runtime
             return salary + salary * percent / 100;
         }
 
+        private static int EarlyInterviewFailureChance(PaperShiftRunState state, JobDefinition job)
+        {
+            if (state.Interview.Satisfaction >= 35)
+            {
+                return 0;
+            }
+
+            var chance = 8 + (35 - state.Interview.Satisfaction) / 2 + job.Difficulty / 20 + state.Resume.DeceptionRisk / 8;
+            return Clamp(chance, 0, 35);
+        }
+
         private void ApplyAnnualBudget(PaperShiftRunState state)
         {
             var yearlyIncome = state.CurrentJob.Salary * 12;
@@ -905,6 +938,62 @@ namespace PaperShift.Runtime
                 Company = company;
                 Job = job;
             }
+        }
+    }
+
+    public enum InterviewStepOutcome
+    {
+        Continue,
+        Passed,
+        Failed,
+        Event
+    }
+
+    public sealed class InterviewStepResult
+    {
+        public readonly InterviewStepOutcome Outcome;
+        public readonly string Message;
+        public readonly TriggeredEvent TriggeredEvent;
+        public readonly int SatisfactionBefore;
+        public readonly int SatisfactionAfter;
+
+        public int SatisfactionDelta
+        {
+            get { return SatisfactionAfter - SatisfactionBefore; }
+        }
+
+        private InterviewStepResult(InterviewStepOutcome outcome, string message, TriggeredEvent triggeredEvent, int satisfactionBefore, int satisfactionAfter)
+        {
+            Outcome = outcome;
+            Message = message;
+            TriggeredEvent = triggeredEvent;
+            SatisfactionBefore = satisfactionBefore;
+            SatisfactionAfter = satisfactionAfter;
+        }
+
+        public static InterviewStepResult Continue(string message, int satisfactionBefore, int satisfactionAfter)
+        {
+            return new InterviewStepResult(InterviewStepOutcome.Continue, message, null, satisfactionBefore, satisfactionAfter);
+        }
+
+        public static InterviewStepResult Passed(string message, int satisfactionBefore, int satisfactionAfter)
+        {
+            return new InterviewStepResult(InterviewStepOutcome.Passed, message, null, satisfactionBefore, satisfactionAfter);
+        }
+
+        public static InterviewStepResult Failed(string message)
+        {
+            return new InterviewStepResult(InterviewStepOutcome.Failed, message, null, 0, 0);
+        }
+
+        public static InterviewStepResult Failed(string message, int satisfactionBefore, int satisfactionAfter)
+        {
+            return new InterviewStepResult(InterviewStepOutcome.Failed, message, null, satisfactionBefore, satisfactionAfter);
+        }
+
+        public static InterviewStepResult Event(TriggeredEvent triggeredEvent, int satisfactionBefore, int satisfactionAfter)
+        {
+            return new InterviewStepResult(InterviewStepOutcome.Event, string.Empty, triggeredEvent, satisfactionBefore, satisfactionAfter);
         }
     }
 

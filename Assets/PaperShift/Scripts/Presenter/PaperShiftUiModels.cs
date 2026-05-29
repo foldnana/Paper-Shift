@@ -4,7 +4,7 @@ using PaperShift.Domain;
 
 namespace PaperShift.Presenter
 {
-    internal sealed class UiPair
+    public sealed class UiPair
     {
         public readonly string Label;
         public readonly string Value;
@@ -16,7 +16,7 @@ namespace PaperShift.Presenter
         }
     }
 
-    internal sealed class CandidateUiData
+    public sealed class CandidateUiData
     {
         public string Badge;
         public string Corner;
@@ -114,7 +114,7 @@ namespace PaperShift.Presenter
                 }
             }
 
-            var stat = database.FindStat(bestId);
+            var stat = database == null ? null : database.FindStat(bestId);
             return (stat == null ? bestId : stat.DisplayName) + "强";
         }
 
