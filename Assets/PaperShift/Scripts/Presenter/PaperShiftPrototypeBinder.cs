@@ -70,6 +70,7 @@ namespace PaperShift.Presenter
             {
                 activeScreen = current;
                 RefreshAll();
+                PlayJobCardTransition(current);
             }
 
             if (bannerRoot != null && bannerRoot.gameObject.activeSelf && Time.unscaledTime >= bannerHideAt)
@@ -536,7 +537,7 @@ namespace PaperShift.Presenter
 
             SetTitle(screen, "求职");
             RefreshCandidateCard(Find(screen, "Self Candidate Card"), BuildWorkerCardData("求职者"));
-            RefreshCandidateCard(Find(screen, "Interview Job Card"), BuildInterviewCardData());
+            RefreshCandidateCard(FindJobCard(screen, "Interview Job Card"), BuildInterviewCardData());
             SetButtonLabel(Find(screen, "Primary Bottom Action"), "询问结果");
             SetButtonLabel(Find(screen, "Secondary Bottom Action"), "再投\n一家");
             RefreshCalendar(screen);
@@ -551,7 +552,7 @@ namespace PaperShift.Presenter
             }
 
             RefreshCandidateCard(Find(screen, "Failure Self Card"), BuildWorkerCardData("求职者"));
-            RefreshCandidateCard(Find(screen, "Rejected Job Card"), BuildInterviewCardData());
+            RefreshCandidateCard(FindJobCard(screen, "Rejected Job Card"), BuildInterviewCardData());
             SetText(Find(screen, "Failure Banner"), "Text", LastLogOr("面试失败。对方认为匹配度不够，你还在求职状态。"));
             SetButtonLabel(Find(screen, "Primary Bottom Action"), "再投一家");
             RefreshCalendar(screen);
@@ -566,10 +567,66 @@ namespace PaperShift.Presenter
             }
 
             RefreshCandidateCard(Find(screen, "Work Self Card"), BuildWorkerCardData(State.CurrentJob.JobTitle));
-            RefreshCandidateCard(Find(screen, "Current Job Card"), BuildJobCardData());
+            RefreshCandidateCard(FindJobCard(screen, "Current Job Card"), BuildJobCardData());
             SetButtonLabel(Find(screen, "Primary Bottom Action"), "再干一年");
             SetButtonLabel(Find(screen, "Secondary Bottom Action"), "钱\n分配");
             RefreshCalendar(screen);
+        }
+
+        private void PlayJobCardTransition(PaperShiftScreen screen)
+        {
+            if (State == null)
+            {
+                return;
+            }
+
+            switch (screen)
+            {
+                case PaperShiftScreen.JobSearch:
+                    ShowJobTransition(
+                        FindJobCard(Screen(PaperShiftScreen.JobSearch), "Interview Job Card"),
+                        "⌛",
+                        "你进入了面试期",
+                        State.Interview.Round <= 0 ? "正在联系面试官……" : "正在等待面试结果……",
+                        PaperShiftTheme.Hex("#9ed8f7"));
+                    break;
+                case PaperShiftScreen.Work:
+                    ShowJobTransition(
+                        FindJobCard(Screen(PaperShiftScreen.Work), "Current Job Card"),
+                        "⌛",
+                        "你进入了打工期",
+                        "正在适应新的工作节奏……",
+                        PaperShiftTheme.Hex("#9fd9f3"));
+                    break;
+                case PaperShiftScreen.InterviewFailure:
+                    ShowJobTransition(
+                        FindJobCard(Screen(PaperShiftScreen.InterviewFailure), "Rejected Job Card"),
+                        "⌛",
+                        "你进入了空窗期",
+                        "正在重新联系公司……",
+                        PaperShiftTheme.Hex("#a6dcf7"));
+                    break;
+            }
+        }
+
+        private void ShowJobTransition(Transform card, string icon, string title, string detail, Color accent)
+        {
+            if (card == null)
+            {
+                return;
+            }
+
+            var transition = card.GetComponent<PaperShiftJobCardTransition>();
+            if (transition != null)
+            {
+                transition.Show(icon, title, detail, accent);
+            }
+        }
+
+        private Transform FindJobCard(Transform screen, string preferredName)
+        {
+            var preferred = Find(screen, preferredName);
+            return preferred != null ? preferred : Find(screen, "Job Card");
         }
 
         private void RefreshBudget()

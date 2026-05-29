@@ -364,7 +364,7 @@ namespace PaperShift.Editor
 
             var content = CreateScroll(view.transform, "Job Search Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "Self Candidate Card", model.JobSearchSelf, 386f, false, false);
-            CreateCandidateCard(content, "Interview Job Card", model.JobOffer, 330f, true, false);
+            CreateJobCardTransition(CreateCandidateCard(content, "Job Card", model.JobOffer, 330f, true, false));
             AddCalendarAndActions(view.transform, "2026", "5", "面试第2轮", controller.ShowInterviewFailure, "再投\n一家", controller.ShowJobSearch);
         }
 
@@ -375,7 +375,7 @@ namespace PaperShift.Editor
 
             var content = CreateScroll(view.transform, "Failure Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "Failure Self Card", model.FailureSelf, 371f, false, false);
-            CreateCandidateCard(content, "Rejected Job Card", model.FailureOffer, 330f, false, true);
+            CreateJobCardTransition(CreateCandidateCard(content, "Rejected Job Card", model.FailureOffer, 330f, false, true));
 
             var banner = CreateRounded(view.transform, "Failure Banner", PaperShiftTheme.Hex("#c3c3c3", 0.88f), 0f);
             SetTop(banner, Width, 126f, 0f, 376f);
@@ -393,7 +393,7 @@ namespace PaperShift.Editor
 
             var content = CreateScroll(view.transform, "Work Scroll", WorkContentTop, WorkScrollHeight, PageWidth);
             CreateCandidateCard(content, "Work Self Card", model.WorkSelf, 335f, false, false);
-            CreateCandidateCard(content, "Current Job Card", model.WorkJob, 330f, true, false);
+            CreateJobCardTransition(CreateCandidateCard(content, "Current Job Card", model.WorkJob, 330f, true, false));
             AddCalendarAndActions(view.transform, "2031", "6", "再干一月", controller.ShowWork, "钱\n分配", controller.ShowBudget);
         }
 
@@ -773,7 +773,7 @@ namespace PaperShift.Editor
             AddText(chip, "Label", label, 12, text, TextAnchor.MiddleCenter);
         }
 
-        private static void CreateCandidateCard(Transform parent, string name, CandidateCardData data, float height, bool includeProgress, bool disabled)
+        private static RectTransform CreateCandidateCard(Transform parent, string name, CandidateCardData data, float height, bool includeProgress, bool disabled)
         {
             var card = CreatePaperCard(parent, name, PageWidth, height, false);
             if (disabled)
@@ -851,6 +851,73 @@ namespace PaperShift.Editor
             {
                 CreateProgressFooter(card, data.Progress);
             }
+
+            return card;
+        }
+
+        private static void CreateJobCardTransition(RectTransform card)
+        {
+            if (card == null)
+            {
+                return;
+            }
+
+            card.gameObject.AddComponent<PaperShiftJobCardTransition>();
+
+            var overlay = CreateRect(card, "State Transition Overlay");
+            Stretch(overlay, 0f, 0f, 0f, 0f);
+
+            var topVeil = CreateRounded(overlay, "Top Veil", PaperShiftTheme.Hex("#ffffff", 0.76f), 20f);
+            topVeil.anchorMin = new Vector2(0f, 1f);
+            topVeil.anchorMax = new Vector2(1f, 1f);
+            topVeil.pivot = new Vector2(0.5f, 1f);
+            topVeil.offsetMin = new Vector2(0f, -138f);
+            topVeil.offsetMax = Vector2.zero;
+
+            var bottomVeil = CreateRounded(overlay, "Bottom Veil", PaperShiftTheme.Hex("#ffffff", 0.78f), 20f);
+            bottomVeil.anchorMin = Vector2.zero;
+            bottomVeil.anchorMax = new Vector2(1f, 0f);
+            bottomVeil.pivot = new Vector2(0.5f, 0f);
+            bottomVeil.offsetMin = Vector2.zero;
+            bottomVeil.offsetMax = new Vector2(0f, 168f);
+
+            var ribbonShadow = CreateRounded(overlay, "Transition Ribbon Shadow", PaperShiftTheme.Hex("#2d4b5f", 0.24f), 0f);
+            ribbonShadow.anchorMin = new Vector2(0f, 0.5f);
+            ribbonShadow.anchorMax = new Vector2(1f, 0.5f);
+            ribbonShadow.pivot = new Vector2(0.5f, 0.5f);
+            ribbonShadow.sizeDelta = new Vector2(48f, 106f);
+            ribbonShadow.anchoredPosition = new Vector2(0f, -8f);
+            ribbonShadow.localEulerAngles = new Vector3(0f, 0f, -1.2f);
+
+            var ribbon = CreateRounded(overlay, "Transition Ribbon", PaperShiftTheme.Hex("#9ed8f7"), 0f);
+            ribbon.anchorMin = new Vector2(0f, 0.5f);
+            ribbon.anchorMax = new Vector2(1f, 0.5f);
+            ribbon.pivot = new Vector2(0.5f, 0.5f);
+            ribbon.sizeDelta = new Vector2(48f, 104f);
+            ribbon.localEulerAngles = new Vector3(0f, 0f, -1.2f);
+
+            var topEdge = CreateRounded(ribbon, "Top Edge", PaperShiftTheme.Hex("#ffffff", 0.28f), 0f);
+            topEdge.anchorMin = new Vector2(0f, 1f);
+            topEdge.anchorMax = new Vector2(1f, 1f);
+            topEdge.pivot = new Vector2(0.5f, 1f);
+            topEdge.sizeDelta = new Vector2(0f, 5f);
+
+            var bottomEdge = CreateRounded(ribbon, "Bottom Edge", PaperShiftTheme.Hex("#1c4960", 0.20f), 0f);
+            bottomEdge.anchorMin = new Vector2(0f, 0f);
+            bottomEdge.anchorMax = new Vector2(1f, 0f);
+            bottomEdge.pivot = new Vector2(0.5f, 0f);
+            bottomEdge.sizeDelta = new Vector2(0f, 6f);
+
+            AddText(ribbon, "Icon", "⌛", 47, PaperShiftTheme.Hex("#159f92"), TextAnchor.MiddleLeft, new RectOffset(72, 0, 0, 0));
+            AddText(ribbon, "Title", "你进入了空窗期", 22, PaperShiftTheme.Ink, TextAnchor.MiddleLeft, new RectOffset(135, 16, 0, 0));
+
+            var detail = CreateRounded(overlay, "Detail Bubble", PaperShiftTheme.Hex("#ffffff", 0.90f), 9f);
+            detail.anchorMin = new Vector2(0f, 0.5f);
+            detail.anchorMax = new Vector2(1f, 0.5f);
+            detail.pivot = new Vector2(0.5f, 0.5f);
+            detail.sizeDelta = new Vector2(-84f, 42f);
+            detail.anchoredPosition = new Vector2(0f, -92f);
+            AddText(detail, "Detail", "正在重新联系公司……", 17, PaperShiftTheme.Ink, TextAnchor.MiddleCenter);
         }
 
         private static void CreateProgressFooter(Transform card, ProgressData progress)
