@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using PaperShift.Controller;
 using PaperShift.Data;
@@ -17,6 +18,9 @@ namespace PaperShift.Presenter
         public PaperShiftSceneController SceneController;
         public GameObject TagRowPrefab;
         public GameObject ResumeTagPrefab;
+        public GameObject StatusTagPrefab;
+        public GameObject EmptySlotPrefab;
+        public PaperShiftGameplayViewReferences GameplayView;
 
         private readonly string[] eraIds = { "agrarian", "industrial", "modern", "near_future", "far_future", "post_work" };
         private readonly string[] intentIds = { "ai_intent", "remote_first", "salary_high" };
@@ -25,11 +29,14 @@ namespace PaperShift.Presenter
         private readonly string[] optionButtonNames = { "Option Apply", "Option Stay", "Option Save" };
         private readonly PaperShiftTagSelectionView tagSelectionView = new PaperShiftTagSelectionView();
         private readonly PaperShiftResumeTagListView resumeTagListView = new PaperShiftResumeTagListView();
+        private readonly PaperShiftCandidateTagGridView candidateTagGridView = new PaperShiftCandidateTagGridView();
 
         private PaperShiftScreen activeScreen;
         private RectTransform bannerRoot;
         private Text bannerText;
         private float bannerHideAt;
+        private Coroutine reapplyJobRoutine;
+        private bool suppressNextStateTransition;
 
         private PaperShiftDatabase Database
         {
@@ -53,6 +60,7 @@ namespace PaperShift.Presenter
                 SceneController = GetComponent<PaperShiftSceneController>();
             }
 
+            GameplayView = ResolveGameplayView();
             CreateBanner();
             BindStaticButtons();
             RefreshAll();
@@ -70,7 +78,14 @@ namespace PaperShift.Presenter
             {
                 activeScreen = current;
                 RefreshAll();
-                PlayJobCardTransition(current);
+                if (suppressNextStateTransition)
+                {
+                    suppressNextStateTransition = false;
+                }
+                else
+                {
+                    PlayJobCardTransition(current);
+                }
             }
 
             if (bannerRoot != null && bannerRoot.gameObject.activeSelf && Time.unscaledTime >= bannerHideAt)
@@ -135,39 +150,18 @@ namespace PaperShift.Presenter
                 RefreshAll();
             });
 
-            var job = Screen(PaperShiftScreen.JobSearch);
-            BindButton(job, "Primary Bottom Action", AskInterviewResult);
-            BindButton(job, "Progress Button", AskInterviewResult);
-            BindButton(job, "Secondary Bottom Action", () =>
+            var gameplay = EnsureGameplayView();
+            if (gameplay != null)
             {
-                Presenter.FindInterviewAndShow();
-                ShowBanner("已重新投递一家公司。");
-                RefreshAll();
-            });
-
-            var failure = Screen(PaperShiftScreen.InterviewFailure);
-            BindButton(failure, "Primary Bottom Action", () =>
-            {
-                Presenter.FindInterviewAndShow();
-                RefreshAll();
-            });
-
-            var work = Screen(PaperShiftScreen.Work);
-            BindButton(work, "Primary Bottom Action", () =>
-            {
-                Presenter.CompleteWorkYear();
-                RefreshAll();
-            });
-            BindButton(work, "Secondary Bottom Action", () =>
-            {
-                SceneController.ShowBudget();
-                RefreshAll();
-            });
-            BindButton(work, "Top Right Button", () =>
-            {
-                SceneController.ShowBudget();
-                RefreshAll();
-            });
+                BindButton(gameplay.StartInterviewButton, AskInterviewResult);
+                BindButton(gameplay.JobProgressButton, AskInterviewResult);
+                BindButton(gameplay.ReapplyButton, BeginReapplyJobWithTransition);
+                BindButton(gameplay.StartWorkButton, () =>
+                {
+                    Presenter.CompleteWorkYear();
+                    RefreshAll();
+                });
+            }
 
             var budget = Screen(PaperShiftScreen.Budget);
             BindButton(budget, "Save Budget Button", () =>
@@ -529,53 +523,60 @@ namespace PaperShift.Presenter
 
         private void RefreshJobSearch()
         {
-            var screen = Screen(PaperShiftScreen.JobSearch);
-            if (screen == null)
+            var gameplay = EnsureGameplayView();
+            if (gameplay == null)
             {
+                Debug.LogWarning("PaperShift gameplay view references are not assigned.");
                 return;
             }
 
-            SetTitle(screen, "求职");
-            RefreshCandidateCard(Find(screen, "Self Candidate Card"), BuildWorkerCardData("求职者"));
-            RefreshCandidateCard(FindJobCard(screen, "Interview Job Card"), BuildInterviewCardData());
-            SetButtonLabel(Find(screen, "Primary Bottom Action"), "询问结果");
-            SetButtonLabel(Find(screen, "Secondary Bottom Action"), "再投\n一家");
-            RefreshCalendar(screen);
+            if (!gameplay.IsComplete(out var missingField))
+            {
+                Debug.LogWarning("PaperShift gameplay view reference is missing: " + missingField, gameplay);
+                return;
+            }
+
+            RefreshCandidateCard(gameplay.SelfCard, BuildWorkerCardData("求职者"));
+            RefreshWorkerStatusTags(gameplay);
+            RefreshCandidateCard(gameplay.JobCard, BuildInterviewCardData());
+            SetGameplayActionsVisible(startInterview: true, reapply: true, startWork: false);
+            RefreshCalendar(gameplay.Root);
         }
 
         private void RefreshFailure()
         {
-            var screen = Screen(PaperShiftScreen.InterviewFailure);
-            if (screen == null)
+            var gameplay = EnsureGameplayView();
+            if (gameplay == null || CurrentScreen() != PaperShiftScreen.InterviewFailure)
             {
                 return;
             }
 
-            RefreshCandidateCard(Find(screen, "Failure Self Card"), BuildWorkerCardData("求职者"));
-            RefreshCandidateCard(FindJobCard(screen, "Rejected Job Card"), BuildInterviewCardData());
-            SetText(Find(screen, "Failure Banner"), "Text", LastLogOr("面试失败。对方认为匹配度不够，你还在求职状态。"));
-            SetButtonLabel(Find(screen, "Primary Bottom Action"), "再投一家");
-            RefreshCalendar(screen);
+            RefreshCandidateCard(gameplay.SelfCard, BuildWorkerCardData("求职者"));
+            RefreshWorkerStatusTags(gameplay);
+            RefreshCandidateCard(gameplay.JobCard, BuildInterviewCardData());
+            SetGameplayActionsVisible(startInterview: false, reapply: true, startWork: false);
+            RefreshCalendar(gameplay.Root);
         }
 
         private void RefreshWork()
         {
-            var screen = Screen(PaperShiftScreen.Work);
-            if (screen == null)
+            var gameplay = EnsureGameplayView();
+            if (gameplay == null || CurrentScreen() != PaperShiftScreen.Work)
             {
                 return;
             }
 
-            RefreshCandidateCard(Find(screen, "Work Self Card"), BuildWorkerCardData(State.CurrentJob.JobTitle));
-            RefreshCandidateCard(FindJobCard(screen, "Current Job Card"), BuildJobCardData());
-            SetButtonLabel(Find(screen, "Primary Bottom Action"), "再干一年");
-            SetButtonLabel(Find(screen, "Secondary Bottom Action"), "钱\n分配");
-            RefreshCalendar(screen);
+            RefreshCandidateCard(gameplay.SelfCard, BuildWorkerCardData(State.CurrentJob.JobTitle));
+            RefreshWorkerStatusTags(gameplay);
+            RefreshCandidateCard(gameplay.JobCard, BuildJobCardData());
+            SetGameplayActionsVisible(startInterview: false, reapply: false, startWork: true);
+            RefreshCalendar(gameplay.Root);
         }
 
         private void PlayJobCardTransition(PaperShiftScreen screen)
         {
-            if (State == null)
+            var gameplay = EnsureGameplayView();
+            if (State == null || gameplay == null)
             {
                 return;
             }
@@ -584,7 +585,7 @@ namespace PaperShift.Presenter
             {
                 case PaperShiftScreen.JobSearch:
                     ShowJobTransition(
-                        FindJobCard(Screen(PaperShiftScreen.JobSearch), "Interview Job Card"),
+                        gameplay.JobTransition,
                         "⌛",
                         "你进入了面试期",
                         State.Interview.Round <= 0 ? "正在联系面试官……" : "正在等待面试结果……",
@@ -592,7 +593,7 @@ namespace PaperShift.Presenter
                     break;
                 case PaperShiftScreen.Work:
                     ShowJobTransition(
-                        FindJobCard(Screen(PaperShiftScreen.Work), "Current Job Card"),
+                        gameplay.JobTransition,
                         "⌛",
                         "你进入了打工期",
                         "正在适应新的工作节奏……",
@@ -600,7 +601,7 @@ namespace PaperShift.Presenter
                     break;
                 case PaperShiftScreen.InterviewFailure:
                     ShowJobTransition(
-                        FindJobCard(Screen(PaperShiftScreen.InterviewFailure), "Rejected Job Card"),
+                        gameplay.JobTransition,
                         "⌛",
                         "你进入了空窗期",
                         "正在重新联系公司……",
@@ -609,24 +610,141 @@ namespace PaperShift.Presenter
             }
         }
 
-        private void ShowJobTransition(Transform card, string icon, string title, string detail, Color accent)
+        private void ShowJobTransition(PaperShiftJobCardTransition transition, string icon, string title, string detail, Color accent)
         {
-            if (card == null)
+            if (transition == null)
             {
                 return;
             }
 
-            var transition = card.GetComponent<PaperShiftJobCardTransition>();
-            if (transition != null)
+            transition.Show(icon, title, detail, accent);
+        }
+
+        private void BeginReapplyJobWithTransition()
+        {
+            if (reapplyJobRoutine != null)
             {
-                transition.Show(icon, title, detail, accent);
+                return;
+            }
+
+            reapplyJobRoutine = StartCoroutine(ReapplyJobAfterTransition());
+        }
+
+        private IEnumerator ReapplyJobAfterTransition()
+        {
+            var gameplay = EnsureGameplayView();
+            var transition = gameplay == null ? null : gameplay.JobTransition;
+
+            if (transition != null && transition.ShowPreauthored())
+            {
+                SetGameplayActionsInteractable(false);
+                yield return new WaitForSecondsRealtime(PaperShiftJobCardTransition.TotalSeconds);
+                SetGameplayActionsInteractable(true);
+            }
+
+            var beforeReapplyScreen = CurrentScreen();
+            Presenter.FindInterviewAndShow();
+            suppressNextStateTransition = beforeReapplyScreen != CurrentScreen();
+            RefreshAll();
+            reapplyJobRoutine = null;
+        }
+
+        private void SetGameplayActionsInteractable(bool interactable)
+        {
+            var gameplay = EnsureGameplayView();
+            if (gameplay == null)
+            {
+                return;
+            }
+
+            SetButtonInteractable(gameplay.StartInterviewButton, interactable);
+            SetButtonInteractable(gameplay.ReapplyButton, interactable);
+            SetButtonInteractable(gameplay.StartWorkButton, interactable);
+            SetButtonInteractable(gameplay.JobProgressButton, interactable);
+        }
+
+        private void SetButtonInteractable(Button button, bool interactable)
+        {
+            if (button != null)
+            {
+                button.interactable = interactable;
             }
         }
 
-        private Transform FindJobCard(Transform screen, string preferredName)
+        private void SetGameplayActionsVisible(bool startInterview, bool reapply, bool startWork)
         {
-            var preferred = Find(screen, preferredName);
-            return preferred != null ? preferred : Find(screen, "Job Card");
+            var gameplay = EnsureGameplayView();
+            if (gameplay == null)
+            {
+                return;
+            }
+
+            SetButtonVisible(gameplay.StartInterviewButton, startInterview);
+            SetButtonVisible(gameplay.ReapplyButton, reapply);
+            SetButtonVisible(gameplay.StartWorkButton, startWork);
+        }
+
+        private void SetButtonVisible(Button button, bool visible)
+        {
+            if (button != null)
+            {
+                button.gameObject.SetActive(visible);
+            }
+        }
+
+        private Transform GameplayScreen(PaperShiftScreen screen)
+        {
+            var view = Screen(screen);
+            if (view != null)
+            {
+                return view;
+            }
+
+            return SceneController != null &&
+                SceneController.CurrentScreen == screen &&
+                (screen == PaperShiftScreen.InterviewFailure || screen == PaperShiftScreen.Work)
+                ? Screen(PaperShiftScreen.JobSearch)
+                : null;
+        }
+
+        private PaperShiftGameplayViewReferences ResolveGameplayView()
+        {
+            if (GameplayView != null)
+            {
+                return GameplayView;
+            }
+
+            if (SceneController == null || SceneController.ScreenViews == null)
+            {
+                return null;
+            }
+
+            for (var i = 0; i < SceneController.ScreenViews.Length; i++)
+            {
+                var screenView = SceneController.ScreenViews[i];
+                if (screenView == null)
+                {
+                    continue;
+                }
+
+                var references = screenView.GetComponent<PaperShiftGameplayViewReferences>();
+                if (references != null)
+                {
+                    return references;
+                }
+            }
+
+            return null;
+        }
+
+        private PaperShiftGameplayViewReferences EnsureGameplayView()
+        {
+            if (GameplayView == null)
+            {
+                GameplayView = ResolveGameplayView();
+            }
+
+            return GameplayView;
         }
 
         private void RefreshBudget()
@@ -650,6 +768,23 @@ namespace PaperShift.Presenter
             SetImpact(screen, 1, "结婚事件\n<size=21><color=#ff4f8f>+" + Mathf.RoundToInt(State.Budget.Romance * 0.45f) + "%</color></size>");
             SetImpact(screen, 2, "生子事件\n<size=21><color=#ff8a00>+" + Mathf.RoundToInt(State.Budget.Romance * 0.3f) + "%</color></size>");
             SetImpact(screen, 3, "后代成长\n<size=21><color=#249ee8>+" + Mathf.RoundToInt(State.Budget.Education * 0.75f) + "%</color></size>");
+        }
+
+        private void RefreshWorkerStatusTags(PaperShiftGameplayViewReferences gameplay)
+        {
+            if (gameplay == null || State == null || State.Worker == null)
+            {
+                return;
+            }
+
+            candidateTagGridView.TagPrefab = StatusTagPrefab;
+            candidateTagGridView.EmptySlotPrefab = EmptySlotPrefab;
+            candidateTagGridView.Refresh(gameplay.SelfTagsRoot, State.Worker.Tags);
+
+            if (gameplay.SelfEventLog != null)
+            {
+                gameplay.SelfEventLog.gameObject.SetActive(false);
+            }
         }
 
         private void RefreshNewsModal()
@@ -739,12 +874,6 @@ namespace PaperShift.Presenter
                 new UiPair("压力", worker.Stress.ToString())
             };
 
-            var tags = new List<string>();
-            for (var i = 0; i < worker.Tags.Count; i++)
-            {
-                tags.Add(worker.Tags[i].DisplayName);
-            }
-
             return new CandidateUiData
             {
                 Badge = worker.Age + "岁",
@@ -753,7 +882,7 @@ namespace PaperShift.Presenter
                 Subtitle = worker.Gender + " " + subtitleRole,
                 RingText = "压力 " + worker.Stress,
                 Rows = rows,
-                Tags = tags,
+                Tags = new List<string>(),
                 ProgressPercent = string.Empty,
                 ProgressLabel = string.Empty,
                 ProgressFill = 0f,
@@ -960,6 +1089,17 @@ namespace PaperShift.Presenter
             }
         }
 
+        private void BindButton(Button button, UnityAction action)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.onClick = new Button.ButtonClickedEvent();
+            button.onClick.AddListener(action);
+        }
+
         private Transform Screen(PaperShiftScreen screen)
         {
             if (SceneController == null || SceneController.ScreenViews == null)
@@ -981,6 +1121,11 @@ namespace PaperShift.Presenter
 
         private PaperShiftScreen CurrentScreen()
         {
+            if (SceneController != null)
+            {
+                return SceneController.CurrentScreen;
+            }
+
             if (SceneController == null || SceneController.ScreenViews == null)
             {
                 return activeScreen;

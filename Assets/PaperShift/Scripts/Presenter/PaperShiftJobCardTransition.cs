@@ -6,44 +6,83 @@ namespace PaperShift.Presenter
 {
     public sealed class PaperShiftJobCardTransition : MonoBehaviour
     {
-        private const string OverlayName = "State Transition Overlay";
         private const float FadeInSeconds = 0.18f;
         private const float HoldSeconds = 1.10f;
         private const float FadeOutSeconds = 0.36f;
+        public const float TotalSeconds = FadeInSeconds + HoldSeconds + FadeOutSeconds;
+
+        public RectTransform Overlay;
+        public RectTransform Ribbon;
+        public Text IconText;
+        public Text TitleText;
+        public Text DetailText;
 
         private readonly List<Graphic> graphics = new List<Graphic>();
         private readonly List<Color> baseColors = new List<Color>();
-        private RectTransform overlay;
-        private RectTransform ribbon;
-        private Text iconText;
-        private Text titleText;
-        private Text detailText;
+        private string authoredIcon;
+        private string authoredTitle;
+        private string authoredDetail;
+        private Color authoredRibbonColor;
         private float startedAt;
         private bool playing;
         private bool bound;
+        private bool capturedAuthoredState;
+
+        private void Awake()
+        {
+            BindSceneReferences();
+            if (Overlay != null)
+            {
+                Overlay.gameObject.SetActive(false);
+            }
+        }
 
         public void Show(string icon, string title, string detail, Color accent)
         {
-            BindSceneObjects();
-            if (overlay == null)
+            Begin(icon, title, detail, accent, true);
+        }
+
+        public bool ShowPreauthored()
+        {
+            return Begin(string.Empty, string.Empty, string.Empty, Color.clear, false);
+        }
+
+        private bool Begin(string icon, string title, string detail, Color accent, bool applyContent)
+        {
+            BindSceneReferences();
+            if (Overlay == null)
             {
-                return;
+                return false;
             }
 
-            SetText(iconText, icon);
-            SetText(titleText, title);
-            SetText(detailText, detail);
-            SetGraphicColor(ribbon, accent);
+            if (playing)
+            {
+                RestoreBaseColors();
+            }
+
+            if (applyContent)
+            {
+                SetText(IconText, icon);
+                SetText(TitleText, title);
+                SetText(DetailText, detail);
+                SetGraphicColor(Ribbon, accent);
+            }
+            else
+            {
+                RestoreAuthoredState();
+            }
+
             CaptureBaseColors();
-            overlay.gameObject.SetActive(true);
+            Overlay.gameObject.SetActive(true);
             SetAlpha(0f);
             startedAt = Time.unscaledTime;
             playing = true;
+            return true;
         }
 
         private void LateUpdate()
         {
-            if (!playing || overlay == null)
+            if (!playing || Overlay == null)
             {
                 return;
             }
@@ -53,7 +92,8 @@ namespace PaperShift.Presenter
             if (elapsed >= total)
             {
                 SetAlpha(0f);
-                overlay.gameObject.SetActive(false);
+                RestoreBaseColors();
+                Overlay.gameObject.SetActive(false);
                 playing = false;
                 return;
             }
@@ -72,39 +112,76 @@ namespace PaperShift.Presenter
                 SetAlpha(Mathf.SmoothStep(1f, 0f, t));
             }
 
-            if (ribbon != null)
+            if (Ribbon != null)
             {
                 var pop = Mathf.Clamp01(elapsed / FadeInSeconds);
                 var scaleY = Mathf.Lerp(0.88f, 1f, Mathf.SmoothStep(0f, 1f, pop));
-                ribbon.localScale = new Vector3(1f, scaleY, 1f);
-                ribbon.anchoredPosition = new Vector2(0f, Mathf.Sin(elapsed * 10f) * 1.4f);
+                Ribbon.localScale = new Vector3(1f, scaleY, 1f);
+                Ribbon.anchoredPosition = new Vector2(0f, Mathf.Sin(elapsed * 10f) * 1.4f);
             }
         }
 
-        private void BindSceneObjects()
+        private void RestoreBaseColors()
         {
-            var found = FindChild(transform, OverlayName) as RectTransform;
-            if (found == null)
+            for (var i = 0; i < graphics.Count && i < baseColors.Count; i++)
+            {
+                graphics[i].color = baseColors[i];
+            }
+        }
+
+        private void BindSceneReferences()
+        {
+            if (Overlay == null)
             {
                 return;
             }
 
-            if (bound && overlay == found)
+            if (bound)
             {
                 return;
             }
 
-            overlay = found;
-            overlay.SetAsLastSibling();
-            ribbon = FindChild(overlay, "Transition Ribbon") as RectTransform;
-            iconText = FindText(overlay, "Icon");
-            titleText = FindText(overlay, "Title");
-            detailText = FindText(overlay, "Detail");
+            Overlay.SetAsLastSibling();
 
             graphics.Clear();
-            overlay.GetComponentsInChildren(true, graphics);
+            Overlay.GetComponentsInChildren(true, graphics);
+            CaptureAuthoredState();
             CaptureBaseColors();
             bound = true;
+        }
+
+        private void CaptureAuthoredState()
+        {
+            if (capturedAuthoredState)
+            {
+                return;
+            }
+
+            authoredIcon = IconText == null ? string.Empty : IconText.text;
+            authoredTitle = TitleText == null ? string.Empty : TitleText.text;
+            authoredDetail = DetailText == null ? string.Empty : DetailText.text;
+
+            var ribbonGraphic = Ribbon == null ? null : Ribbon.GetComponent<Graphic>();
+            authoredRibbonColor = ribbonGraphic == null ? Color.white : ribbonGraphic.color;
+            capturedAuthoredState = true;
+        }
+
+        private void RestoreAuthoredState()
+        {
+            if (!capturedAuthoredState)
+            {
+                return;
+            }
+
+            SetText(IconText, authoredIcon);
+            SetText(TitleText, authoredTitle);
+            SetText(DetailText, authoredDetail);
+
+            var ribbonGraphic = Ribbon == null ? null : Ribbon.GetComponent<Graphic>();
+            if (ribbonGraphic != null)
+            {
+                ribbonGraphic.color = authoredRibbonColor;
+            }
         }
 
         private void CaptureBaseColors()
@@ -149,34 +226,5 @@ namespace PaperShift.Presenter
             }
         }
 
-        private static Text FindText(Transform root, string name)
-        {
-            var child = FindChild(root, name);
-            return child == null ? null : child.GetComponent<Text>();
-        }
-
-        private static Transform FindChild(Transform root, string name)
-        {
-            if (root == null)
-            {
-                return null;
-            }
-
-            if (root.name == name)
-            {
-                return root;
-            }
-
-            for (var i = 0; i < root.childCount; i++)
-            {
-                var result = FindChild(root.GetChild(i), name);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-
-            return null;
-        }
     }
 }

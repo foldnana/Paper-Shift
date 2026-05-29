@@ -805,22 +805,24 @@ namespace PaperShift.Editor
                 CreateInfoRow(miniGrid, row.Label, row.Value, row.IsRare, 27f, 13, 14, 52f);
             }
 
-            if (data.Tags.Length > 0)
+            var isSelfCard = name.Contains("Self Card");
+            if (isSelfCard || data.Tags.Length > 0)
             {
+                var maxTagSlots = isSelfCard ? 12 : 8;
                 var tags = CreateRect(card, "Tags");
-                AnchorTopLeft(tags, PageWidth - 32f, 86f, 16f, 168f);
+                AnchorTopLeft(tags, PageWidth - 32f, isSelfCard ? 132f : 86f, 16f, 168f);
                 var tagGrid = tags.gameObject.AddComponent<GridLayoutGroup>();
                 tagGrid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
                 tagGrid.constraintCount = 4;
                 tagGrid.cellSize = new Vector2((PageWidth - 56f) * 0.25f, 36f);
                 tagGrid.spacing = new Vector2(8f, 9f);
 
-                foreach (var tag in data.Tags)
+                for (var i = 0; i < data.Tags.Length && i < maxTagSlots; i++)
                 {
-                    CreateTicket(tags, tag.Name, tag.Rarity, false, 16, 36f);
+                    CreateTicket(tags, data.Tags[i].Name, data.Tags[i].Rarity, false, 16, 36f);
                 }
 
-                var slotCount = Mathf.Max(0, 8 - data.Tags.Length);
+                var slotCount = Mathf.Max(0, maxTagSlots - data.Tags.Length);
                 for (var i = 0; i < slotCount; i++)
                 {
                     CreateSlot(tags);

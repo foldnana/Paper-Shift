@@ -10,6 +10,8 @@ namespace PaperShift.Controller
         public PaperShiftScreen InitialScreen = PaperShiftScreen.Create;
         public PaperShiftScreenView[] ScreenViews = new PaperShiftScreenView[0];
 
+        public PaperShiftScreen CurrentScreen { get; private set; }
+
         private void Awake()
         {
             ShowScreen(InitialScreen);
@@ -45,6 +47,8 @@ namespace PaperShift.Controller
 
         public void ShowScreen(PaperShiftScreen screen)
         {
+            CurrentScreen = screen;
+            var visibleScreen = ResolveVisibleScreen(screen);
             PaperShiftScreenView activeView = null;
 
             foreach (var view in ScreenViews)
@@ -54,7 +58,7 @@ namespace PaperShift.Controller
                     continue;
                 }
 
-                var isActive = view.Screen == screen;
+                var isActive = view.Screen == visibleScreen;
                 view.gameObject.SetActive(isActive);
                 if (isActive)
                 {
@@ -66,6 +70,40 @@ namespace PaperShift.Controller
             {
                 ResetScrollRects(activeView.transform);
             }
+        }
+
+        private PaperShiftScreen ResolveVisibleScreen(PaperShiftScreen screen)
+        {
+            if (HasScreenView(screen))
+            {
+                return screen;
+            }
+
+            if ((screen == PaperShiftScreen.InterviewFailure || screen == PaperShiftScreen.Work) &&
+                HasScreenView(PaperShiftScreen.JobSearch))
+            {
+                return PaperShiftScreen.JobSearch;
+            }
+
+            return screen;
+        }
+
+        private bool HasScreenView(PaperShiftScreen screen)
+        {
+            if (ScreenViews == null)
+            {
+                return false;
+            }
+
+            foreach (var view in ScreenViews)
+            {
+                if (view != null && view.Screen == screen)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void ResetScrollRects(Transform root)
