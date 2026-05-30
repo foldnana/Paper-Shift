@@ -17,15 +17,26 @@ namespace PaperShift.Presenter
                 return;
             }
 
-            var promotionProgress = state.HasActiveJob ? state.CurrentJob.PromotionProgress : 0;
-            var quitRisk = state.HasActiveJob ? state.CurrentJob.QuitRisk : 0;
+            var regularizationChance = state.HasActiveJob ? state.CurrentJob.PromotionProgress : 0;
 
-            RefreshItem(WorkStatus, promotionProgress, "升职进度");
-            RefreshItem(LayoffStatus, quitRisk, "被裁风险");
+            if (state.Phase == PaperShiftPhase.Probation && state.HasActiveJob)
+            {
+                SetItemVisible(WorkStatus, true);
+                SetItemVisible(LayoffStatus, false);
+                SetItemVisible(InterviewStatus, false);
+                RefreshItem(WorkStatus, regularizationChance, "转正概率");
+                return;
+            }
+
+            SetItemVisible(WorkStatus, true);
+            SetItemVisible(LayoffStatus, true);
+            SetItemVisible(InterviewStatus, true);
+            RefreshInactive(WorkStatus, "待进入试用期");
+            RefreshInactive(LayoffStatus, "待评估风险");
 
             if (showInterviewProgress)
             {
-                RefreshItem(InterviewStatus, state.Interview.Satisfaction, "面试满意度");
+                RefreshItem(InterviewStatus, state.Interview.Satisfaction, "面试成功率");
             }
             else if (InterviewStatus != null)
             {
@@ -41,6 +52,14 @@ namespace PaperShift.Presenter
             }
         }
 
+        public void SetWorkInteractable(bool interactable)
+        {
+            if (WorkStatus != null && WorkStatus.ActionButton != null)
+            {
+                WorkStatus.ActionButton.interactable = interactable;
+            }
+        }
+
         private static void RefreshItem(PaperShiftBottomStatusItemBinding item, int percent, string label)
         {
             if (item == null)
@@ -50,11 +69,32 @@ namespace PaperShift.Presenter
 
             item.Refresh(Mathf.Clamp(percent, 0, 100), label);
         }
+
+        private static void RefreshInactive(PaperShiftBottomStatusItemBinding item, string label)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            item.RefreshInactive(label);
+        }
+
+        private static void SetItemVisible(PaperShiftBottomStatusItemBinding item, bool visible)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            item.SetVisible(visible);
+        }
     }
 
     [System.Serializable]
     public sealed class PaperShiftBottomStatusItemBinding
     {
+        public GameObject Root;
         public Text PercentText;
         public GameObject ProgressBarRoot;
         public RectTransform Fill;
@@ -94,6 +134,35 @@ namespace PaperShift.Presenter
             {
                 ProgressBarRoot.SetActive(false);
             }
+        }
+
+        public void SetVisible(bool visible)
+        {
+            var root = ResolveRoot();
+            if (root != null)
+            {
+                root.SetActive(visible);
+            }
+        }
+
+        private GameObject ResolveRoot()
+        {
+            if (Root != null)
+            {
+                return Root;
+            }
+
+            if (PercentText != null && PercentText.transform.parent != null)
+            {
+                return PercentText.transform.parent.gameObject;
+            }
+
+            if (ActionButton != null)
+            {
+                return ActionButton.gameObject;
+            }
+
+            return ProgressBarRoot;
         }
     }
 }

@@ -85,6 +85,11 @@ namespace PaperShift.Controller
                 return PaperShiftScreen.JobSearch;
             }
 
+            if (HasScreenView(PaperShiftScreen.JobSearch))
+            {
+                return PaperShiftScreen.JobSearch;
+            }
+
             return screen;
         }
 

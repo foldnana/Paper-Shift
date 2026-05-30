@@ -17,7 +17,6 @@ namespace PaperShift.Presenter
         public PaperShiftRunState State;
         public List<TagDefinition> CurrentTagChoices = new List<TagDefinition>();
         public int LastInterviewSatisfactionDelta { get; private set; }
-        public int LastInterviewRound { get; private set; }
 
         private PaperShiftGameService service;
         private TriggeredEvent pendingEvent;
@@ -120,18 +119,27 @@ namespace PaperShift.Presenter
 
         public void FindInterviewAndShow()
         {
+            FindInterviewAndShowInternal();
+        }
+
+        private bool FindInterviewAndShowInternal()
+        {
+            pendingEvent = null;
+            service.RestartJobSearch(State);
             if (service.FindInterviewOffer(State))
             {
                 LastInterviewSatisfactionDelta = 0;
-                LastInterviewRound = 0;
                 ShowJobSearch();
+                return true;
             }
+
+            return false;
         }
 
-        public InterviewStepOutcome AdvanceInterview(out string message)
+        public InterviewStepOutcome PrepareInterview(out string message)
         {
             message = string.Empty;
-            var result = service.AdvanceInterviewStep(State);
+            var result = service.PrepareInterviewStep(State);
             if (result == null)
             {
                 return InterviewStepOutcome.Failed;
@@ -140,7 +148,22 @@ namespace PaperShift.Presenter
             pendingEvent = result.TriggeredEvent;
             message = result.Message;
             LastInterviewSatisfactionDelta = result.SatisfactionDelta;
-            LastInterviewRound = State.Interview.Round;
+            ShowJobSearch();
+            return result.Outcome;
+        }
+
+        public InterviewStepOutcome ApplyInterview(out string message)
+        {
+            message = string.Empty;
+            var result = service.ApplyInterview(State);
+            if (result == null)
+            {
+                return InterviewStepOutcome.Failed;
+            }
+
+            pendingEvent = result.TriggeredEvent;
+            message = result.Message;
+            LastInterviewSatisfactionDelta = result.SatisfactionDelta;
             switch (result.Outcome)
             {
                 case InterviewStepOutcome.Event:
@@ -150,9 +173,14 @@ namespace PaperShift.Presenter
                     ShowWork();
                     break;
                 case InterviewStepOutcome.Failed:
-                    if (SceneController != null)
+                    var failureMessage = message;
+                    if (FindInterviewAndShowInternal())
                     {
-                        SceneController.ShowInterviewFailure();
+                        message = failureMessage + "\n已自动换一家公司继续面试。";
+                    }
+                    else
+                    {
+                        ShowResume();
                     }
                     break;
                 default:
@@ -163,9 +191,14 @@ namespace PaperShift.Presenter
             return result.Outcome;
         }
 
+        public InterviewStepOutcome AdvanceInterview(out string message)
+        {
+            return ApplyInterview(out message);
+        }
+
         public void AdvanceInterview()
         {
-            AdvanceInterview(out _);
+            ApplyInterview(out _);
         }
 
         public bool AskInterviewResult(out string message)
@@ -178,9 +211,14 @@ namespace PaperShift.Presenter
             }
             else
             {
-                if (SceneController != null)
+                var failureMessage = message;
+                if (FindInterviewAndShowInternal())
                 {
-                    SceneController.ShowInterviewFailure();
+                    message = failureMessage + "\n已自动换一家公司继续面试。";
+                }
+                else
+                {
+                    ShowResume();
                 }
             }
 
@@ -189,7 +227,7 @@ namespace PaperShift.Presenter
 
         public void AcceptOffer()
         {
-            if (service.AcceptOffer(State))
+            if (service.StartProbation(State))
             {
                 ShowWork();
             }
@@ -199,22 +237,92 @@ namespace PaperShift.Presenter
             }
         }
 
+        public ProbationStepOutcome AdvanceProbation(out string message)
+        {
+            message = string.Empty;
+            var result = service.AdvanceProbationStep(State);
+            if (result == null)
+            {
+                return ProbationStepOutcome.Failed;
+            }
+
+            pendingEvent = result.TriggeredEvent;
+            message = result.Message;
+            switch (result.Outcome)
+            {
+                case ProbationStepOutcome.Event:
+                    ShowNews();
+                    break;
+                case ProbationStepOutcome.Passed:
+                    ShowRetirement();
+                    break;
+                case ProbationStepOutcome.Failed:
+                    var failureMessage = message;
+                    if (FindInterviewAndShowInternal())
+                    {
+                        message = failureMessage + "\n已自动换一家公司继续面试。";
+                    }
+                    else
+                    {
+                        ShowResume();
+                    }
+                    break;
+                default:
+                    ShowWork();
+                    break;
+            }
+
+            return result.Outcome;
+        }
+
+        public void AdvanceProbation()
+        {
+            AdvanceProbation(out _);
+        }
+
+        public ProbationStepOutcome ApplyRegularization(out string message)
+        {
+            message = string.Empty;
+            var result = service.ApplyRegularization(State);
+            if (result == null)
+            {
+                return ProbationStepOutcome.Failed;
+            }
+
+            pendingEvent = result.TriggeredEvent;
+            message = result.Message;
+            switch (result.Outcome)
+            {
+                case ProbationStepOutcome.Passed:
+                    ShowRetirement();
+                    break;
+                case ProbationStepOutcome.Failed:
+                    var failureMessage = message;
+                    if (FindInterviewAndShowInternal())
+                    {
+                        message = failureMessage + "\n已自动换一家公司继续面试。";
+                    }
+                    else
+                    {
+                        ShowResume();
+                    }
+                    break;
+                default:
+                    ShowWork();
+                    break;
+            }
+
+            return result.Outcome;
+        }
+
+        public void ApplyRegularization()
+        {
+            ApplyRegularization(out _);
+        }
+
         public void CompleteWorkYear()
         {
-            pendingEvent = service.CompleteWorkYear(State);
-            if (State.Phase == PaperShiftPhase.Retirement)
-            {
-                ShowRetirement();
-                return;
-            }
-
-            if (pendingEvent != null)
-            {
-                ShowNews();
-                return;
-            }
-
-            ShowBudget();
+            AdvanceProbation(out _);
         }
 
         public void SaveBudgetAndReturnToWork()
@@ -258,8 +366,7 @@ namespace PaperShift.Presenter
 
         public void QuitJob()
         {
-            service.QuitJob(State);
-            ShowResume();
+            FindInterviewAndShowInternal();
         }
 
         public void RetireNow()

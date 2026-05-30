@@ -23,10 +23,17 @@ namespace PaperShift.Presenter
         private string authoredTitle;
         private string authoredDetail;
         private Color authoredRibbonColor;
+        private Vector2 authoredRibbonPosition;
+        private Vector3 authoredRibbonScale;
         private float startedAt;
         private bool playing;
         private bool bound;
         private bool capturedAuthoredState;
+
+        public bool IsPlaying
+        {
+            get { return playing; }
+        }
 
         private void Awake()
         {
@@ -93,6 +100,7 @@ namespace PaperShift.Presenter
             {
                 SetAlpha(0f);
                 RestoreBaseColors();
+                RestoreRibbonTransform();
                 Overlay.gameObject.SetActive(false);
                 playing = false;
                 return;
@@ -116,8 +124,8 @@ namespace PaperShift.Presenter
             {
                 var pop = Mathf.Clamp01(elapsed / FadeInSeconds);
                 var scaleY = Mathf.Lerp(0.88f, 1f, Mathf.SmoothStep(0f, 1f, pop));
-                Ribbon.localScale = new Vector3(1f, scaleY, 1f);
-                Ribbon.anchoredPosition = new Vector2(0f, Mathf.Sin(elapsed * 10f) * 1.4f);
+                Ribbon.localScale = new Vector3(authoredRibbonScale.x, authoredRibbonScale.y * scaleY, authoredRibbonScale.z);
+                Ribbon.anchoredPosition = authoredRibbonPosition + new Vector2(0f, Mathf.Sin(elapsed * 10f) * 1.4f);
             }
         }
 
@@ -163,6 +171,8 @@ namespace PaperShift.Presenter
 
             var ribbonGraphic = Ribbon == null ? null : Ribbon.GetComponent<Graphic>();
             authoredRibbonColor = ribbonGraphic == null ? Color.white : ribbonGraphic.color;
+            authoredRibbonPosition = Ribbon == null ? Vector2.zero : Ribbon.anchoredPosition;
+            authoredRibbonScale = Ribbon == null ? Vector3.one : Ribbon.localScale;
             capturedAuthoredState = true;
         }
 
@@ -182,6 +192,19 @@ namespace PaperShift.Presenter
             {
                 ribbonGraphic.color = authoredRibbonColor;
             }
+
+            RestoreRibbonTransform();
+        }
+
+        private void RestoreRibbonTransform()
+        {
+            if (Ribbon == null)
+            {
+                return;
+            }
+
+            Ribbon.anchoredPosition = authoredRibbonPosition;
+            Ribbon.localScale = authoredRibbonScale;
         }
 
         private void CaptureBaseColors()

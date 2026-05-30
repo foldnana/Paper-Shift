@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using PaperShift.Domain;
 using PaperShift.Model;
 using PaperShift.Runtime;
 using UnityEngine;
@@ -14,7 +16,10 @@ namespace PaperShift.Presenter
         public PaperShiftCandidateCardView JobCardView;
         public PaperShiftBottomStatusBarView BottomStatusBar;
 
+        private const float EventLogMessageSeconds = 3.2f;
         private readonly PaperShiftCandidateTagGridView candidateTagGridView = new PaperShiftCandidateTagGridView();
+        private Transform eventLogRoot;
+        private GameObject eventLogLineTemplate;
 
         private void Reset()
         {
@@ -31,14 +36,24 @@ namespace PaperShift.Presenter
                 return;
             }
 
-            Bind(gameplay.StartInterviewButton, AdvanceInterview);
-            Bind(gameplay.JobProgressButton, AdvanceInterview);
+            Bind(gameplay.StartInterviewButton, PrepareInterview);
+            Bind(gameplay.JobProgressButton, ApplyInterview);
             Bind(gameplay.ReapplyButton, () => Host.BeginReapplyJobWithTransition());
             Bind(gameplay.StartWorkButton, () =>
             {
-                Presenter.CompleteWorkYear();
-                RefreshAll();
+                AdvanceProbation();
             });
+
+            var bottomStatus = ResolveBottomStatusBar();
+            if (bottomStatus != null && bottomStatus.InterviewStatus != null)
+            {
+                Bind(bottomStatus.InterviewStatus.ActionButton, ApplyInterview);
+            }
+
+            if (bottomStatus != null && bottomStatus.WorkStatus != null)
+            {
+                Bind(bottomStatus.WorkStatus.ActionButton, ApplyRegularization);
+            }
         }
 
         public override void RefreshView()
@@ -102,7 +117,7 @@ namespace PaperShift.Presenter
         private void RefreshWork()
         {
             RefreshCards(BuildWorkerCardData(State.CurrentJob.JobTitle), BuildJobCardData());
-            SetGameplayActionsVisible(startInterview: false, reapply: false, startWork: true);
+            SetGameplayActionsVisible(startInterview: false, reapply: true, startWork: true);
             RefreshBottomStatusBar(interviewActionEnabled: false);
             RefreshCalendar();
         }
@@ -141,21 +156,154 @@ namespace PaperShift.Presenter
             candidateTagGridView.EmptySlotPrefab = Host == null ? null : Host.EmptySlotPrefab;
             candidateTagGridView.Refresh(gameplay.SelfTagsRoot, State.Worker.Tags);
 
-            if (gameplay.SelfEventLog != null)
-            {
-                gameplay.SelfEventLog.gameObject.SetActive(false);
-            }
+            ResolveEventLogLineTemplate(ResolveEventLogRoot());
         }
 
-        private void AdvanceInterview()
+        private void PrepareInterview()
         {
-            var outcome = Presenter.AdvanceInterview(out var message);
+            var outcome = Presenter.PrepareInterview(out var message);
             if (!string.IsNullOrEmpty(message) && outcome != InterviewStepOutcome.Event)
             {
-                ShowBanner(message);
+                ShowEventLogMessage(message);
             }
 
             RefreshAll();
+        }
+
+        private void ApplyInterview()
+        {
+            var outcome = Presenter.ApplyInterview(out var message);
+            if (!string.IsNullOrEmpty(message) && outcome != InterviewStepOutcome.Event)
+            {
+                ShowTransitionMessage("面试结果", message, outcome == InterviewStepOutcome.Passed ? PaperShiftTheme.Hex("#9fd9f3") : PaperShiftTheme.Hex("#a6dcf7"));
+            }
+
+            RefreshAll();
+        }
+
+        private void AdvanceProbation()
+        {
+            var outcome = Presenter.AdvanceProbation(out var message);
+            if (!string.IsNullOrEmpty(message) && outcome != ProbationStepOutcome.Event)
+            {
+                ShowTransitionMessage("试用期", message, PaperShiftTheme.Hex("#9fd9f3"));
+            }
+
+            RefreshAll();
+        }
+
+        private void ApplyRegularization()
+        {
+            var outcome = Presenter.ApplyRegularization(out var message);
+            if (!string.IsNullOrEmpty(message) && outcome != ProbationStepOutcome.Event)
+            {
+                ShowTransitionMessage("申请入职", message, outcome == ProbationStepOutcome.Passed ? PaperShiftTheme.Hex("#9fd9f3") : PaperShiftTheme.Hex("#a6dcf7"));
+            }
+
+            RefreshAll();
+        }
+
+        private void ShowTransitionMessage(string title, string detail, Color accent)
+        {
+            var gameplay = ResolveGameplayView();
+            if (gameplay != null && gameplay.JobTransition != null)
+            {
+                gameplay.JobTransition.Show("↻", title, detail, accent);
+                return;
+            }
+
+            ShowBanner(detail);
+        }
+
+        private void ShowEventLogMessage(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
+            var root = ResolveEventLogRoot();
+            var template = ResolveEventLogLineTemplate(root);
+            if (root == null || template == null)
+            {
+                ShowBanner(message);
+                return;
+            }
+
+            root.gameObject.SetActive(true);
+            var line = Instantiate(template, root);
+            line.name = "Runtime Log Line";
+            line.SetActive(true);
+
+            var text = line.GetComponentInChildren<Text>(true);
+            if (text != null)
+            {
+                text.text = message;
+            }
+
+            StartCoroutine(AnimateEventLogLine(line, EventLogMessageSeconds));
+        }
+
+        private IEnumerator AnimateEventLogLine(GameObject line, float holdSeconds)
+        {
+            if (line == null)
+            {
+                yield break;
+            }
+
+            var graphics = new List<Graphic>();
+            line.GetComponentsInChildren(true, graphics);
+            var baseColors = new List<Color>();
+            for (var i = 0; i < graphics.Count; i++)
+            {
+                baseColors.Add(graphics[i].color);
+            }
+
+            var baseScale = line.transform.localScale;
+            const float fadeInSeconds = 0.16f;
+            const float fadeOutSeconds = 0.28f;
+
+            var elapsed = 0f;
+            while (elapsed < fadeInSeconds && line != null)
+            {
+                var t = Mathf.Clamp01(elapsed / fadeInSeconds);
+                SetGraphicAlpha(graphics, baseColors, Mathf.SmoothStep(0f, 1f, t));
+                line.transform.localScale = Vector3.Lerp(baseScale * 0.96f, baseScale, Mathf.SmoothStep(0f, 1f, t));
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            SetGraphicAlpha(graphics, baseColors, 1f);
+            if (line != null)
+            {
+                line.transform.localScale = baseScale;
+            }
+
+            yield return new WaitForSecondsRealtime(holdSeconds);
+
+            elapsed = 0f;
+            while (elapsed < fadeOutSeconds && line != null)
+            {
+                var t = Mathf.Clamp01(elapsed / fadeOutSeconds);
+                SetGraphicAlpha(graphics, baseColors, Mathf.SmoothStep(1f, 0f, t));
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            if (line != null)
+            {
+                Destroy(line);
+            }
+        }
+
+        private static void SetGraphicAlpha(List<Graphic> graphics, List<Color> baseColors, float alpha)
+        {
+            for (var i = 0; i < graphics.Count; i++)
+            {
+                var color = i < baseColors.Count ? baseColors[i] : graphics[i].color;
+                color.a *= alpha;
+                graphics[i].color = color;
+            }
         }
 
         private CandidateUiData BuildWorkerCardData(string subtitleRole)
@@ -189,19 +337,19 @@ namespace PaperShift.Presenter
         {
             return new CandidateUiData
             {
-                Badge = Mathf.Max(1, State.Interview.Round + 1) + "轮",
+                Badge = "推进",
                 Corner = "面试",
                 Name = EmptyFallback(State.Interview.CompanyName, "还没有公司"),
                 Subtitle = EmptyFallback(State.Interview.JobTitle, "先投递简历"),
-                RingText = "满意 " + State.Interview.Satisfaction,
+                RingText = "成功 " + State.Interview.Satisfaction + "%",
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.Interview.CompanyName, "待投递")),
                     new UiPair("岗位", EmptyFallback(State.Interview.JobTitle, "未知")),
                     new UiPair("月薪", State.Interview.Salary.ToString()),
-                    new UiPair("轮次", State.Interview.Round + "/" + Mathf.Max(1, State.Interview.MaxRounds)),
-                    new UiPair("满意", State.Interview.Satisfaction.ToString()),
-                    new UiPair("风险", State.Resume.DeceptionRisk + "%")
+                    new UiPair("成功率", State.Interview.Satisfaction + "%"),
+                    new UiPair("简历风险", State.Resume.DeceptionRisk + "%"),
+                    new UiPair("状态", State.Interview.Satisfaction >= 70 ? "有希望" : "推进中")
                 },
                 Tags = InterviewTags(),
                 ProgressPercent = State.Interview.Satisfaction + "%",
@@ -214,43 +362,40 @@ namespace PaperShift.Presenter
         {
             if (State.Interview.HasOffer)
             {
-                return "可入职";
+                return "高成功率";
             }
 
-            if (Presenter != null &&
-                Presenter.LastInterviewRound == State.Interview.Round &&
-                State.Interview.Round > 0 &&
-                Presenter.LastInterviewSatisfactionDelta != 0)
+            if (Presenter != null && Presenter.LastInterviewSatisfactionDelta != 0)
             {
                 var delta = Presenter.LastInterviewSatisfactionDelta;
-                return "面试满意度 " + (delta > 0 ? "+" : string.Empty) + delta;
+                return "成功率 " + (delta > 0 ? "+" : string.Empty) + delta + "%";
             }
 
-            return "面试满意度";
+            return "面试成功率";
         }
 
         private CandidateUiData BuildJobCardData()
         {
             return new CandidateUiData
             {
-                Badge = State.HasActiveJob ? "在职" : "待业",
-                Corner = "岗位",
+                Badge = State.HasActiveJob ? "试用" : "待业",
+                Corner = "试用期",
                 Name = EmptyFallback(State.CurrentJob.CompanyName, "暂无工作"),
                 Subtitle = EmptyFallback(State.CurrentJob.JobTitle, "去投递简历"),
-                RingText = "强度 " + State.CurrentJob.Intensity,
+                RingText = "转正 " + State.CurrentJob.PromotionProgress + "%",
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.CurrentJob.CompanyName, "暂无")),
                     new UiPair("岗位", EmptyFallback(State.CurrentJob.JobTitle, "暂无")),
                     new UiPair("月薪", State.CurrentJob.Salary.ToString()),
-                    new UiPair("年限", State.CurrentJob.WorkYears + " 年"),
-                    new UiPair("升职", State.CurrentJob.PromotionProgress + "%"),
-                    new UiPair("离职", State.CurrentJob.QuitRisk + "%")
+                    new UiPair("试用", State.CurrentJob.WorkYears + " 个月"),
+                    new UiPair("转正概率", State.CurrentJob.PromotionProgress + "%"),
+                    new UiPair("状态", State.CurrentJob.PromotionProgress >= 70 ? "有希望" : "观察中")
                 },
                 Tags = CurrentJobTags(),
                 ProgressPercent = State.CurrentJob.PromotionProgress + "%",
-                ProgressLabel = State.CurrentJob.QuitRisk > State.CurrentJob.PromotionProgress ? "离职风险" : "升职进度",
-                ProgressFill = Mathf.Clamp01((State.CurrentJob.QuitRisk > State.CurrentJob.PromotionProgress ? State.CurrentJob.QuitRisk : State.CurrentJob.PromotionProgress) / 100f)
+                ProgressLabel = "转正概率",
+                ProgressFill = Mathf.Clamp01(State.CurrentJob.PromotionProgress / 100f)
             };
         }
 
@@ -305,7 +450,7 @@ namespace PaperShift.Presenter
         private void PlayJobCardTransition(PaperShiftScreen screen)
         {
             var gameplay = ResolveGameplayView();
-            if (State == null || gameplay == null || gameplay.JobTransition == null)
+            if (State == null || gameplay == null || gameplay.JobTransition == null || gameplay.JobTransition.IsPlaying)
             {
                 return;
             }
@@ -313,10 +458,10 @@ namespace PaperShift.Presenter
             switch (screen)
             {
                 case PaperShiftScreen.JobSearch:
-                    gameplay.JobTransition.Show("↻", "你进入了面试期", State.Interview.Round <= 0 ? "正在联系面试官..." : "正在等待面试结果...", PaperShiftTheme.Hex("#9ed8f7"));
+                    gameplay.JobTransition.Show("↻", "你进入了面试期", "正在推进面试机会...", PaperShiftTheme.Hex("#9ed8f7"));
                     break;
                 case PaperShiftScreen.Work:
-                    gameplay.JobTransition.Show("↻", "你进入了打工期", "正在适应新的工作节奏...", PaperShiftTheme.Hex("#9fd9f3"));
+                    gameplay.JobTransition.Show("↻", "你进入了试用期", "正在适应新的工作节奏...", PaperShiftTheme.Hex("#9fd9f3"));
                     break;
                 case PaperShiftScreen.InterviewFailure:
                     gameplay.JobTransition.Show("↻", "你进入了空窗期", "正在重新联系公司...", PaperShiftTheme.Hex("#a6dcf7"));
@@ -340,19 +485,16 @@ namespace PaperShift.Presenter
 
         private void RefreshBottomStatusBar(bool interviewActionEnabled)
         {
-            if (BottomStatusBar == null)
-            {
-                BottomStatusBar = GetComponentInChildren<PaperShiftBottomStatusBarView>(true);
-            }
-
-            if (BottomStatusBar == null)
+            var bottomStatusBar = ResolveBottomStatusBar();
+            if (bottomStatusBar == null)
             {
                 SetButtonInteractable(ResolveGameplayView() == null ? null : ResolveGameplayView().JobProgressButton, interviewActionEnabled);
                 return;
             }
 
-            BottomStatusBar.Refresh(State, interviewActionEnabled && State.Interview.Round > 0);
-            BottomStatusBar.SetInterviewInteractable(interviewActionEnabled);
+            bottomStatusBar.Refresh(State, interviewActionEnabled && !string.IsNullOrEmpty(State.Interview.JobId));
+            bottomStatusBar.SetInterviewInteractable(interviewActionEnabled);
+            bottomStatusBar.SetWorkInteractable(State.Phase == PaperShiftPhase.Probation && State.HasActiveJob);
         }
 
         private void RefreshCalendar()
@@ -375,6 +517,90 @@ namespace PaperShift.Presenter
             }
 
             return GameplayView;
+        }
+
+        private PaperShiftBottomStatusBarView ResolveBottomStatusBar()
+        {
+            if (BottomStatusBar == null)
+            {
+                BottomStatusBar = GetComponentInChildren<PaperShiftBottomStatusBarView>(true);
+            }
+
+            return BottomStatusBar;
+        }
+
+        private Transform ResolveEventLogRoot()
+        {
+            if (eventLogRoot != null)
+            {
+                return eventLogRoot;
+            }
+
+            var gameplay = ResolveGameplayView();
+            if (gameplay != null && gameplay.SelfEventLog != null)
+            {
+                eventLogRoot = gameplay.SelfEventLog;
+                return eventLogRoot;
+            }
+
+            if (gameplay != null && gameplay.Root != null)
+            {
+                eventLogRoot = FindDeepChild(gameplay.Root, "Event Log");
+            }
+
+            return eventLogRoot;
+        }
+
+        private GameObject ResolveEventLogLineTemplate(Transform root)
+        {
+            if (eventLogLineTemplate != null)
+            {
+                return eventLogLineTemplate;
+            }
+
+            if (root == null)
+            {
+                return null;
+            }
+
+            var line = FindDeepChild(root, "Log Line");
+            if (line == null && root.childCount > 0)
+            {
+                line = root.GetChild(0);
+            }
+
+            if (line == null)
+            {
+                return null;
+            }
+
+            eventLogLineTemplate = line.gameObject;
+            eventLogLineTemplate.SetActive(false);
+            return eventLogLineTemplate;
+        }
+
+        private static Transform FindDeepChild(Transform root, string childName)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+
+            if (root.name == childName)
+            {
+                return root;
+            }
+
+            for (var i = 0; i < root.childCount; i++)
+            {
+                var found = FindDeepChild(root.GetChild(i), childName);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
         }
 
         private static void SetButtonVisible(Button button, bool visible)

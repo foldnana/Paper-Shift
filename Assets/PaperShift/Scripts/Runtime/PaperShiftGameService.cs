@@ -199,80 +199,66 @@ namespace PaperShift.Runtime
                 Round = 0,
                 OfferThreshold = pair.Job.OfferThreshold,
                 Salary = salary,
-                Satisfaction = 0
+                Satisfaction = StartingInterviewSuccessRate(state, pair.Job)
             };
             state.Phase = PaperShiftPhase.Interview;
             state.AddLog("投递到了 " + pair.Company.DisplayName + " · " + pair.Job.DisplayName + "。");
             return true;
         }
 
-        public InterviewStepResult AdvanceInterviewStep(PaperShiftRunState state)
+        public InterviewStepResult PrepareInterviewStep(PaperShiftRunState state)
         {
             var company = database.FindCompany(state.Interview.CompanyId);
             var job = database.FindJob(state.Interview.CompanyId, state.Interview.JobId);
             if (company == null || job == null)
             {
-                return InterviewStepResult.Failed("还没有可推进的面试。");
+                return InterviewStepResult.Failed("还没有可以准备的面试。");
             }
 
-            state.Interview.Round++;
             var satisfactionBefore = state.Interview.Satisfaction;
-            var score = ComputeInterviewScore(state, company, job);
+            var score = ComputeInterviewPreparationDelta(state, company, job);
+            state.Interview.Round++;
             state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + score, 0, 100);
             var satisfactionAfter = state.Interview.Satisfaction;
-            state.AddLog("第" + state.Interview.Round + "轮面试结束，满意度变为 " + state.Interview.Satisfaction + "。");
+            state.AddLog("准备面试，成功率变为 " + state.Interview.Satisfaction + "%。");
 
-            var triggered = TryTriggerEvent(state, GameEventPhase.Interview, company, job);
-            if (triggered != null)
+            var deltaText = score >= 0 ? "+" + score : score.ToString();
+            return InterviewStepResult.Continue("准备面试，成功率 " + deltaText + "%，当前 " + state.Interview.Satisfaction + "%。", satisfactionBefore, satisfactionAfter);
+        }
+
+        public InterviewStepResult ApplyInterview(PaperShiftRunState state)
+        {
+            var company = database.FindCompany(state.Interview.CompanyId);
+            var job = database.FindJob(state.Interview.CompanyId, state.Interview.JobId);
+            if (company == null || job == null)
             {
-                return InterviewStepResult.Event(triggered, satisfactionBefore, satisfactionAfter);
+                return InterviewStepResult.Failed("还没有可以参加的面试。");
             }
 
-            if (state.Interview.HasOffer)
+            var satisfactionBefore = state.Interview.Satisfaction;
+            var satisfactionAfter = state.Interview.Satisfaction;
+            if (state.Interview.Satisfaction >= 100 || random.Next(0, 100) < state.Interview.Satisfaction)
             {
-                var message = "面试通过，" + company.DisplayName + " 发来了 Offer，你已入职 " + job.DisplayName + "。";
+                var message = "面试通过，" + company.DisplayName + " 发来了 Offer，进入 " + job.DisplayName + " 试用期。";
                 state.Interview.Satisfaction = Math.Max(state.Interview.Satisfaction, state.Interview.OfferThreshold);
-                AcceptOffer(state);
+                StartProbation(state);
                 return InterviewStepResult.Passed(message, satisfactionBefore, satisfactionAfter);
             }
 
-            if (state.Interview.Round < state.Interview.MaxRounds && random.Next(0, 100) < EarlyInterviewFailureChance(state, job))
-            {
-                var message = "面试提前结束。面试官认为匹配度不够，你还在求职状态，可以再投一家。";
-                state.Worker.Stress = Clamp(state.Worker.Stress + 6, 0, 100);
-                state.AddLog(message, EventNoticeType.Banner);
-                return InterviewStepResult.Failed(message, satisfactionBefore, satisfactionAfter);
-            }
-
-            if (state.Interview.Round >= state.Interview.MaxRounds)
-            {
-                var message = "面试失败。对方认为匹配度不够，你还在求职状态，可以再投一家。";
-                state.Worker.Stress = Clamp(state.Worker.Stress + 8, 0, 100);
-                state.AddLog(message, EventNoticeType.Banner);
-                return InterviewStepResult.Failed(message, satisfactionBefore, satisfactionAfter);
-            }
-
-            return InterviewStepResult.Continue("第" + state.Interview.Round + "轮面试结束，满意度变为 " + state.Interview.Satisfaction + "，等待下一轮面试。", satisfactionBefore, satisfactionAfter);
+            var failedMessage = "面试失败。对方认为匹配度不够，你还在求职状态。";
+            state.Worker.Stress = Clamp(state.Worker.Stress + 6, 0, 100);
+            state.AddLog(failedMessage, EventNoticeType.Banner);
+            return InterviewStepResult.Failed(failedMessage, satisfactionBefore, satisfactionAfter);
         }
 
         public TriggeredEvent AdvanceInterview(PaperShiftRunState state)
         {
-            var result = AdvanceInterviewStep(state);
+            var result = ApplyInterview(state);
             return result == null ? null : result.TriggeredEvent;
         }
 
-        public bool AcceptOffer(PaperShiftRunState state)
+        public bool StartProbation(PaperShiftRunState state)
         {
-            if (!state.Interview.HasOffer)
-            {
-                var chance = state.Interview.Satisfaction / 100f;
-                if (random.NextDouble() > chance)
-                {
-                    state.AddLog("你申请入职，但对方没有同意。");
-                    return false;
-                }
-            }
-
             var company = database.FindCompany(state.Interview.CompanyId);
             var job = database.FindJob(state.Interview.CompanyId, state.Interview.JobId);
             if (company == null || job == null)
@@ -288,51 +274,102 @@ namespace PaperShift.Runtime
                 JobTitle = job.DisplayName,
                 Salary = state.Interview.Salary,
                 Intensity = job.WorkIntensity,
-                PromotionProgress = 0,
-                QuitRisk = job.QuitRiskBase,
+                PromotionProgress = StartingRegularizationChance(state, job),
+                QuitRisk = 0,
                 WorkYears = 0
             };
             state.Interview = new InterviewState();
-            state.Phase = PaperShiftPhase.Working;
-            state.AddLog("正式入职 " + company.DisplayName + " · " + job.DisplayName + "。", EventNoticeType.Banner);
+            state.Phase = PaperShiftPhase.Probation;
+            state.AddLog("进入试用期 " + company.DisplayName + " · " + job.DisplayName + "。", EventNoticeType.Banner);
             return true;
+        }
+
+        public bool AcceptOffer(PaperShiftRunState state)
+        {
+            return StartProbation(state);
+        }
+
+        public void RestartJobSearch(PaperShiftRunState state)
+        {
+            if (state.HasActiveJob)
+            {
+                state.AddLog("已离开 " + state.CurrentJob.CompanyName + "，重新寻找机会。", EventNoticeType.Banner);
+            }
+
+            state.Interview = new InterviewState();
+            state.CurrentJob = new CurrentJobState();
+            state.Phase = PaperShiftPhase.Interview;
+        }
+
+        public ProbationStepResult AdvanceProbationStep(PaperShiftRunState state)
+        {
+            if (state == null || !state.HasActiveJob)
+            {
+                return ProbationStepResult.Failed("当前没有正在进行的试用期。", 0, 0, 0, 0);
+            }
+
+            var job = database.FindJob(state.CurrentJob.CompanyId, state.CurrentJob.JobId);
+            if (job == null)
+            {
+                return ProbationStepResult.Failed("试用期岗位数据丢失，已回到求职状态。", 0, 0, 0, 0);
+            }
+
+            state.Phase = PaperShiftPhase.Probation;
+            state.CurrentJob.WorkYears++;
+            state.Worker.Stress = Clamp(state.Worker.Stress + Math.Max(1, state.CurrentJob.Intensity / 12), 0, 100);
+
+            var chanceBefore = state.CurrentJob.PromotionProgress;
+            var aptitude = WorkerAptitude(state, job);
+            var chanceDelta = Clamp(8 + job.PromotionBase / 3 + aptitude / 12 + random.Next(-18, 19) - state.Worker.Stress / 20, -30, 32);
+
+            state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + chanceDelta, 0, 100);
+            state.CurrentJob.QuitRisk = 0;
+
+            var deltaText = chanceDelta >= 0 ? "+" + chanceDelta : chanceDelta.ToString();
+            var continueMessage = "试用期推进，转正概率 " + deltaText + "%，当前 " + state.CurrentJob.PromotionProgress + "%。";
+            state.AddLog(continueMessage);
+            return ProbationStepResult.Continue(continueMessage, chanceBefore, state.CurrentJob.PromotionProgress, 0, 0);
+        }
+
+        public ProbationStepResult ApplyRegularization(PaperShiftRunState state)
+        {
+            if (state == null || !state.HasActiveJob)
+            {
+                return ProbationStepResult.Failed("当前没有可以申请入职的试用期。", 0, 0, 0, 0);
+            }
+
+            var chanceBefore = state.CurrentJob.PromotionProgress;
+            if (chanceBefore >= 100 || random.Next(0, 100) < chanceBefore)
+            {
+                CompleteGenerationByHire(state);
+                return ProbationStepResult.Passed("申请入职成功，正式转正。这一代结算。", chanceBefore, chanceBefore, 0, 0);
+            }
+
+            var message = "申请入职没有通过，已自动继续寻找下一家公司。";
+            state.AddLog(message, EventNoticeType.Banner);
+            state.CurrentJob = new CurrentJobState();
+            state.Interview = new InterviewState();
+            state.Phase = PaperShiftPhase.Interview;
+            return ProbationStepResult.Failed(message, chanceBefore, chanceBefore, 0, 0);
+        }
+
+        public void CompleteGenerationByHire(PaperShiftRunState state)
+        {
+            state.Phase = PaperShiftPhase.Retirement;
+            state.Retirement.Reason = RunEndReason.Custom;
+            state.Retirement.ReasonText = "通过试用期，正式入职，这一代结算。";
+            state.Retirement.FinalSavings = state.Worker.Money + Math.Max(0, state.CurrentJob.Salary);
+            state.Retirement.WorkYears = state.CurrentJob.WorkYears;
+            state.Retirement.FinalJobTitle = state.CurrentJob.JobTitle;
+            EnsureHeirs(state);
+            state.AddLog(state.Retirement.ReasonText, EventNoticeType.Banner);
         }
 
         public bool ResolveInterviewResult(PaperShiftRunState state, out string message)
         {
-            message = string.Empty;
-            var company = database.FindCompany(state.Interview.CompanyId);
-            var job = database.FindJob(state.Interview.CompanyId, state.Interview.JobId);
-            if (company == null || job == null)
-            {
-                message = "还没有可询问的面试结果。";
-                return false;
-            }
-
-            if (state.Interview.Round <= 0)
-            {
-                state.Interview.Round = 1;
-                state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + ComputeInterviewScore(state, company, job), 0, 100);
-            }
-
-            var aptitude = WorkerAptitude(state, job) / 5;
-            var chance = state.Interview.Satisfaction + 25 - job.Difficulty / 2 + aptitude - state.Resume.DeceptionRisk / 2;
-            chance = Clamp(chance, 8, 92);
-            var success = random.Next(0, 100) < chance;
-            if (success)
-            {
-                state.Interview.Satisfaction = Math.Max(state.Interview.Satisfaction, state.Interview.OfferThreshold);
-                AcceptOffer(state);
-                message = "面试通过！" + company.DisplayName + " 发来了 Offer，你已入职 " + job.DisplayName + "。";
-                return true;
-            }
-
-            state.Worker.Stress = Clamp(state.Worker.Stress + 6, 0, 100);
-            state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction - random.Next(8, 20), 0, 100);
-            state.Phase = PaperShiftPhase.Interview;
-            message = "面试失败。对方认为匹配度不够，你还在求职状态，可以再投一家。";
-            state.AddLog(message, EventNoticeType.Banner);
-            return false;
+            var result = ApplyInterview(state);
+            message = result == null ? "还没有可推进的面试。" : result.Message;
+            return result != null && result.Outcome == InterviewStepOutcome.Passed;
         }
 
         public TriggeredEvent CompleteWorkYear(PaperShiftRunState state)
@@ -562,23 +599,28 @@ namespace PaperShift.Runtime
             return picker.Pick(random);
         }
 
-        private int ComputeInterviewScore(PaperShiftRunState state, CompanyDefinition company, JobDefinition job)
+        private int ComputeInterviewPreparationDelta(PaperShiftRunState state, CompanyDefinition company, JobDefinition job)
         {
-            var score = 12 - job.Difficulty / 10 + WorkerAptitude(state, job) / 7;
-            score += MatchIntentWeight(state, job) / 4;
+            var aptitude = WorkerAptitude(state, job);
+            var score = random.Next(-12, 13);
+            score += MatchIntentWeight(state, job) / 16;
+            score += aptitude / 28;
+            score -= job.Difficulty / 18;
+            score -= state.Resume.DeceptionRisk / 18;
+            score -= state.Worker.Stress / 25;
+
             for (var i = 0; i < job.TagIds.Length; i++)
             {
-                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, job.TagIds[i]);
+                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, job.TagIds[i]) / 4;
             }
 
             for (var i = 0; i < company.TagIds.Length; i++)
             {
-                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, company.TagIds[i]);
+                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, company.TagIds[i]) / 4;
             }
 
-            score += ResumePresentationBonus(state.Resume);
-            score -= state.Worker.Stress / 12;
-            return Clamp(score, -30, 45);
+            score += ResumePresentationBonus(state.Resume) / 3;
+            return Clamp(score, -18, 18);
         }
 
         private int WorkerAptitude(PaperShiftRunState state, JobDefinition job)
@@ -607,15 +649,21 @@ namespace PaperShift.Runtime
             return salary + salary * percent / 100;
         }
 
-        private static int EarlyInterviewFailureChance(PaperShiftRunState state, JobDefinition job)
+        private int StartingInterviewSuccessRate(PaperShiftRunState state, JobDefinition job)
         {
-            if (state.Interview.Satisfaction >= 35)
-            {
-                return 0;
-            }
+            var chance = 22 + MatchIntentWeight(state, job) / 4 + WorkerAptitude(state, job) / 12;
+            chance -= job.Difficulty / 5;
+            chance -= state.Resume.DeceptionRisk / 4;
+            chance -= state.Worker.Stress / 16;
+            return Clamp(chance, 5, 65);
+        }
 
-            var chance = 8 + (35 - state.Interview.Satisfaction) / 2 + job.Difficulty / 20 + state.Resume.DeceptionRisk / 8;
-            return Clamp(chance, 0, 35);
+        private int StartingRegularizationChance(PaperShiftRunState state, JobDefinition job)
+        {
+            var chance = 24 + job.PromotionBase / 2 + WorkerAptitude(state, job) / 14;
+            chance -= job.WorkIntensity / 8;
+            chance -= state.Worker.Stress / 18;
+            return Clamp(chance, 8, 70);
         }
 
         private void ApplyAnnualBudget(PaperShiftRunState state)
@@ -994,6 +1042,66 @@ namespace PaperShift.Runtime
         public static InterviewStepResult Event(TriggeredEvent triggeredEvent, int satisfactionBefore, int satisfactionAfter)
         {
             return new InterviewStepResult(InterviewStepOutcome.Event, string.Empty, triggeredEvent, satisfactionBefore, satisfactionAfter);
+        }
+    }
+
+    public enum ProbationStepOutcome
+    {
+        Continue,
+        Passed,
+        Failed,
+        Event
+    }
+
+    public sealed class ProbationStepResult
+    {
+        public readonly ProbationStepOutcome Outcome;
+        public readonly string Message;
+        public readonly TriggeredEvent TriggeredEvent;
+        public readonly int ProgressBefore;
+        public readonly int ProgressAfter;
+        public readonly int RiskBefore;
+        public readonly int RiskAfter;
+
+        public int ProgressDelta
+        {
+            get { return ProgressAfter - ProgressBefore; }
+        }
+
+        public int RiskDelta
+        {
+            get { return RiskAfter - RiskBefore; }
+        }
+
+        private ProbationStepResult(ProbationStepOutcome outcome, string message, TriggeredEvent triggeredEvent, int progressBefore, int progressAfter, int riskBefore, int riskAfter)
+        {
+            Outcome = outcome;
+            Message = message;
+            TriggeredEvent = triggeredEvent;
+            ProgressBefore = progressBefore;
+            ProgressAfter = progressAfter;
+            RiskBefore = riskBefore;
+            RiskAfter = riskAfter;
+        }
+
+        public static ProbationStepResult Continue(string message, int progressBefore, int progressAfter, int riskBefore, int riskAfter)
+        {
+            return new ProbationStepResult(ProbationStepOutcome.Continue, message, null, progressBefore, progressAfter, riskBefore, riskAfter);
+        }
+
+        public static ProbationStepResult Passed(string message, int progressBefore, int progressAfter, int riskBefore, int riskAfter)
+        {
+            return new ProbationStepResult(ProbationStepOutcome.Passed, message, null, progressBefore, progressAfter, riskBefore, riskAfter);
+        }
+
+        public static ProbationStepResult Failed(string message, int progressBefore, int progressAfter, int riskBefore, int riskAfter)
+        {
+            return new ProbationStepResult(ProbationStepOutcome.Failed, message, null, progressBefore, progressAfter, riskBefore, riskAfter);
+        }
+
+        public static ProbationStepResult Event(TriggeredEvent triggeredEvent, int progressBefore, int progressAfter, int riskBefore, int riskAfter)
+        {
+            return new ProbationStepResult(ProbationStepOutcome.Event, string.Empty, triggeredEvent, progressBefore, progressAfter, riskBefore, riskAfter);
         }
     }
 

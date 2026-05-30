@@ -31,9 +31,9 @@ namespace PaperShift.Presenter
                 return;
             }
 
-            Set(CoinText, State.Worker.Money.ToString("N0"));
-            Set(ReasonTitleText, "退场原因：" + State.Retirement.ReasonText);
-            Set(SettlementTexts, "workYears", State.Retirement.WorkYears + " 年");
+            Set(CoinText, State.Retirement.FinalSavings.ToString("N0"));
+            Set(ReasonTitleText, "结算结果：" + State.Retirement.ReasonText);
+            Set(SettlementTexts, "workYears", State.Retirement.WorkYears + " 个月");
             Set(SettlementTexts, "finalJob", string.IsNullOrEmpty(State.Retirement.FinalJobTitle) ? "暂无" : State.Retirement.FinalJobTitle);
             Set(SettlementTexts, "savings", State.Retirement.FinalSavings.ToString());
             Set(SettlementTexts, "mental", State.Worker.Stress >= 70 ? "快撑不住" : "还能聊天");

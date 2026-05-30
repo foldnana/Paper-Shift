@@ -6,6 +6,7 @@ namespace PaperShift.Domain
         SelectTags,
         EditResume,
         Interview,
+        Probation,
         Working,
         Budget,
         EventModal,
