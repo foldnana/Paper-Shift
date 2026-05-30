@@ -31,9 +31,17 @@ namespace PaperShift.Editor
         private static PaperShiftSceneController controller;
         private static readonly List<PaperShiftScreenView> screenViews = new List<PaperShiftScreenView>();
 
-        [MenuItem("Paper Shift/Rebuild Paper Shift UI Scene")]
         public static void Build()
         {
+            if (!EditorUtility.DisplayDialog(
+                    "Deprecated Scene Builder",
+                    "PaperShiftUI.unity is now a hand-maintained scene. Rebuilding it will discard manual hierarchy and reference work. Use Paper Shift/Install Scene View References after manual UI edits instead.",
+                    "Rebuild Anyway",
+                    "Cancel"))
+            {
+                return;
+            }
+
             defaultFont = AssetDatabase.LoadAssetAtPath<Font>(UiFontPath);
             if (defaultFont == null)
             {

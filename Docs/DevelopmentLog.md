@@ -1,6 +1,6 @@
 # Paper Shift 开发记录
 
-最后更新：2026-05-29
+最后更新：2026-05-30
 
 ## 当前项目结构
 
@@ -15,7 +15,19 @@ Paper Shift 是一个 Unity UI 原型项目，核心方向是人生/工作模拟
 - `Runtime`：核心玩法规则、条件判断、效果结算、权重随机、运行时兜底启动。
 - `Presenter`：Unity UI 绑定、界面刷新、自定义图形组件、视图引用组件。
 - `Controller`：页面切换控制。
-- `Editor`：场景生成器和数据库生成工具。
+- `Editor`：手工场景引用安装、数据库生成工具，以及已退役的历史场景生成器。
+
+## 数据源约定
+
+运行时玩法内容以 `Assets/PaperShift/Scripts/Data/PaperShiftSeedData.cs` 为当前唯一权威来源。
+
+`Assets/PaperShift/Scripts/Model/PaperShiftGameModel.cs` 中的旧静态 UI 原型数据只在 Unity Editor 下编译，服务于已退役的 SceneBuilder，不再进入运行期/发布包，也不再作为玩法数据来源。新增标签、岗位、事件、属性、年代时，优先更新 `PaperShiftSeedData` 和 `PaperShiftDefinitions`，不要再往 `PaperShiftGameModel.CreatePrototype()` 里扩内容。
+
+字段 ID 约定：
+
+- 人物“学历/教育水平”的数值来源统一使用 `literacy`。
+- UI 简历行仍可使用字段名 `education` 表示“学历这一行”，但不能读取不存在的 `WorkerProfile` stat `education`。
+- 预算分类里的 `education` 仍表示“教育投入”，它属于 `BudgetPlan`，不是人物属性。
 
 ## 当前关键场景组件
 
@@ -129,19 +141,17 @@ Self Card 的标签区由以下引用驱动：
 - 一次迁移一个页面。
 - 不要继续往手工维护的界面里增加名字查找。
 
-### SceneBuilder 与手工场景存在差异
+### 场景维护方式
 
-`PaperShiftSceneBuilder` 仍然会生成旧结构和旧命名，比如：
+`PaperShiftUI.unity` 已确定为手工维护的主场景。
 
-- `Primary Bottom Action`
-- `Secondary Bottom Action`
+`PaperShiftSceneBuilder` 不再暴露在 `Paper Shift` 菜单中，避免误重建场景并覆盖手工层级、动效和 Inspector 引用。它只作为历史回退工具保留，直接调用时会弹出二次确认。
 
-如果从 SceneBuilder 重新生成场景，可能覆盖当前手工调整过的 UI 和显式引用。
+手工改 UI 后使用：
 
-后续需要二选一：
+- `Paper Shift/Install Scene View References`
 
-- 更新 SceneBuilder，让它也生成新的显式引用组件。
-- 或者把 `PaperShiftUI.unity` 当作手工维护的主场景，暂时不要用 SceneBuilder 重建它。
+这个工具只负责把现有场景层级重新绑定到运行时组件，不负责重建场景。
 
 ### 仍需要 Play Mode 实测
 
@@ -168,7 +178,6 @@ Self Card 的标签区由以下引用驱动：
 ## 建议下一步
 
 1. 在 Unity Play Mode 中完整验证主玩法链路。
-2. 如果 SceneBuilder 还会继续使用，更新它，让它生成 `PaperShiftGameplayViewReferences`。
-3. 将 `PaperShiftPrototypeBinder` 逐步拆成页面级 Binder。
-4. 当标签选择页、简历页、预算页 UI 稳定后，也迁移到显式引用方式。
-5. 增加一个轻量的 Editor 校验工具，用来检查场景关键引用是否缺失。
+2. 将 `PaperShiftPrototypeBinder` 逐步拆成页面级 Binder。
+3. 当标签选择页、简历页、预算页 UI 稳定后，也迁移到显式引用方式。
+4. 增加一个轻量的 Editor 校验工具，用来检查场景关键引用是否缺失。

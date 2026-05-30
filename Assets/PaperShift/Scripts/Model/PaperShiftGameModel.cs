@@ -30,6 +30,7 @@ namespace PaperShift.Model
         SuperRare
     }
 
+#if UNITY_EDITOR
     public sealed class PaperShiftGameModel
     {
         public WorkerData Worker = new WorkerData();
@@ -574,4 +575,5 @@ namespace PaperShift.Model
             Allocation = allocation;
         }
     }
+#endif
 }

@@ -154,7 +154,7 @@ namespace PaperShift.Presenter
             switch (fieldId)
             {
                 case "education":
-                    score = State.Worker.GetStat("education");
+                    score = State.Worker.GetStat("literacy");
                     break;
                 case "experience":
                     score = Mathf.RoundToInt((State.Worker.GetStat("logic") + State.Worker.GetStat("social") + State.Worker.GetStat("body")) / 3f);
@@ -166,7 +166,7 @@ namespace PaperShift.Presenter
                     score = Mathf.Clamp(State.Worker.Tags.Count * 22, 0, 100);
                     break;
                 case "salary":
-                    score = Mathf.RoundToInt((State.Worker.GetStat("logic") + State.Worker.GetStat("social") + State.Worker.GetStat("education")) / 3f);
+                    score = Mathf.RoundToInt((State.Worker.GetStat("logic") + State.Worker.GetStat("social") + State.Worker.GetStat("literacy")) / 3f);
                     break;
                 default:
                     score = 50;

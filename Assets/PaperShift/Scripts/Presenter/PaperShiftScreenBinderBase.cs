@@ -115,7 +115,7 @@ namespace PaperShift.Presenter
 
         protected string ExpectedSalaryLabel()
         {
-            var baseSalary = 6000 + State.Worker.GetStat("logic") * 55 + State.Worker.GetStat("social") * 35 + State.Worker.GetStat("education") * 50;
+            var baseSalary = 6000 + State.Worker.GetStat("logic") * 55 + State.Worker.GetStat("social") * 35 + State.Worker.GetStat("literacy") * 50;
             baseSalary = Mathf.RoundToInt(baseSalary / 500f) * 500;
             return "期望 " + Mathf.Max(4000, baseSalary - 2500) + "-" + Mathf.Max(6000, baseSalary + 3500);
         }
