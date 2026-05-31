@@ -1236,6 +1236,7 @@ namespace PaperShift.Editor
                 case PaperShiftScreen.Budget: return controller.ShowBudget;
                 case PaperShiftScreen.News: return controller.ShowNews;
                 case PaperShiftScreen.Retirement: return controller.ShowRetirement;
+                case PaperShiftScreen.Inheritance: return controller.ShowInheritance;
                 default: return controller.ShowCreate;
             }
         }

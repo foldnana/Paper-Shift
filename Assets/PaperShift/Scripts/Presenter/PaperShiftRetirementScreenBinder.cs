@@ -20,7 +20,11 @@ namespace PaperShift.Presenter
         {
             Bind(FinishButton, () =>
             {
-                Presenter.StartNextGeneration(0);
+                if (SceneController != null)
+                {
+                    SceneController.ShowInheritance();
+                }
+
                 RefreshAll();
             });
         }

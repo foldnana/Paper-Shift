@@ -13,7 +13,8 @@ namespace PaperShift.Model
         Work,
         Budget,
         News,
-        Retirement
+        Retirement,
+        Inheritance
     }
 
     public enum PortraitKind

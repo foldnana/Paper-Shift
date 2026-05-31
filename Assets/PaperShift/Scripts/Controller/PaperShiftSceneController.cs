@@ -26,6 +26,7 @@ namespace PaperShift.Controller
         public void ShowBudget() => ShowScreen(PaperShiftScreen.Budget);
         public void ShowNews() => ShowScreen(PaperShiftScreen.News);
         public void ShowRetirement() => ShowScreen(PaperShiftScreen.Retirement);
+        public void ShowInheritance() => ShowScreen(PaperShiftScreen.Inheritance);
 
         public void BeginCurrentWorkerFlow()
         {
