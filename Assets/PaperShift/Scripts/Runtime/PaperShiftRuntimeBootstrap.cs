@@ -55,7 +55,7 @@ namespace PaperShift.Runtime
                 ? AssetDatabase.LoadAssetAtPath<GameObject>("Assets/PaperShift/Prefab/Tag Row Item--标签选择预制体.prefab")
                 : binder.TagRowPrefab;
             binder.ResumeTagPrefab = binder.ResumeTagPrefab == null
-                ? AssetDatabase.LoadAssetAtPath<GameObject>("Assets/PaperShift/Prefab/标签.prefab")
+                ? AssetDatabase.LoadAssetAtPath<GameObject>("Assets/PaperShift/Prefab/Tag.prefab")
                 : binder.ResumeTagPrefab;
             binder.StatusTagPrefab = binder.StatusTagPrefab == null
                 ? AssetDatabase.LoadAssetAtPath<GameObject>("Assets/PaperShift/Prefab/标签.prefab")

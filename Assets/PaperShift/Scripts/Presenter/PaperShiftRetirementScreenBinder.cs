@@ -36,7 +36,7 @@ namespace PaperShift.Presenter
             Set(SettlementTexts, "workYears", State.Retirement.WorkYears + " 个月");
             Set(SettlementTexts, "finalJob", string.IsNullOrEmpty(State.Retirement.FinalJobTitle) ? "暂无" : State.Retirement.FinalJobTitle);
             Set(SettlementTexts, "savings", State.Retirement.FinalSavings.ToString());
-            Set(SettlementTexts, "mental", State.Worker.Stress >= 70 ? "快撑不住" : "还能聊天");
+            Set(SettlementTexts, "stress", State.Worker.Stress >= 70 ? "快撑不住" : "还能聊天");
         }
     }
 }

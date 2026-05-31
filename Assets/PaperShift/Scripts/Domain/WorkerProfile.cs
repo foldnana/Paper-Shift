@@ -10,6 +10,7 @@ namespace PaperShift.Domain
         public string LastName;
         public string FirstName;
         public string Gender;
+        public string Personality;
         public string EraId;
         public string EraName;
         public int Generation = 1;

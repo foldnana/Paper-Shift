@@ -60,62 +60,17 @@ namespace PaperShift.Presenter
 
         public static string EducationLabel(WorkerProfile worker)
         {
-            var literacy = worker.GetStat("literacy");
-            if (literacy >= 82)
-            {
-                return "重点本科";
-            }
-
-            if (literacy >= 65)
-            {
-                return "普通本科";
-            }
-
-            if (literacy >= 45)
-            {
-                return "高中/职校";
-            }
-
-            return "基础识字";
+            return PaperShiftWorkerAttributes.EducationLabel(worker.GetStat(PaperShiftWorkerAttributes.Education));
         }
 
         public static string FamilyLabel(int value)
         {
-            if (value >= 70)
-            {
-                return "富裕";
-            }
-
-            if (value >= 45)
-            {
-                return "小康";
-            }
-
-            if (value >= 20)
-            {
-                return "普通";
-            }
-
-            return "拮据";
+            return PaperShiftWorkerAttributes.FamilyLabel(value);
         }
 
         public static string BestStatLabel(WorkerProfile worker, PaperShiftDatabase database)
         {
-            var bestId = "logic";
-            var bestValue = -1;
-            var ids = new[] { "body", "literacy", "logic", "social", "mental", "charm" };
-            for (var i = 0; i < ids.Length; i++)
-            {
-                var value = worker.GetStat(ids[i]);
-                if (value > bestValue)
-                {
-                    bestValue = value;
-                    bestId = ids[i];
-                }
-            }
-
-            var stat = database == null ? null : database.FindStat(bestId);
-            return (stat == null ? bestId : stat.DisplayName) + "强";
+            return PaperShiftWorkerAttributes.BestAttributeLabel(worker);
         }
 
         public static string IntentLabel(string id)

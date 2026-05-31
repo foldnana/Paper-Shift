@@ -25,7 +25,6 @@ namespace PaperShift.Presenter
         {
             Screen = PaperShiftScreen.JobSearch;
             GameplayView = GetComponent<PaperShiftGameplayViewReferences>();
-            BottomStatusBar = GetComponentInChildren<PaperShiftBottomStatusBarView>(true);
         }
 
         public override void BindActions()
@@ -318,10 +317,12 @@ namespace PaperShift.Presenter
                 RingText = "压力 " + worker.Stress,
                 Rows = new List<UiPair>
                 {
-                    new UiPair("体魄", Score(worker.GetStat("body"))),
-                    new UiPair("逻辑", worker.GetStat("logic").ToString()),
-                    new UiPair("学历", EducationLabel(worker)),
-                    new UiPair("家境", FamilyLabel(worker.GetStat("family"))),
+                    new UiPair("身高", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Height)),
+                    new UiPair("形象", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Appearance)),
+                    new UiPair("教育", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Education)),
+                    new UiPair("专业", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Major)),
+                    new UiPair("能力", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Ability)),
+                    new UiPair("家境", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Family)),
                     new UiPair("存款", worker.Money.ToString()),
                     new UiPair("压力", worker.Stress.ToString())
                 },
@@ -523,7 +524,8 @@ namespace PaperShift.Presenter
         {
             if (BottomStatusBar == null)
             {
-                BottomStatusBar = GetComponentInChildren<PaperShiftBottomStatusBarView>(true);
+                var gameplay = ResolveGameplayView();
+                BottomStatusBar = gameplay == null ? null : gameplay.BottomStatusBar;
             }
 
             return BottomStatusBar;
@@ -543,11 +545,6 @@ namespace PaperShift.Presenter
                 return eventLogRoot;
             }
 
-            if (gameplay != null && gameplay.Root != null)
-            {
-                eventLogRoot = FindDeepChild(gameplay.Root, "Event Log");
-            }
-
             return eventLogRoot;
         }
 
@@ -563,44 +560,21 @@ namespace PaperShift.Presenter
                 return null;
             }
 
-            var line = FindDeepChild(root, "Log Line");
-            if (line == null && root.childCount > 0)
+            var gameplay = ResolveGameplayView();
+            if (gameplay != null && gameplay.EventLogLinePrefab != null)
             {
-                line = root.GetChild(0);
+                eventLogLineTemplate = gameplay.EventLogLinePrefab;
+                return eventLogLineTemplate;
             }
 
-            if (line == null)
+            if (root.childCount <= 0)
             {
                 return null;
             }
 
-            eventLogLineTemplate = line.gameObject;
+            eventLogLineTemplate = root.GetChild(0).gameObject;
             eventLogLineTemplate.SetActive(false);
             return eventLogLineTemplate;
-        }
-
-        private static Transform FindDeepChild(Transform root, string childName)
-        {
-            if (root == null)
-            {
-                return null;
-            }
-
-            if (root.name == childName)
-            {
-                return root;
-            }
-
-            for (var i = 0; i < root.childCount; i++)
-            {
-                var found = FindDeepChild(root.GetChild(i), childName);
-                if (found != null)
-                {
-                    return found;
-                }
-            }
-
-            return null;
         }
 
         private static void SetButtonVisible(Button button, bool visible)

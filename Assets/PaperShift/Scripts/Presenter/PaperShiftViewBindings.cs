@@ -88,6 +88,18 @@ namespace PaperShift.Presenter
     }
 
     [System.Serializable]
+    public sealed class PaperShiftInfoRowBinding
+    {
+        public string FieldId;
+        public Graphic Background;
+        public Text LabelText;
+        public Text BadgeText;
+        public Text ValueText;
+        public Button HideButton;
+        public Button ExaggerateButton;
+    }
+
+    [System.Serializable]
     public sealed class PaperShiftBudgetRowBinding
     {
         public string BudgetId;

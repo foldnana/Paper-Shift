@@ -47,13 +47,12 @@ namespace PaperShift.Data
         {
             return new[]
             {
-                new StatDefinition { Id = "body", DisplayName = "体魄", StartMin = 25, StartMax = 85, Description = "影响健康恢复、体力劳动和高危职业。" },
-                new StatDefinition { Id = "literacy", DisplayName = "识字", StartMin = 20, StartMax = 85, Description = "影响学习、考试和文书岗位。" },
-                new StatDefinition { Id = "logic", DisplayName = "逻辑", StartMin = 15, StartMax = 90, Description = "影响技术岗位、复杂事件判断。" },
-                new StatDefinition { Id = "social", DisplayName = "社交", StartMin = 10, StartMax = 90, Description = "影响面试、关系、销售和恋爱事件。" },
-                new StatDefinition { Id = "mental", DisplayName = "精神状态", StartMin = 35, StartMax = 90, Description = "影响抗压和长期工作稳定性。" },
-                new StatDefinition { Id = "family", DisplayName = "家境", StartMin = 0, StartMax = 80, Description = "影响初始资产、教育和后代资源。" },
-                new StatDefinition { Id = "charm", DisplayName = "魅力", StartMin = 10, StartMax = 90, Description = "影响正面社交事件和特殊机会。" }
+                new StatDefinition { Id = PaperShiftWorkerAttributes.Height, DisplayName = "身高", StartMin = 155, StartMax = 188, Description = "劳动者的身高信息，可在简历中隐藏或夸大。" },
+                new StatDefinition { Id = PaperShiftWorkerAttributes.Appearance, DisplayName = "形象", StartMin = 25, StartMax = 88, Description = "影响简历吸引力和面试第一印象。" },
+                new StatDefinition { Id = PaperShiftWorkerAttributes.Education, DisplayName = "教育", StartMin = 20, StartMax = 88, Description = "影响学历呈现、学习相关岗位和面试基础分。" },
+                new StatDefinition { Id = PaperShiftWorkerAttributes.Family, DisplayName = "家境", StartMin = 10, StartMax = 82, Description = "影响初始资金和部分身份信息。" },
+                new StatDefinition { Id = PaperShiftWorkerAttributes.Major, DisplayName = "专业", StartMin = 20, StartMax = 88, Description = "影响专业方向、岗位匹配和简历含金量。" },
+                new StatDefinition { Id = PaperShiftWorkerAttributes.Ability, DisplayName = "能力", StartMin = 20, StartMax = 88, Description = "影响工作表现、试用期转正概率和岗位适配。" }
             };
         }
 
@@ -108,8 +107,8 @@ namespace PaperShift.Data
                             WorkIntensity = 48,
                             Requirements = new[]
                             {
-                                new StatRequirement { StatId = "body", MinValue = 40, Weight = 2 },
-                                new StatRequirement { StatId = "logic", MinValue = 35, Weight = 2 }
+                                new StatRequirement { StatId = PaperShiftWorkerAttributes.Ability, MinValue = 40, Weight = 2 },
+                                new StatRequirement { StatId = PaperShiftWorkerAttributes.Major, MinValue = 35, Weight = 2 }
                             }
                         }
                     }
@@ -138,9 +137,9 @@ namespace PaperShift.Data
                             QuitRiskBase = 8,
                             Requirements = new[]
                             {
-                                new StatRequirement { StatId = "logic", MinValue = 55, Weight = 3 },
-                                new StatRequirement { StatId = "literacy", MinValue = 50, Weight = 2 },
-                                new StatRequirement { StatId = "mental", MinValue = 45, Weight = 1 }
+                                new StatRequirement { StatId = PaperShiftWorkerAttributes.Major, MinValue = 55, Weight = 3 },
+                                new StatRequirement { StatId = PaperShiftWorkerAttributes.Education, MinValue = 50, Weight = 2 },
+                                new StatRequirement { StatId = PaperShiftWorkerAttributes.Ability, MinValue = 45, Weight = 1 }
                             }
                         }
                     }
@@ -180,7 +179,7 @@ namespace PaperShift.Data
                     Options = new[]
                     {
                         Option("use", "谨慎使用", Effect(EffectKind.AddPromotionProgress, "", 12), Effect(EffectKind.AddStress, "", -3), Log("AI先行者标签发挥了作用，主管注意到了效率提升。")),
-                        Option("teach", "教给同事", Effect(EffectKind.AddStat, "social", 4), Effect(EffectKind.AddPromotionProgress, "", 6), Log("你教会了同事，团队关系更好了。"))
+                        Option("teach", "教给同事", Effect(EffectKind.AddStat, PaperShiftWorkerAttributes.Ability, 4), Effect(EffectKind.AddPromotionProgress, "", 6), Log("你教会了同事，团队关系更好了。"))
                     }
                 },
                 new GameEventDefinition

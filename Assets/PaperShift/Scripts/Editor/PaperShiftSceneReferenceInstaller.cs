@@ -61,14 +61,15 @@ namespace PaperShift.Editor
             binder.Texts = new[]
             {
                 TextBinding("gender", TextUnder(root, "Info 性别", "Value")),
+                TextBinding("personality", TextUnder(root, "Info 性格", "Value")),
                 TextBinding("era", TextUnder(root, "Info 年代", "Value")),
                 TextBinding("age", TextUnder(root, "Info 年龄", "Value")),
-                TextBinding("body", TextUnder(root, "Info 体魄", "Value")),
-                TextBinding("literacy", TextUnder(root, "Info 识字", "Value")),
-                TextBinding("logic", TextUnder(root, "Info 逻辑", "Value")),
-                TextBinding("social", TextUnder(root, "Info 社交", "Value")),
-                TextBinding("education", TextUnder(root, "Info 学历", "Value")),
+                TextBinding("height", TextUnder(root, "Info 身高", "Value")),
+                TextBinding("appearance", TextUnder(root, "Info 形象", "Value")),
+                TextBinding("education", TextUnder(root, "Info 教育", "Value")),
                 TextBinding("family", TextUnder(root, "Info 家境", "Value")),
+                TextBinding("major", TextUnder(root, "Info 专业", "Value")),
+                TextBinding("ability", TextUnder(root, "Info 能力", "Value")),
                 TextBinding("advantage", TextUnder(root, "Info 优势", "Value")),
                 TextBinding("asset", TextUnder(root, "Info 资产", "Value")),
                 TextBinding("lastName", TextUnder(root, "Name Row 姓", "Value")),
@@ -266,7 +267,7 @@ namespace PaperShift.Editor
                 TextBinding("workYears", TextUnder(root, "Settlement 工作年限", "Value")),
                 TextBinding("finalJob", TextUnder(root, "Settlement 最终职业", "Value")),
                 TextBinding("savings", TextUnder(root, "Settlement 留下存款", "Value")),
-                TextBinding("mental", TextUnder(root, "Settlement 精神状态", "Value"))
+                TextBinding("stress", TextUnder(root, "Settlement 精神状态", "Value"))
             };
             Dirty(binder);
             return binder;

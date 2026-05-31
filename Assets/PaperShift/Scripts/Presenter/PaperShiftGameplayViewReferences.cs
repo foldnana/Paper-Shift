@@ -9,7 +9,9 @@ namespace PaperShift.Presenter
         public Transform JobCard;
         public Transform SelfTagsRoot;
         public Transform SelfEventLog;
+        public GameObject EventLogLinePrefab;
         public PaperShiftJobCardTransition JobTransition;
+        public PaperShiftBottomStatusBarView BottomStatusBar;
         public Button StartInterviewButton;
         public Button ReapplyButton;
         public Button StartWorkButton;

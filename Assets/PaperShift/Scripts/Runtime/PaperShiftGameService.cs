@@ -556,6 +556,7 @@ namespace PaperShift.Runtime
                 Id = Guid.NewGuid().ToString("N"),
                 LastName = Pick(database.LastNames, "李"),
                 Gender = random.NextDouble() < 0.5 ? "女" : "男",
+                Personality = Pick(new[] { "沉稳", "谨慎", "开朗", "灵活", "较真", "随和" }, "沉稳"),
                 EraId = era == null ? "modern" : era.Id,
                 EraName = era == null ? "现代城市" : era.DisplayName,
                 Generation = generation,
@@ -573,8 +574,19 @@ namespace PaperShift.Runtime
                 worker.SetStat(stat.Id, random.Next(stat.StartMin, stat.StartMax + 1));
             }
 
-            worker.Money += 1000 + worker.GetStat("family") * 120;
+            worker.SetStat(PaperShiftWorkerAttributes.Height, RollHeight(worker.Gender));
+            worker.Money += 1000 + worker.GetStat(PaperShiftWorkerAttributes.Family) * 80 + worker.GetStat(PaperShiftWorkerAttributes.Ability) * 35;
             return worker;
+        }
+
+        private int RollHeight(string gender)
+        {
+            if (gender == "女")
+            {
+                return random.Next(155, 179);
+            }
+
+            return random.Next(165, 189);
         }
 
         private TagDefinition PickStartingTag(PaperShiftRunState state)
@@ -675,8 +687,8 @@ namespace PaperShift.Runtime
             state.Worker.Stress = Clamp(state.Worker.Stress - (state.Budget.Housing - 20) / 8, 0, 100);
             if (state.Budget.Education >= 18)
             {
-                state.Worker.AddStat("literacy", 1);
-                state.Worker.AddStat("logic", 1);
+                state.Worker.AddStat(PaperShiftWorkerAttributes.Education, 1);
+                state.Worker.AddStat(PaperShiftWorkerAttributes.Ability, 1);
             }
         }
 
@@ -752,8 +764,9 @@ namespace PaperShift.Runtime
                     InheritancePercent = i == 0 ? 50 : 25,
                     TraitSummary = i == 0 ? "学习好，适合接班" : "属性随机，路线未定"
                 };
-                heir.Stats.Add(new StatValue { Id = "family", Value = Clamp(state.Worker.GetStat("family") + state.Budget.Savings / 5, 0, 100) });
-                heir.Stats.Add(new StatValue { Id = "literacy", Value = Clamp(state.Worker.GetStat("literacy") + state.Budget.Education / 4, 0, 100) });
+                heir.Stats.Add(new StatValue { Id = PaperShiftWorkerAttributes.Family, Value = Clamp(state.Worker.GetStat(PaperShiftWorkerAttributes.Family) + state.Budget.Savings / 5, 0, 100) });
+                heir.Stats.Add(new StatValue { Id = PaperShiftWorkerAttributes.Education, Value = Clamp(state.Worker.GetStat(PaperShiftWorkerAttributes.Education) + state.Budget.Education / 4, 0, 100) });
+                heir.Stats.Add(new StatValue { Id = PaperShiftWorkerAttributes.Ability, Value = Clamp(state.Worker.GetStat(PaperShiftWorkerAttributes.Ability), 0, 100) });
                 InheritTag(state, heir, "family_craft");
                 InheritTag(state, heir, "good_accounting");
                 state.Worker.Heirs.Add(heir);
