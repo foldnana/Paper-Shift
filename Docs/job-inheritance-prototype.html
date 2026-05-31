@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>人生总结与下一代选择原型</title>
+  <style>
+    :root {
+      --bg: #d5b4ff;
+      --paper: #f8fdff;
+      --ink: #303238;
+      --muted: #66707a;
+      --blue: #249ee8;
+      --blue-soft: #e5f6ff;
+      --purple: #8c22ee;
+      --purple-soft: #dec5ff;
+      --gold: #ffb21c;
+      --green: #16b86f;
+      --red: #dd315b;
+      --line: #dce8f0;
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #b98ff3;
+      color: var(--ink);
+      padding: 24px;
+    }
+
+    .phone {
+      width: 393px;
+      height: 852px;
+      background: var(--bg);
+      overflow: hidden;
+      box-shadow: 0 18px 48px rgba(42, 36, 70, .28);
+      padding: 30px 23px 24px;
+      position: relative;
+    }
+
+    .topbar {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      font-size: 17px;
+    }
+
+    .back {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: white;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .12);
+    }
+
+    .coinline {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+    }
+
+    .coin {
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid #ff9100;
+      color: white;
+      display: inline-grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .ribbon {
+      height: 62px;
+      margin-top: 18px;
+      background: var(--blue);
+      color: white;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      box-shadow: 0 5px 0 rgba(42, 74, 112, .32);
+    }
+
+    .ribbon h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+
+    .summary-card,
+    .choose-card {
+      background: rgba(248, 253, 255, .96);
+      border-radius: 18px;
+      box-shadow: 0 3px 0 rgba(74, 69, 101, .18);
+    }
+
+    .summary-card {
+      margin-top: 14px;
+      padding: 13px;
+    }
+
+    .section-title {
+      text-align: center;
+      color: #4c535b;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .metric {
+      min-height: 58px;
+      border-radius: 10px;
+      background: white;
+      display: grid;
+      align-content: center;
+      text-align: center;
+      box-shadow: inset 0 0 0 1px rgba(220, 232, 240, .75);
+      padding: 5px;
+    }
+
+    .metric .k {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .metric .v {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .story {
+      margin-top: 10px;
+      background: white;
+      border-radius: 12px;
+      padding: 10px 12px;
+      line-height: 1.55;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: inset 0 0 0 1px rgba(220, 232, 240, .75);
+    }
+
+    .story b {
+      color: var(--purple);
+    }
+
+    .life-line {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .event {
+      min-height: 52px;
+      border-radius: 10px;
+      background: white;
+      padding: 7px 6px;
+      text-align: center;
+      box-shadow: inset 0 0 0 1px rgba(220, 232, 240, .75);
+    }
+
+    .event .age {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .event .text {
+      margin-top: 3px;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .tag {
+      min-height: 28px;
+      border-radius: 8px;
+      border: 2px solid #303238;
+      background: white;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .tag.good {
+      border-color: #147ab7;
+      background: var(--blue-soft);
+      color: #126a9e;
+    }
+
+    .tag.purple {
+      border-color: #6421a3;
+      background: var(--purple-soft);
+      color: #55208a;
+    }
+
+    .child-tags {
+      margin-top: 9px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .choose-card {
+      margin-top: 12px;
+      padding: 12px;
+    }
+
+    .children {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      justify-items: center;
+    }
+
+    .child {
+      width: 68px;
+      height: 72px;
+      border-radius: 10px;
+      background: white;
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 2px;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, .16);
+      border: 2px solid transparent;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .child.selected {
+      border-color: #303238;
+    }
+
+    .portrait {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #e9b347;
+      position: relative;
+      border: 2px solid #fff;
+    }
+
+    .portrait.blue {
+      background: #77c8f3;
+    }
+
+    .hair {
+      position: absolute;
+      left: 10px;
+      top: 7px;
+      width: 22px;
+      height: 13px;
+      border-radius: 10px 10px 6px 6px;
+      background: #253970;
+    }
+
+    .face {
+      position: absolute;
+      left: 11px;
+      top: 17px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ffd0c3;
+    }
+
+    .face::after {
+      content: "• •";
+      position: absolute;
+      left: 0;
+      top: 3px;
+      width: 100%;
+      text-align: center;
+      font-weight: 900;
+      font-size: 9px;
+    }
+
+    .selected-profile {
+      margin-top: 10px;
+      background: white;
+      border-radius: 12px;
+      padding: 9px;
+      box-shadow: inset 0 0 0 1px rgba(220, 232, 240, .75);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+    }
+
+    .stat {
+      min-height: 28px;
+      border-radius: 7px;
+      background: #f7fbff;
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      align-items: center;
+      font-size: 11px;
+      box-shadow: inset 0 0 0 1px rgba(220, 232, 240, .75);
+    }
+
+    .stat .k {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: #f0f0f0;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .stat .v {
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .button {
+      height: 52px;
+      border-radius: 14px;
+      border: 3px solid #303238;
+      background: white;
+      display: grid;
+      place-items: center;
+      margin-top: 12px;
+      font-size: 18px;
+      font-weight: 900;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, .16);
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <header class="topbar">
+      <div class="back">&lt;</div>
+      <div>人生总结</div>
+      <div class="coinline"><span class="coin">A</span><span>4,515</span></div>
+    </header>
+
+    <section class="ribbon">
+      <h1>这一代打工人生结束了</h1>
+    </section>
+
+    <section class="summary-card">
+      <div class="section-title">系统推演：后来的人生</div>
+
+      <div class="metrics">
+        <div class="metric"><div class="k">最终职业</div><div class="v">AI训练师</div></div>
+        <div class="metric"><div class="k">工作年限</div><div class="v">18年</div></div>
+        <div class="metric"><div class="k">压力</div><div class="v" style="color:var(--red)">偏高</div></div>
+        <div class="metric"><div class="k">前景</div><div class="v" style="color:var(--green)">上升</div></div>
+      </div>
+
+      <div class="story">
+        他把这份工作干成了长期饭碗。行业还在往上走，所以日子比刚入职时稳了许多；
+        只是压力也跟着留下来，后来的人生一直带着一点<b>“不能停下”</b>的习惯。
+      </div>
+
+      <div class="life-line">
+        <div class="event"><div class="age">32岁</div><div class="text">结婚<br>生活合并账本</div></div>
+        <div class="event"><div class="age">36岁</div><div class="text">买房<br>家境变得稳定</div></div>
+        <div class="event"><div class="age">38岁</div><div class="text">生子<br>下一代登场</div></div>
+      </div>
+
+    </section>
+
+    <section class="choose-card">
+      <div class="section-title">从孩子里选择下一代</div>
+
+      <div class="children">
+        <div class="child selected">
+          <div class="portrait"><div class="hair"></div><div class="face"></div></div>
+          孙小澈
+        </div>
+        <div class="child">
+          <div class="portrait blue"><div class="hair"></div><div class="face"></div></div>
+          孙远白
+        </div>
+        <div class="child">
+          <div class="portrait"><div class="hair"></div><div class="face"></div></div>
+          孙林
+        </div>
+        <div class="child">
+          <div class="portrait blue"><div class="hair"></div><div class="face"></div></div>
+          孙可
+        </div>
+      </div>
+
+      <div class="selected-profile">
+        <div class="stats">
+          <div class="stat"><div class="k">姓名</div><div class="v">孙小澈</div></div>
+          <div class="stat"><div class="k">性别</div><div class="v">女</div></div>
+          <div class="stat"><div class="k">年龄</div><div class="v">24岁</div></div>
+          <div class="stat"><div class="k">家境</div><div class="v">小康</div></div>
+          <div class="stat"><div class="k">教育</div><div class="v">普通本科</div></div>
+          <div class="stat"><div class="k">形象</div><div class="v">较善5分</div></div>
+          <div class="stat"><div class="k">能力</div><div class="v">会用AI</div></div>
+          <div class="stat"><div class="k">身高</div><div class="v">168cm</div></div>
+          <div class="stat"><div class="k">性格</div><div class="v">谨慎</div></div>
+          <div class="stat"><div class="k">月入</div><div class="v">0元</div></div>
+        </div>
+
+        <div class="child-tags">
+          <div class="tag good">AI耳濡目染</div>
+          <div class="tag purple">城市生活</div>
+          <div class="tag">谨慎做事</div>
+          <div class="tag">父母期望</div>
+        </div>
+      </div>
+
+      <div class="button">选好了，开启下一代</div>
+    </section>
+  </main>
+</body>
+</html>
