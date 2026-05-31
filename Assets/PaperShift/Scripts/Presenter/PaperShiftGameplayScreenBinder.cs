@@ -17,9 +17,12 @@ namespace PaperShift.Presenter
         public PaperShiftBottomStatusBarView BottomStatusBar;
 
         private const float EventLogMessageSeconds = 3.2f;
+        private const float EventLogLineSpacing = 6f;
         private readonly PaperShiftCandidateTagGridView candidateTagGridView = new PaperShiftCandidateTagGridView();
+        private readonly List<GameObject> activeEventLogLines = new List<GameObject>();
         private Transform eventLogRoot;
         private GameObject eventLogLineTemplate;
+        private bool eventLogSceneItemsHidden;
 
         private void Reset()
         {
@@ -174,7 +177,14 @@ namespace PaperShift.Presenter
             var outcome = Presenter.ApplyInterview(out var message);
             if (!string.IsNullOrEmpty(message) && outcome != InterviewStepOutcome.Event)
             {
-                ShowTransitionMessage("面试结果", message, outcome == InterviewStepOutcome.Passed ? PaperShiftTheme.Hex("#9fd9f3") : PaperShiftTheme.Hex("#a6dcf7"));
+                if (outcome == InterviewStepOutcome.Continue)
+                {
+                    ShowEventLogMessage(message);
+                }
+                else
+                {
+                    ShowTransitionMessage("面试结果", message, outcome == InterviewStepOutcome.Passed ? PaperShiftTheme.Hex("#9fd9f3") : PaperShiftTheme.Hex("#a6dcf7"));
+                }
             }
 
             RefreshAll();
@@ -185,7 +195,14 @@ namespace PaperShift.Presenter
             var outcome = Presenter.AdvanceProbation(out var message);
             if (!string.IsNullOrEmpty(message) && outcome != ProbationStepOutcome.Event)
             {
-                ShowTransitionMessage("试用期", message, PaperShiftTheme.Hex("#9fd9f3"));
+                if (outcome == ProbationStepOutcome.Continue)
+                {
+                    ShowEventLogMessage(message);
+                }
+                else
+                {
+                    ShowTransitionMessage("试用期", message, PaperShiftTheme.Hex("#9fd9f3"));
+                }
             }
 
             RefreshAll();
@@ -196,7 +213,14 @@ namespace PaperShift.Presenter
             var outcome = Presenter.ApplyRegularization(out var message);
             if (!string.IsNullOrEmpty(message) && outcome != ProbationStepOutcome.Event)
             {
-                ShowTransitionMessage("申请入职", message, outcome == ProbationStepOutcome.Passed ? PaperShiftTheme.Hex("#9fd9f3") : PaperShiftTheme.Hex("#a6dcf7"));
+                if (outcome == ProbationStepOutcome.Continue)
+                {
+                    ShowEventLogMessage(message);
+                }
+                else
+                {
+                    ShowTransitionMessage("申请入职", message, outcome == ProbationStepOutcome.Passed ? PaperShiftTheme.Hex("#9fd9f3") : PaperShiftTheme.Hex("#a6dcf7"));
+                }
             }
 
             RefreshAll();
@@ -233,6 +257,7 @@ namespace PaperShift.Presenter
             var line = Instantiate(template, root);
             line.name = "Runtime Log Line";
             line.SetActive(true);
+            ConfigureEventLogLineRect(line);
 
             var text = line.GetComponentInChildren<Text>(true);
             if (text != null)
@@ -240,6 +265,8 @@ namespace PaperShift.Presenter
                 text.text = message;
             }
 
+            activeEventLogLines.Add(line);
+            ReflowEventLogLines();
             StartCoroutine(AnimateEventLogLine(line, EventLogMessageSeconds));
         }
 
@@ -291,8 +318,67 @@ namespace PaperShift.Presenter
 
             if (line != null)
             {
+                activeEventLogLines.Remove(line);
                 Destroy(line);
+                ReflowEventLogLines();
             }
+        }
+
+        private void ConfigureEventLogLineRect(GameObject line)
+        {
+            var rect = line == null ? null : line.GetComponent<RectTransform>();
+            if (rect == null)
+            {
+                return;
+            }
+
+            var height = EventLogLineHeight(rect);
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            rect.sizeDelta = new Vector2(0f, height);
+            rect.anchoredPosition = Vector2.zero;
+        }
+
+        private void ReflowEventLogLines()
+        {
+            for (var i = activeEventLogLines.Count - 1; i >= 0; i--)
+            {
+                if (activeEventLogLines[i] == null)
+                {
+                    activeEventLogLines.RemoveAt(i);
+                }
+            }
+
+            var offset = 0f;
+            for (var i = activeEventLogLines.Count - 1; i >= 0; i--)
+            {
+                var rect = activeEventLogLines[i].GetComponent<RectTransform>();
+                if (rect == null)
+                {
+                    continue;
+                }
+
+                rect.SetAsLastSibling();
+                rect.anchoredPosition = new Vector2(0f, offset);
+                offset += EventLogLineHeight(rect) + EventLogLineSpacing;
+            }
+        }
+
+        private static float EventLogLineHeight(RectTransform rect)
+        {
+            if (rect == null)
+            {
+                return 30f;
+            }
+
+            if (rect.sizeDelta.y > 0f)
+            {
+                return rect.sizeDelta.y;
+            }
+
+            var preferred = LayoutUtility.GetPreferredHeight(rect);
+            return preferred > 0f ? preferred : 30f;
         }
 
         private static void SetGraphicAlpha(List<Graphic> graphics, List<Color> baseColors, float alpha)
@@ -533,23 +619,46 @@ namespace PaperShift.Presenter
 
         private Transform ResolveEventLogRoot()
         {
-            if (eventLogRoot != null)
-            {
-                return eventLogRoot;
-            }
-
             var gameplay = ResolveGameplayView();
             if (gameplay != null && gameplay.SelfEventLog != null)
             {
                 eventLogRoot = gameplay.SelfEventLog;
+                HideInitialEventLogItems(eventLogRoot);
                 return eventLogRoot;
             }
 
-            return eventLogRoot;
+            eventLogRoot = null;
+            return null;
+        }
+
+        private void HideInitialEventLogItems(Transform root)
+        {
+            if (eventLogSceneItemsHidden || root == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i < root.childCount; i++)
+            {
+                var child = root.GetChild(i);
+                if (child != null)
+                {
+                    child.gameObject.SetActive(false);
+                }
+            }
+
+            eventLogSceneItemsHidden = true;
         }
 
         private GameObject ResolveEventLogLineTemplate(Transform root)
         {
+            var gameplay = ResolveGameplayView();
+            if (gameplay != null && gameplay.EventLogLinePrefab != null)
+            {
+                eventLogLineTemplate = gameplay.EventLogLinePrefab;
+                return eventLogLineTemplate;
+            }
+
             if (eventLogLineTemplate != null)
             {
                 return eventLogLineTemplate;
@@ -558,13 +667,6 @@ namespace PaperShift.Presenter
             if (root == null)
             {
                 return null;
-            }
-
-            var gameplay = ResolveGameplayView();
-            if (gameplay != null && gameplay.EventLogLinePrefab != null)
-            {
-                eventLogLineTemplate = gameplay.EventLogLinePrefab;
-                return eventLogLineTemplate;
             }
 
             if (root.childCount <= 0)

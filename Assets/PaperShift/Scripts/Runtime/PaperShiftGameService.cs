@@ -217,7 +217,6 @@ namespace PaperShift.Runtime
 
             var satisfactionBefore = state.Interview.Satisfaction;
             var score = ComputeInterviewPreparationDelta(state, company, job);
-            state.Interview.Round++;
             state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + score, 0, 100);
             var satisfactionAfter = state.Interview.Satisfaction;
             state.AddLog("准备面试，成功率变为 " + state.Interview.Satisfaction + "%。");
@@ -235,14 +234,34 @@ namespace PaperShift.Runtime
                 return InterviewStepResult.Failed("还没有可以参加的面试。");
             }
 
+            var stage = Math.Max(0, state.Interview.Round) + 1;
+            state.Interview.Round = stage;
+
             var satisfactionBefore = state.Interview.Satisfaction;
+            var score = ComputeInterviewMeetingDelta(state, company, job, stage);
+            state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + score, 0, 100);
             var satisfactionAfter = state.Interview.Satisfaction;
-            if (state.Interview.Satisfaction >= 100 || random.Next(0, 100) < state.Interview.Satisfaction)
+
+            if (stage < 4)
+            {
+                var continueMessage = InterviewStageMessage(stage, score, satisfactionAfter);
+                state.AddLog(continueMessage);
+                return InterviewStepResult.Continue(continueMessage, satisfactionBefore, satisfactionAfter);
+            }
+
+            if (satisfactionAfter >= 100 || random.Next(0, 100) < satisfactionAfter)
             {
                 var message = "面试通过，" + company.DisplayName + " 发来了 Offer，进入 " + job.DisplayName + " 试用期。";
-                state.Interview.Satisfaction = Math.Max(state.Interview.Satisfaction, state.Interview.OfferThreshold);
+                state.Interview.Satisfaction = Math.Max(satisfactionAfter, state.Interview.OfferThreshold);
                 StartProbation(state);
-                return InterviewStepResult.Passed(message, satisfactionBefore, satisfactionAfter);
+                return InterviewStepResult.Passed(message, satisfactionBefore, state.Interview.Satisfaction);
+            }
+
+            if (stage < 6 && random.Next(0, 100) < 35)
+            {
+                var holdMessage = InterviewStageMessage(stage, score, satisfactionAfter);
+                state.AddLog(holdMessage);
+                return InterviewStepResult.Continue(holdMessage, satisfactionBefore, satisfactionAfter);
             }
 
             var failedMessage = "面试失败。对方认为匹配度不够，你还在求职状态。";
@@ -339,10 +358,28 @@ namespace PaperShift.Runtime
             }
 
             var chanceBefore = state.CurrentJob.PromotionProgress;
+            if (chanceBefore < 100 && random.Next(0, 100) < 45)
+            {
+                var chanceDelta = ComputeRegularizationReviewDelta(state);
+                state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + chanceDelta, 0, 100);
+                var reviewMessage = RegularizationReviewMessage(chanceDelta, state.CurrentJob.PromotionProgress);
+                state.AddLog(reviewMessage);
+                return ProbationStepResult.Continue(reviewMessage, chanceBefore, state.CurrentJob.PromotionProgress, 0, 0);
+            }
+
             if (chanceBefore >= 100 || random.Next(0, 100) < chanceBefore)
             {
                 CompleteGenerationByHire(state);
                 return ProbationStepResult.Passed("申请入职成功，正式转正。这一代结算。", chanceBefore, chanceBefore, 0, 0);
+            }
+
+            if (random.Next(0, 100) < 35)
+            {
+                var chanceDelta = ComputeRegularizationReviewDelta(state);
+                state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + chanceDelta, 0, 100);
+                var reviewMessage = RegularizationReviewMessage(chanceDelta, state.CurrentJob.PromotionProgress);
+                state.AddLog(reviewMessage);
+                return ProbationStepResult.Continue(reviewMessage, chanceBefore, state.CurrentJob.PromotionProgress, 0, 0);
             }
 
             var message = "申请入职没有通过，已自动继续寻找下一家公司。";
@@ -633,6 +670,78 @@ namespace PaperShift.Runtime
 
             score += ResumePresentationBonus(state.Resume) / 3;
             return Clamp(score, -18, 18);
+        }
+
+        private int ComputeInterviewMeetingDelta(PaperShiftRunState state, CompanyDefinition company, JobDefinition job, int stage)
+        {
+            var aptitude = WorkerAptitude(state, job);
+            var score = random.Next(-10, 11);
+            score += MatchIntentWeight(state, job) / 22;
+            score += aptitude / 36;
+            score -= job.Difficulty / 24;
+            score -= state.Resume.DeceptionRisk / 22;
+            score -= state.Worker.Stress / 30;
+            score += Math.Min(stage, 4) * 2;
+
+            for (var i = 0; i < job.TagIds.Length; i++)
+            {
+                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, job.TagIds[i]) / 6;
+            }
+
+            for (var i = 0; i < company.TagIds.Length; i++)
+            {
+                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, company.TagIds[i]) / 6;
+            }
+
+            return Clamp(score, -14, 16);
+        }
+
+        private static string InterviewStageMessage(int stage, int delta, int satisfaction)
+        {
+            var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
+            var stageText = "进入下一轮沟通";
+            switch (stage)
+            {
+                case 1:
+                    stageText = "初面结束，对方约你进入二面";
+                    break;
+                case 2:
+                    stageText = "二面聊完，对方安排你进入三面";
+                    break;
+                case 3:
+                    stageText = "三面通过，对方把你推进到终面";
+                    break;
+                default:
+                    stageText = "终面暂时没有拍板，对方要求补充沟通";
+                    break;
+            }
+
+            return stageText + "。成功率 " + deltaText + "%，当前 " + satisfaction + "%。";
+        }
+
+        private int ComputeRegularizationReviewDelta(PaperShiftRunState state)
+        {
+            var score = random.Next(-14, 15);
+            score += state.CurrentJob.Intensity <= 55 ? 4 : -3;
+            score -= state.Worker.Stress / 28;
+            score += state.CurrentJob.WorkYears / 2;
+            return Clamp(score, -18, 18);
+        }
+
+        private static string RegularizationReviewMessage(int delta, int chance)
+        {
+            var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
+            if (delta > 0)
+            {
+                return "主管追加了一轮试用反馈，转正概率 " + deltaText + "%，当前 " + chance + "%。";
+            }
+
+            if (delta < 0)
+            {
+                return "转正审批被要求补材料，转正概率 " + deltaText + "%，当前 " + chance + "%。";
+            }
+
+            return "转正审批还在排队，概率暂时不变，当前 " + chance + "%。";
         }
 
         private int WorkerAptitude(PaperShiftRunState state, JobDefinition job)

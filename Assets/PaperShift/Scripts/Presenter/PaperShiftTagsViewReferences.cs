@@ -15,6 +15,11 @@ namespace PaperShift.Presenter
         [Min(1)] public int TagChoiceCount = 7;
         public bool HideExistingRowsBeforeRefresh = true;
 
+        [Header("Roll Animation")]
+        public bool AnimateTagRows = true;
+        [Min(0.01f)] public float RollTickSeconds = 0.055f;
+        [Min(0.01f)] public float RowSettleSeconds = 0.22f;
+
         [Header("Actions")]
         public Button FreeRefreshButton;
         public Button SuperRefreshButton;

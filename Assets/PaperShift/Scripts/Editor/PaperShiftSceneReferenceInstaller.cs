@@ -177,9 +177,11 @@ namespace PaperShift.Editor
             {
                 binder.GameplayView.CalendarYearText = TextUnder(root, "Calendar", "Text");
                 binder.GameplayView.CalendarMonthText = TextUnder(root, "Calendar", "Month");
+                binder.GameplayView.SelfEventLog = Find(binder.GameplayView.SelfCard, "Event Log") ?? Find(root, "Event Log");
                 binder.SelfCardView = InstallCandidateCard(binder.GameplayView.SelfCard);
                 binder.JobCardView = InstallCandidateCard(binder.GameplayView.JobCard);
                 binder.BottomStatusBar = InstallBottomStatusBar(root);
+                binder.GameplayView.BottomStatusBar = binder.BottomStatusBar;
                 host.GameplayView = binder.GameplayView;
                 Dirty(binder.GameplayView);
             }

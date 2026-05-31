@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using PaperShift.Data;
 using PaperShift.Model;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +24,9 @@ namespace PaperShift.Presenter
         [HideInInspector] public int TagChoiceCount = 7;
 
         private readonly PaperShiftTagSelectionView tagSelectionView = new PaperShiftTagSelectionView();
+        private Coroutine rollAnimationRoutine;
+        private string lastChoiceSignature;
+        private bool forceAnimateOnNextRefresh = true;
 
         private void Reset()
         {
@@ -35,6 +41,7 @@ namespace PaperShift.Presenter
             {
                 ApplyTagChoiceCount();
                 Presenter.RollTagsAndShow();
+                forceAnimateOnNextRefresh = true;
                 RefreshView();
             });
             Bind(ActiveSuperRefreshButton(), () =>
@@ -42,6 +49,7 @@ namespace PaperShift.Presenter
                 ApplyTagChoiceCount();
                 Presenter.RollTagsAndShow();
                 ShowBanner("时代机会刷新，出现了一组新标签。");
+                forceAnimateOnNextRefresh = true;
                 RefreshView();
             });
             Bind(ActiveConfirmButton(), TryContinueToResume);
@@ -65,17 +73,41 @@ namespace PaperShift.Presenter
             RefreshActionState();
 
             var listRoot = ActiveTagListRoot();
-            if (listRoot != null)
+            if (listRoot == null)
             {
-                tagSelectionView.TagRowPrefab = ActiveTagRowPrefab();
-                tagSelectionView.HideExistingRowsBeforeRefresh = View == null || View.HideExistingRowsBeforeRefresh;
-                tagSelectionView.Refresh(listRoot, Presenter, () =>
-                {
-                    RefreshView();
-                    Host.RefreshScreen(PaperShiftScreen.Create);
-                    Host.RefreshScreen(PaperShiftScreen.Resume);
-                });
+                return;
             }
+
+            var choiceSignature = tagSelectionView.CurrentSignature(Presenter);
+            var shouldAnimate = ActiveAnimateTagRows() && (forceAnimateOnNextRefresh || choiceSignature != lastChoiceSignature);
+            lastChoiceSignature = choiceSignature;
+            forceAnimateOnNextRefresh = false;
+
+            StopRollAnimation();
+            tagSelectionView.TagRowPrefab = ActiveTagRowPrefab();
+            tagSelectionView.HideExistingRowsBeforeRefresh = View == null || View.HideExistingRowsBeforeRefresh;
+            tagSelectionView.Refresh(listRoot, Presenter, () =>
+            {
+                RefreshView();
+                Host.RefreshScreen(PaperShiftScreen.Create);
+                Host.RefreshScreen(PaperShiftScreen.Resume);
+            });
+
+            if (shouldAnimate && CanPlayRollAnimation())
+            {
+                StartRollAnimation();
+            }
+        }
+
+        public override void OnScreenBecameActive(PaperShiftScreen screen)
+        {
+            if (screen != PaperShiftScreen.Tags)
+            {
+                return;
+            }
+
+            forceAnimateOnNextRefresh = true;
+            RefreshView();
         }
 
         private void TryContinueToResume()
@@ -96,6 +128,76 @@ namespace PaperShift.Presenter
             var selectedEnoughTags = State.Worker.Tags.Count >= Presenter.StartingTagLimit;
             SetActive(ActiveConfirmPromptRoot(), !selectedEnoughTags);
             SetButtonVisible(ActiveStartJobButton(), selectedEnoughTags);
+        }
+
+        private void StartRollAnimation()
+        {
+            if (!CanPlayRollAnimation())
+            {
+                return;
+            }
+
+            StopRollAnimation();
+            rollAnimationRoutine = StartCoroutine(RunRollAnimation());
+        }
+
+        private bool CanPlayRollAnimation()
+        {
+            return Application.isPlaying &&
+                isActiveAndEnabled &&
+                gameObject.activeInHierarchy &&
+                SceneController != null &&
+                SceneController.CurrentScreen == PaperShiftScreen.Tags;
+        }
+
+        private IEnumerator RunRollAnimation()
+        {
+            SetRollActionsInteractable(false);
+            yield return tagSelectionView.PlayRollAnimation(
+                Presenter,
+                ActiveSpinPool(),
+                () =>
+                {
+                    RefreshView();
+                    Host.RefreshScreen(PaperShiftScreen.Create);
+                    Host.RefreshScreen(PaperShiftScreen.Resume);
+                },
+                ActiveRollTickSeconds(),
+                ActiveRowSettleSeconds());
+
+            rollAnimationRoutine = null;
+            SetRollActionsInteractable(true);
+            RefreshActionState();
+        }
+
+        private void StopRollAnimation()
+        {
+            if (rollAnimationRoutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(rollAnimationRoutine);
+            rollAnimationRoutine = null;
+            SetRollActionsInteractable(true);
+        }
+
+        private IList<TagDefinition> ActiveSpinPool()
+        {
+            if (Database != null && Database.Tags != null && Database.Tags.Length > 0)
+            {
+                return Database.Tags;
+            }
+
+            return Presenter.CurrentTagChoices;
+        }
+
+        private void SetRollActionsInteractable(bool interactable)
+        {
+            SetInteractable(ActiveFreeRefreshButton(), interactable);
+            SetInteractable(ActiveSuperRefreshButton(), interactable);
+            SetInteractable(ActiveConfirmButton(), interactable);
+            SetInteractable(ActiveStartJobButton(), interactable);
         }
 
         private void ResolveView()
@@ -173,6 +275,21 @@ namespace PaperShift.Presenter
             return View != null && View.ConfirmLabel != null ? View.ConfirmLabel : ConfirmLabel;
         }
 
+        private bool ActiveAnimateTagRows()
+        {
+            return View == null || View.AnimateTagRows;
+        }
+
+        private float ActiveRollTickSeconds()
+        {
+            return View == null ? 0.055f : View.RollTickSeconds;
+        }
+
+        private float ActiveRowSettleSeconds()
+        {
+            return View == null ? 0.22f : View.RowSettleSeconds;
+        }
+
         private Button ActiveStartJobButton()
         {
             if (View != null && View.StartJobButton != null)
@@ -207,6 +324,14 @@ namespace PaperShift.Presenter
             {
                 SetActive(button.gameObject, isVisible);
                 button.interactable = isVisible;
+            }
+        }
+
+        private static void SetInteractable(Button button, bool interactable)
+        {
+            if (button != null)
+            {
+                button.interactable = interactable;
             }
         }
     }
