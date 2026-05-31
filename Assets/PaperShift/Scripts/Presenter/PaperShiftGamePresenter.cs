@@ -57,9 +57,24 @@ namespace PaperShift.Presenter
 
         public void RollTagsAndShow()
         {
+            ClearSelectedStartingTags();
             CurrentTagChoices = service.RollStartingTags(State, StartingTagChoiceCount);
             State.Phase = PaperShiftPhase.SelectTags;
             ShowTags();
+        }
+
+        private void ClearSelectedStartingTags()
+        {
+            if (State == null || State.Worker == null || State.Worker.Tags == null)
+            {
+                return;
+            }
+
+            State.Worker.Tags.Clear();
+            if (State.Resume != null && State.Resume.HiddenTagIds != null)
+            {
+                State.Resume.HiddenTagIds.Clear();
+            }
         }
 
         public void EnsureTagChoices()
@@ -69,7 +84,7 @@ namespace PaperShift.Presenter
                 CurrentTagChoices = new List<TagDefinition>();
             }
 
-            if (CurrentTagChoices.Count == 0)
+            if (CurrentTagChoices.Count == 0 || CurrentTagChoices.Count != StartingTagChoiceCount)
             {
                 CurrentTagChoices = service.RollStartingTags(State, StartingTagChoiceCount);
             }

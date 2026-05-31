@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7439665646088765762}
   - component: {fileID: 9098279110021146087}
+  - component: {fileID: 7726500000000000001}
   m_Layer: 5
   m_Name: "Tag Row Item--\u6807\u7B7E\u9009\u62E9\u9884\u5236\u4F53"
   m_TagString: Untagged
@@ -60,6 +61,32 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7726500000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135039555883140535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9d6189850bc43b2a0a99862d82f5f39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LabelText: {fileID: 6164370938533197336}
+  DescriptionText: {fileID: 5739797258091874173}
+  NormalState: {fileID: 3459977766605614279}
+  RareState: {fileID: 5386153104892274013}
+  SuperRareState: {fileID: 5905759845740539433}
+  SelectedState: {fileID: 7125136974775895283}
+  UnselectedState: {fileID: 5442938792210054556}
+  SelectedBadges:
+  - {fileID: 4866027090031766210}
+  - {fileID: 6582696717553493107}
+  ActionButtons:
+  - {fileID: 7733088549762390635}
+  - {fileID: 5730311253531017118}
+  Background: {fileID: 0}
 --- !u!1 &1153018115545168218
 GameObject:
   m_ObjectHideFlags: 0

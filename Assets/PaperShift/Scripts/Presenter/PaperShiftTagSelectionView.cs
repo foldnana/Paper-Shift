@@ -4,39 +4,32 @@ using PaperShift.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 namespace PaperShift.Presenter
 {
     internal sealed class PaperShiftTagSelectionView
     {
-        private const string TagRowPrefabPath = "Assets/PaperShift/Prefab/Tag Row Item--标签选择预制体.prefab";
         private const string RuntimeRowPrefix = "Runtime Tag Row - ";
 
         private readonly List<GameObject> runtimeRows = new List<GameObject>();
         private readonly List<GameObject> originalRows = new List<GameObject>();
         private bool originalRowsCached;
 
-        public GameObject TagRowPrefab;
+        public PaperShiftTagChoiceItemViewReferences TagRowPrefab;
+        public bool HideExistingRowsBeforeRefresh = true;
 
         public void Refresh(Transform listRoot, PaperShiftGamePresenter presenter, Action onSelectionChanged)
         {
-            if (listRoot == null || presenter == null || presenter.State == null)
+            if (listRoot == null || presenter == null || presenter.State == null || TagRowPrefab == null)
             {
-                return;
-            }
-
-            ResolvePrefab();
-            if (TagRowPrefab == null)
-            {
-                RefreshExistingRows(listRoot, presenter, onSelectionChanged);
                 return;
             }
 
             CacheOriginalRows(listRoot);
-            HideOriginalRows();
+            if (HideExistingRowsBeforeRefresh)
+            {
+                HideOriginalRows();
+            }
+
             ClearRuntimeRows();
 
             for (var i = 0; i < presenter.CurrentTagChoices.Count; i++)
@@ -44,22 +37,10 @@ namespace PaperShift.Presenter
                 var tag = presenter.CurrentTagChoices[i];
                 var row = UnityEngine.Object.Instantiate(TagRowPrefab, listRoot, false);
                 row.name = RuntimeRowPrefix + tag.Id;
-                row.SetActive(true);
-                runtimeRows.Add(row);
-                ConfigurePrefabRow(row.transform, presenter, tag, onSelectionChanged);
+                row.gameObject.SetActive(true);
+                runtimeRows.Add(row.gameObject);
+                ConfigureRow(row, presenter, tag, onSelectionChanged);
             }
-        }
-
-        private void ResolvePrefab()
-        {
-            if (TagRowPrefab != null)
-            {
-                return;
-            }
-
-#if UNITY_EDITOR
-            TagRowPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(TagRowPrefabPath);
-#endif
         }
 
         private void CacheOriginalRows(Transform listRoot)
@@ -115,13 +96,13 @@ namespace PaperShift.Presenter
             runtimeRows.Clear();
         }
 
-        private void ConfigurePrefabRow(Transform row, PaperShiftGamePresenter presenter, TagDefinition tag, Action onSelectionChanged)
+        private void ConfigureRow(PaperShiftTagChoiceItemViewReferences row, PaperShiftGamePresenter presenter, TagDefinition tag, Action onSelectionChanged)
         {
             var selected = presenter.State.Worker.HasTag(tag.Id);
-            SetText(Find(row, "标签介绍"), tag.Description);
-            SetTagName(row, tag.DisplayName);
-            SetRarityTicket(row, tag);
-            SetSelected(row, selected);
+            Set(row.LabelText, tag.DisplayName);
+            Set(row.DescriptionText, tag.Description);
+            ApplyRarity(row, tag.RarityId);
+            ApplySelected(row, selected);
             BindButtons(row, () =>
             {
                 presenter.ToggleStartingTag(tag.Id);
@@ -129,157 +110,73 @@ namespace PaperShift.Presenter
             });
         }
 
-        private void SetRarityTicket(Transform row, TagDefinition tag)
+        private static void ApplyRarity(PaperShiftTagChoiceItemViewReferences row, string rarityId)
         {
-            var rare = IsRarity(tag, "rare");
-            var superRare = IsRarity(tag, "super_rare");
-            var normal = IsRarity(tag, "normal") || (!rare && !superRare);
-            SetTicket(row, "Ticket 普通", normal, tag.DisplayName);
-            SetTicket(row, "Ticket 稀有", rare, tag.DisplayName);
-            SetTicket(row, "Ticket 超稀有", superRare, tag.DisplayName);
+            var rare = IsRarity(rarityId, "rare");
+            var superRare = IsRarity(rarityId, "super_rare");
+            SetActive(row.NormalState, !rare && !superRare);
+            SetActive(row.RareState, rare);
+            SetActive(row.SuperRareState, superRare);
         }
 
-        private void SetTicket(Transform row, string ticketName, bool active, string displayName)
+        private static void ApplySelected(PaperShiftTagChoiceItemViewReferences row, bool selected)
         {
-            var ticket = Find(row, ticketName);
-            if (ticket == null)
+            SetActive(row.UnselectedState, !selected);
+            SetActive(row.SelectedState, selected);
+
+            if (row.SelectedBadges != null)
+            {
+                for (var i = 0; i < row.SelectedBadges.Length; i++)
+                {
+                    SetActive(row.SelectedBadges[i], selected);
+                }
+            }
+
+            if (row.Background != null)
+            {
+                row.Background.color = selected ? PaperShiftTheme.Hex("#e9f7ff") : PaperShiftTheme.White;
+            }
+        }
+
+        private static void BindButtons(PaperShiftTagChoiceItemViewReferences row, UnityEngine.Events.UnityAction onClick)
+        {
+            if (row.ActionButtons == null)
             {
                 return;
             }
 
-            ticket.gameObject.SetActive(active);
-        }
-
-        private void SetTagName(Transform row, string displayName)
-        {
-            var texts = row.GetComponentsInChildren<Text>(true);
-            for (var i = 0; i < texts.Length; i++)
+            for (var i = 0; i < row.ActionButtons.Length; i++)
             {
-                if (texts[i].transform.name == "Label")
+                var button = row.ActionButtons[i];
+                if (button == null)
                 {
-                    texts[i].text = displayName;
-                }
-            }
-        }
-
-        private void SetSelected(Transform row, bool selected)
-        {
-            SetActive(row, "未选选择框", !selected);
-            SetActive(row, "选择框", selected);
-            SetActiveAll(row, "Selected Badge", selected);
-        }
-
-        private void BindButtons(Transform row, UnityEngine.Events.UnityAction onClick)
-        {
-            var buttons = row.GetComponentsInChildren<Button>(true);
-            if (buttons.Length == 0)
-            {
-                var button = row.gameObject.AddComponent<Button>();
-                button.targetGraphic = row.GetComponent<Graphic>();
-                buttons = new[] { button };
-            }
-
-            for (var i = 0; i < buttons.Length; i++)
-            {
-                buttons[i].onClick.RemoveAllListeners();
-                buttons[i].onClick.AddListener(onClick);
-            }
-        }
-
-        private void RefreshExistingRows(Transform listRoot, PaperShiftGamePresenter presenter, Action onSelectionChanged)
-        {
-            for (var i = 0; i < listRoot.childCount; i++)
-            {
-                var row = listRoot.GetChild(i);
-                if (i >= presenter.CurrentTagChoices.Count)
-                {
-                    row.gameObject.SetActive(false);
                     continue;
                 }
 
-                row.gameObject.SetActive(true);
-                var tag = presenter.CurrentTagChoices[i];
-                var selected = presenter.State.Worker.HasTag(tag.Id);
-                var graphic = row.GetComponent<Graphic>();
-                if (graphic != null)
-                {
-                    graphic.color = selected ? PaperShiftTheme.Hex("#e9f7ff") : PaperShiftTheme.White;
-                }
-
-                SetText(Find(row, "Description"), tag.Description);
-                SetText(Find(row, "标签介绍"), tag.Description);
-                SetTagName(row, tag.DisplayName);
-                SetSelected(row, selected);
-                BindButtons(row, () =>
-                {
-                    presenter.ToggleStartingTag(tag.Id);
-                    onSelectionChanged?.Invoke();
-                });
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(onClick);
             }
         }
 
-        private static bool IsRarity(TagDefinition tag, string rarityId)
+        private static bool IsRarity(string rarityId, string expected)
         {
-            return string.Equals(tag.RarityId, rarityId, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(rarityId, expected, StringComparison.OrdinalIgnoreCase);
         }
 
-        private static void SetActive(Transform root, string name, bool active)
+        private static void Set(Text text, string value)
         {
-            var target = Find(root, name);
-            if (target != null)
-            {
-                target.gameObject.SetActive(active);
-            }
-        }
-
-        private static void SetActiveAll(Transform root, string name, bool active)
-        {
-            var targets = root.GetComponentsInChildren<Transform>(true);
-            for (var i = 0; i < targets.Length; i++)
-            {
-                if (targets[i].name == name)
-                {
-                    targets[i].gameObject.SetActive(active);
-                }
-            }
-        }
-
-        private static void SetText(Transform target, string value)
-        {
-            if (target == null)
-            {
-                return;
-            }
-
-            var text = target.GetComponent<Text>();
             if (text != null)
             {
                 text.text = value;
             }
         }
 
-        private static Transform Find(Transform root, string name)
+        private static void SetActive(GameObject target, bool active)
         {
-            if (root == null)
+            if (target != null)
             {
-                return null;
+                target.SetActive(active);
             }
-
-            if (root.name == name)
-            {
-                return root;
-            }
-
-            for (var i = 0; i < root.childCount; i++)
-            {
-                var found = Find(root.GetChild(i), name);
-                if (found != null)
-                {
-                    return found;
-                }
-            }
-
-            return null;
         }
     }
 }
