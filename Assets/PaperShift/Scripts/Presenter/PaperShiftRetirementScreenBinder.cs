@@ -64,7 +64,7 @@ namespace PaperShift.Presenter
             Set(SettlementTexts, "family", PaperShiftWorkerAttributes.DisplayValue(State.Worker, PaperShiftWorkerAttributes.Family));
             Set(SettlementTexts, "job", jobTitle);
             Set(SettlementTexts, "salary", salary.ToString("N0") + "元");
-            Set(SettlementTexts, "totalReward", salary.ToString("N0"));
+            Set(SettlementTexts, "totalReward", State.Retirement.FinalSavings.ToString("N0"));
         }
     }
 }

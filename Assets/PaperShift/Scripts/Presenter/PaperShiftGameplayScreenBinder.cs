@@ -18,11 +18,14 @@ namespace PaperShift.Presenter
 
         private const float EventLogMessageSeconds = 3.2f;
         private const float EventLogLineSpacing = 6f;
+        private const string RuntimeEventLogLineName = "Runtime Event Log Line";
+        private const string LegacyRuntimeEventLogLineName = "Runtime Log Line";
         private readonly PaperShiftCandidateTagGridView candidateTagGridView = new PaperShiftCandidateTagGridView();
         private readonly List<GameObject> activeEventLogLines = new List<GameObject>();
         private Transform eventLogRoot;
         private GameObject eventLogLineTemplate;
         private bool eventLogSceneItemsHidden;
+        private int eventLogGeneration = -1;
 
         private void Reset()
         {
@@ -60,6 +63,8 @@ namespace PaperShift.Presenter
 
         public override void RefreshView()
         {
+            ClearEventLogIfGenerationChanged();
+
             var current = SceneController == null ? Screen : SceneController.CurrentScreen;
             if (current == PaperShiftScreen.Work)
             {
@@ -77,7 +82,13 @@ namespace PaperShift.Presenter
 
         public override void OnScreenBecameActive(PaperShiftScreen screen)
         {
+            ClearEventLogIfGenerationChanged();
             PlayJobCardTransition(screen);
+        }
+
+        private void OnDisable()
+        {
+            ClearEventLogMessages();
         }
 
         public void SetActionsInteractable(bool interactable)
@@ -255,7 +266,7 @@ namespace PaperShift.Presenter
 
             root.gameObject.SetActive(true);
             var line = Instantiate(template, root);
-            line.name = "Runtime Log Line";
+            line.name = RuntimeEventLogLineName;
             line.SetActive(true);
             ConfigureEventLogLineRect(line);
 
@@ -319,9 +330,62 @@ namespace PaperShift.Presenter
             if (line != null)
             {
                 activeEventLogLines.Remove(line);
-                Destroy(line);
+                DestroyEventLogLine(line);
                 ReflowEventLogLines();
+                if (activeEventLogLines.Count == 0 && eventLogRoot != null)
+                {
+                    eventLogRoot.gameObject.SetActive(false);
+                }
             }
+        }
+
+        private void ClearEventLogIfGenerationChanged()
+        {
+            if (State == null)
+            {
+                return;
+            }
+
+            if (eventLogGeneration == State.Generation)
+            {
+                return;
+            }
+
+            eventLogGeneration = State.Generation;
+            ClearEventLogMessages();
+        }
+
+        private void ClearEventLogMessages()
+        {
+            for (var i = activeEventLogLines.Count - 1; i >= 0; i--)
+            {
+                DestroyEventLogLine(activeEventLogLines[i]);
+            }
+
+            activeEventLogLines.Clear();
+
+            var root = eventLogRoot != null ? eventLogRoot : ResolveEventLogRoot();
+            if (root == null)
+            {
+                return;
+            }
+
+            var template = ResolveEventLogLineTemplate(root);
+            for (var i = root.childCount - 1; i >= 0; i--)
+            {
+                var child = root.GetChild(i);
+                if (child == null || child.gameObject == template)
+                {
+                    continue;
+                }
+
+                if (child.name == RuntimeEventLogLineName || child.name == LegacyRuntimeEventLogLineName)
+                {
+                    DestroyEventLogLine(child.gameObject);
+                }
+            }
+
+            root.gameObject.SetActive(false);
         }
 
         private void ConfigureEventLogLineRect(GameObject line)
@@ -385,9 +449,31 @@ namespace PaperShift.Presenter
         {
             for (var i = 0; i < graphics.Count; i++)
             {
+                if (graphics[i] == null)
+                {
+                    continue;
+                }
+
                 var color = i < baseColors.Count ? baseColors[i] : graphics[i].color;
                 color.a *= alpha;
                 graphics[i].color = color;
+            }
+        }
+
+        private static void DestroyEventLogLine(GameObject line)
+        {
+            if (line == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(line);
+            }
+            else
+            {
+                DestroyImmediate(line);
             }
         }
 
@@ -409,7 +495,6 @@ namespace PaperShift.Presenter
                     new UiPair("专业", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Major)),
                     new UiPair("能力", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Ability)),
                     new UiPair("家境", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Family)),
-                    new UiPair("存款", worker.Money.ToString()),
                     new UiPair("压力", worker.Stress.ToString())
                 },
                 Tags = new List<string>(),

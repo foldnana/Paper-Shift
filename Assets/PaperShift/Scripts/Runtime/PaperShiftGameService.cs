@@ -7,6 +7,8 @@ namespace PaperShift.Runtime
 {
     public sealed class PaperShiftGameService
     {
+        public const int FirstGenerationStartYear = 2026;
+
         private readonly PaperShiftDatabase database;
         private readonly ConditionEvaluator conditions;
         private readonly EffectResolver effects;
@@ -25,24 +27,16 @@ namespace PaperShift.Runtime
             get { return database; }
         }
 
-        public PaperShiftRunState StartNewRun(string eraId = "modern", int? seed = null)
+        public PaperShiftRunState StartNewRun(string eraId = null, int? seed = null)
         {
-            if (seed.HasValue)
-            {
-                random = new Random(seed.Value);
-            }
-
-            var era = database.FindEra(eraId);
-            if (era == null && database.Eras.Length > 0)
-            {
-                era = database.Eras[0];
-            }
+            var actualSeed = seed.HasValue ? seed.Value : Environment.TickCount;
+            random = new Random(actualSeed);
 
             var state = new PaperShiftRunState();
-            state.Seed = seed.HasValue ? seed.Value : Environment.TickCount;
+            state.Seed = actualSeed;
             state.Generation = 1;
-            state.CurrentYear = era == null ? 2000 : random.Next(era.StartYear, era.EndYear + 1);
-            state.Worker = CreateRandomWorker(era, state.CurrentYear, 1, 0);
+            state.CurrentYear = FirstGenerationStartYear;
+            state.Worker = CreateRandomWorker(state.CurrentYear, 1);
             state.Phase = PaperShiftPhase.CreateWorker;
             state.AddLog("新的打工人生开始了。");
             return state;
@@ -50,8 +44,7 @@ namespace PaperShift.Runtime
 
         public void RandomizeWorker(PaperShiftRunState state, string eraId)
         {
-            var era = database.FindEra(eraId);
-            state.Worker = CreateRandomWorker(era, state.CurrentYear, state.Generation, 0);
+            state.Worker = CreateRandomWorker(state.CurrentYear, state.Generation);
             state.Phase = PaperShiftPhase.CreateWorker;
             state.AddLog("已随机生成新的劳动者。");
         }
@@ -395,7 +388,7 @@ namespace PaperShift.Runtime
             state.Phase = PaperShiftPhase.Retirement;
             state.Retirement.Reason = RunEndReason.Custom;
             state.Retirement.ReasonText = "通过试用期，正式入职，这一代结算。";
-            state.Retirement.FinalSavings = state.Worker.Money + Math.Max(0, state.CurrentJob.Salary);
+            state.Retirement.FinalSavings = state.Worker.Money;
             state.Retirement.WorkYears = state.CurrentJob.WorkYears;
             state.Retirement.FinalJobTitle = state.CurrentJob.JobTitle;
             EnsureHeirs(state);
@@ -486,11 +479,13 @@ namespace PaperShift.Runtime
             }
 
             var heir = state.Worker.Heirs[heirIndex];
-            var era = NextEra(state.Worker.EraId);
-            var inheritedMoney = state.Worker.Money * Math.Max(0, heir.InheritancePercent) / 100;
-            var next = CreateRandomWorker(era, state.CurrentYear, state.Generation + 1, inheritedMoney);
+            var yearAdvance = Math.Max(1, 18 - heir.Age);
+            var nextYear = state.CurrentYear + yearAdvance;
+            var next = CreateRandomWorker(nextYear, state.Generation + 1);
             next.FirstName = heir.Name.Length > state.Worker.LastName.Length ? heir.Name.Substring(state.Worker.LastName.Length) : heir.Name;
             next.Gender = heir.Gender;
+            next.Age = Math.Max(18, heir.Age + yearAdvance);
+            next.BirthYear = nextYear - next.Age;
             next.Tags.AddRange(heir.Tags);
             for (var i = 0; i < heir.Stats.Count; i++)
             {
@@ -498,11 +493,14 @@ namespace PaperShift.Runtime
             }
 
             state.Generation++;
+            state.CurrentYear = nextYear;
             state.Worker = next;
             state.Resume = new ResumeProfile();
             state.Interview = new InterviewState();
             state.CurrentJob = new CurrentJobState();
             state.Retirement = new RetirementState();
+            state.Logs.Clear();
+            state.Banners.Clear();
             state.Phase = PaperShiftPhase.CreateWorker;
             state.AddLog("第 " + state.Generation + " 代开始了。", EventNoticeType.Banner);
             return true;
@@ -586,7 +584,7 @@ namespace PaperShift.Runtime
             return false;
         }
 
-        private WorkerProfile CreateRandomWorker(EraDefinition era, int currentYear, int generation, int inheritedMoney)
+        private WorkerProfile CreateRandomWorker(int currentYear, int generation)
         {
             var worker = new WorkerProfile
             {
@@ -594,13 +592,13 @@ namespace PaperShift.Runtime
                 LastName = Pick(database.LastNames, "李"),
                 Gender = random.NextDouble() < 0.5 ? "女" : "男",
                 Personality = Pick(new[] { "沉稳", "谨慎", "开朗", "灵活", "较真", "随和" }, "沉稳"),
-                EraId = era == null ? "modern" : era.Id,
-                EraName = era == null ? "现代城市" : era.DisplayName,
+                EraId = string.Empty,
+                EraName = currentYear + "年",
                 Generation = generation,
                 Age = random.Next(18, 31),
                 Stress = random.Next(5, 26),
                 Health = random.Next(65, 96),
-                Money = inheritedMoney
+                Money = 0
             };
             worker.FirstName = worker.Gender == "女" ? Pick(database.FemaleFirstNames, "小满") : Pick(database.MaleFirstNames, "知行");
             worker.BirthYear = currentYear - worker.Age;
@@ -612,7 +610,6 @@ namespace PaperShift.Runtime
             }
 
             worker.SetStat(PaperShiftWorkerAttributes.Height, RollHeight(worker.Gender));
-            worker.Money += 1000 + worker.GetStat(PaperShiftWorkerAttributes.Family) * 80 + worker.GetStat(PaperShiftWorkerAttributes.Ability) * 35;
             return worker;
         }
 
@@ -789,9 +786,6 @@ namespace PaperShift.Runtime
 
         private void ApplyAnnualBudget(PaperShiftRunState state)
         {
-            var yearlyIncome = state.CurrentJob.Salary * 12;
-            var savings = yearlyIncome * state.Budget.Savings / 100;
-            state.Worker.Money += savings;
             state.Worker.Health = Clamp(state.Worker.Health + (state.Budget.Food - 20) / 5, 0, 100);
             state.Worker.Stress = Clamp(state.Worker.Stress - (state.Budget.Housing - 20) / 8, 0, 100);
             if (state.Budget.Education >= 18)
@@ -1015,6 +1009,11 @@ namespace PaperShift.Runtime
 
         private static bool MatchesEra(string[] eraIds, string eraId)
         {
+            if (string.IsNullOrEmpty(eraId))
+            {
+                return true;
+            }
+
             if (eraIds == null || eraIds.Length == 0)
             {
                 return true;

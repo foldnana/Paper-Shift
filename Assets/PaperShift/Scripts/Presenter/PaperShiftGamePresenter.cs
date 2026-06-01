@@ -11,7 +11,7 @@ namespace PaperShift.Presenter
     {
         public PaperShiftDatabase Database;
         public PaperShiftSceneController SceneController;
-        public string InitialEraId = "modern";
+        public string InitialEraId = string.Empty;
         public int StartingTagChoiceCount = 7;
         public int StartingTagLimit = 3;
         public PaperShiftRunState State;
@@ -50,7 +50,7 @@ namespace PaperShift.Presenter
 
         public void SetEraAndRandomize(string eraId)
         {
-            service.RandomizeWorker(State, eraId);
+            service.RandomizeWorker(State, string.Empty);
             CurrentTagChoices = service.RollStartingTags(State, StartingTagChoiceCount);
             ShowCreate();
         }

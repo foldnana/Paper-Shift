@@ -104,10 +104,28 @@ namespace PaperShift.Presenter
             Set(Texts, "major", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Major));
             Set(Texts, "ability", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Ability));
             Set(Texts, "advantage", PaperShiftWorkerAttributes.BestAttributeLabel(worker) + " / " + WorkerTagSummary(worker));
-            Set(Texts, "asset", "启动资金 " + worker.Money);
+            HideTextBindingRow(Texts, "asset");
             Set(Texts, "lastName", worker.LastName);
             Set(Texts, "firstName", worker.FirstName);
             Set(Texts, "coin", worker.Money.ToString("N0"));
+        }
+
+        private void HideTextBindingRow(PaperShiftTextBinding[] bindings, string id)
+        {
+            var binding = FindBinding(bindings, id);
+            if (binding == null || binding.Text == null)
+            {
+                return;
+            }
+
+            var row = binding.Text.transform.parent;
+            if (row != null)
+            {
+                row.gameObject.SetActive(false);
+                return;
+            }
+
+            binding.Text.gameObject.SetActive(false);
         }
 
         private void RefreshEraTiles(PaperShiftEraTileBinding[] tiles)

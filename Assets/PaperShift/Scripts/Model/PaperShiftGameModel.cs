@@ -69,7 +69,7 @@ namespace PaperShift.Model
                 Education = "普通本科",
                 Family = "小康",
                 Advantage = "学习能力强",
-                Asset = "启动资金 8000",
+                Asset = "0",
                 Coin = "2,135"
             };
 
@@ -168,8 +168,7 @@ namespace PaperShift.Model
                 InfoPair.Normal("逻辑", "57"),
                 InfoPair.Normal("学历", "普通本科"),
                 InfoPair.Normal("家境", "小康"),
-                InfoPair.Rare("优势", "★学习强"),
-                InfoPair.Rare("资产", "★8000")
+                InfoPair.Rare("优势", "★学习强")
             };
             model.FailureSelf.Tags = new[]
             {
@@ -214,7 +213,6 @@ namespace PaperShift.Model
                 {
                     InfoPair.Rare("职业", "★AI训练师"),
                     InfoPair.Rare("月薪", "★18000"),
-                    InfoPair.Normal("存款", "12600"),
                     InfoPair.Normal("关系", "单身"),
                     InfoPair.Normal("健康", "82"),
                     InfoPair.Normal("前途", "上升")
@@ -261,7 +259,6 @@ namespace PaperShift.Model
             {
                 InfoPair.Rare("职业", "★AI训练师"),
                 InfoPair.Rare("月薪", "★18000"),
-                InfoPair.Normal("存款", "28600"),
                 InfoPair.Normal("前途", "上升")
             };
             model.NewsSelf.Tags = new[]
@@ -556,7 +553,6 @@ namespace PaperShift.Model
                     InfoPair.Normal("学历", "未知"),
                     InfoPair.Normal("家境", "小康"),
                     InfoPair.Normal("求职", "未开始"),
-                    InfoPair.Normal("资产", "待分配"),
                     InfoPair.Normal("压力", "0")
                 }
             };

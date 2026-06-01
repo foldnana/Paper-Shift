@@ -33,9 +33,15 @@ namespace PaperShift.Presenter
             ClearRuntimeItems(tagsRoot);
 
             var tagCount = tags == null ? 0 : Mathf.Min(tags.Count, MaxSlots);
+            if (TagPrefab == null || EmptySlotPrefab == null)
+            {
+                Debug.LogWarning("PaperShift status tag grid needs TagPrefab and EmptySlotPrefab references. Runtime fallback UI creation is disabled.");
+                return;
+            }
+
             for (var i = 0; i < MaxSlots; i++)
             {
-                if (i < tagCount && TagPrefab != null)
+                if (i < tagCount)
                 {
                     var item = UnityEngine.Object.Instantiate(TagPrefab, tagsRoot, false);
                     item.name = RuntimeItemPrefix + "Tag " + tags[i].TagId;
@@ -44,22 +50,10 @@ namespace PaperShift.Presenter
                     continue;
                 }
 
-                if (i < tagCount)
-                {
-                    CreateFallbackTag(tagsRoot, tags[i]);
-                    continue;
-                }
-
-                if (EmptySlotPrefab != null)
-                {
-                    var item = UnityEngine.Object.Instantiate(EmptySlotPrefab, tagsRoot, false);
-                    item.name = RuntimeItemPrefix + "Empty " + i;
-                    item.SetActive(true);
-                    ConfigureSlot(item.transform, tagsRoot);
-                    continue;
-                }
-
-                CreateFallbackSlot(tagsRoot, i);
+                var slot = UnityEngine.Object.Instantiate(EmptySlotPrefab, tagsRoot, false);
+                slot.name = RuntimeItemPrefix + "Empty " + i;
+                slot.SetActive(true);
+                ConfigureSlot(slot.transform, tagsRoot);
             }
         }
 
@@ -88,7 +82,8 @@ namespace PaperShift.Presenter
             var grid = tagsRoot.GetComponent<GridLayoutGroup>();
             if (grid == null)
             {
-                grid = tagsRoot.gameObject.AddComponent<GridLayoutGroup>();
+                Debug.LogWarning("PaperShift status tag root needs a prebuilt GridLayoutGroup.");
+                return;
             }
 
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
@@ -118,29 +113,6 @@ namespace PaperShift.Presenter
             ConfigureItemLayout(root, tagsRoot);
         }
 
-        private static void CreateFallbackTag(Transform tagsRoot, TagInstance tag)
-        {
-            var grid = tagsRoot.GetComponent<GridLayoutGroup>();
-            var cellSize = grid == null ? new Vector2(96f, 36f) : grid.cellSize;
-            var color = TagColor(tag.RarityId);
-            var border = TagBorder(tag.RarityId);
-            var root = CreateRounded(tagsRoot, RuntimeItemPrefix + "Tag " + tag.TagId, color, 7f);
-            ConfigureItemLayout(root, tagsRoot);
-            AddOutline(root.gameObject, border, 2f);
-            AddText(root, "Label", tag.DisplayName, 12, PaperShiftTheme.Hex("#3b3f43"), TextAnchor.MiddleCenter, new RectOffset(8, 8, 0, 0));
-            if (root is RectTransform rect)
-            {
-                rect.sizeDelta = cellSize;
-            }
-        }
-
-        private static void CreateFallbackSlot(Transform tagsRoot, int index)
-        {
-            var root = CreateRounded(tagsRoot, RuntimeItemPrefix + "Empty " + index, PaperShiftTheme.Slot, 8f);
-            ConfigureItemLayout(root, tagsRoot);
-            AddOutline(root.gameObject, PaperShiftTheme.Hex("#d8e0e6"), 2f);
-        }
-
         private static void ConfigureItemLayout(Transform root, Transform tagsRoot)
         {
             var grid = tagsRoot.GetComponent<GridLayoutGroup>();
@@ -156,13 +128,11 @@ namespace PaperShift.Presenter
             }
 
             var layout = root.GetComponent<LayoutElement>();
-            if (layout == null)
+            if (layout != null)
             {
-                layout = root.gameObject.AddComponent<LayoutElement>();
+                layout.preferredWidth = cellSize.x;
+                layout.preferredHeight = cellSize.y;
             }
-
-            layout.preferredWidth = cellSize.x;
-            layout.preferredHeight = cellSize.y;
 
             var rects = root.GetComponentsInChildren<RectTransform>(true);
             for (var i = 0; i < rects.Length; i++)
@@ -221,36 +191,6 @@ namespace PaperShift.Presenter
         private static bool IsRarity(string rarityId, string expected)
         {
             return string.Equals(rarityId, expected, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static Color TagColor(string rarityId)
-        {
-            if (IsRarity(rarityId, "rare"))
-            {
-                return PaperShiftTheme.BlueTicket;
-            }
-
-            if (IsRarity(rarityId, "super_rare"))
-            {
-                return PaperShiftTheme.PurpleTicket;
-            }
-
-            return PaperShiftTheme.White;
-        }
-
-        private static Color TagBorder(string rarityId)
-        {
-            if (IsRarity(rarityId, "rare"))
-            {
-                return PaperShiftTheme.Hex("#315e77");
-            }
-
-            if (IsRarity(rarityId, "super_rare"))
-            {
-                return PaperShiftTheme.Hex("#5a367b");
-            }
-
-            return PaperShiftTheme.Hex("#42474b");
         }
 
         private static void HideOriginalItems(Transform tagsRoot)
@@ -320,53 +260,5 @@ namespace PaperShift.Presenter
             return null;
         }
 
-        private static RectTransform CreateRounded(Transform parent, string name, Color color, float radius)
-        {
-            var go = new GameObject(name, typeof(RectTransform));
-            go.layer = parent.gameObject.layer;
-            var rect = go.GetComponent<RectTransform>();
-            rect.SetParent(parent, false);
-            rect.localScale = Vector3.one;
-            var graphic = go.AddComponent<RoundedRectGraphic>();
-            graphic.color = color;
-            graphic.CornerRadius = radius;
-            return rect;
-        }
-
-        private static void AddOutline(GameObject target, Color color, float distance)
-        {
-            var outline = target.AddComponent<Outline>();
-            outline.effectColor = color;
-            outline.effectDistance = new Vector2(distance, -distance);
-            outline.useGraphicAlpha = true;
-        }
-
-        private static Text AddText(Transform parent, string name, string body, int fontSize, Color color, TextAnchor alignment, RectOffset padding)
-        {
-            var go = new GameObject(name, typeof(RectTransform));
-            go.layer = parent.gameObject.layer;
-            var rect = go.GetComponent<RectTransform>();
-            rect.SetParent(parent, false);
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(padding.left, padding.bottom);
-            rect.offsetMax = new Vector2(-padding.right, -padding.top);
-
-            var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = fontSize;
-            text.fontStyle = FontStyle.Bold;
-            text.color = color;
-            text.alignment = alignment;
-            text.supportRichText = true;
-            text.resizeTextForBestFit = true;
-            text.resizeTextMinSize = 8;
-            text.resizeTextMaxSize = fontSize;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-            text.verticalOverflow = VerticalWrapMode.Overflow;
-            text.raycastTarget = false;
-            text.text = body;
-            return text;
-        }
     }
 }
