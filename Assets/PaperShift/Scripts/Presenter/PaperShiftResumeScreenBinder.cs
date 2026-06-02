@@ -116,7 +116,7 @@ namespace PaperShift.Presenter
         private void RefreshHeader()
         {
             var worker = State.Worker;
-            Set(ActiveCoinText(), worker.Money.ToString("N0"));
+            SetActive(ActiveCoinText() == null ? null : ActiveCoinText().gameObject, false);
             Set(ActiveHeaderNameText(), worker.FullName);
             Set(ActiveHeaderMetaText(), worker.Gender + " " + worker.Age + " 岁 " + worker.EraName);
             Set(ActiveGenerationText(), "第" + State.Generation + "代");

@@ -293,7 +293,7 @@ namespace PaperShift.Editor
             SetTop(refreshArea, PageWidth - 32f, 93f, 0f, 789f);
             AddText(refreshArea, "Refresh Title", "换一组标签", 14, PaperShiftTheme.Ink, TextAnchor.UpperLeft, new RectOffset(0, 0, 0, 0));
             CreateButton(refreshArea, "Free Refresh", "免费刷新  1", -105f, 26f, 198f, 66f, PaperShiftTheme.White, PaperShiftTheme.Ink, null);
-            CreateButton(refreshArea, "Super Refresh", "超级刷新\n时代变更，获得更好的标签!", 106f, 26f, 220f, 66f, PaperShiftTheme.Purple, Color.white, null, 16);
+            CreateButton(refreshArea, "Super Refresh", "超级刷新\n出现一组更稀有的标签!", 106f, 26f, 220f, 66f, PaperShiftTheme.Purple, Color.white, null, 16);
 
             CreateButton(view.transform, "Confirm Tags Button", "确认标签 " + selectedCount + "/3", 0f, 882f, PageWidth, 64f, PaperShiftTheme.White, PaperShiftTheme.Ink, controller.ShowResume);
         }
@@ -315,10 +315,10 @@ namespace PaperShift.Editor
             AddText(header, "Name", "李 小满\n<size=18>女 24 岁 现代城市</size>", 24, PaperShiftTheme.Ink, TextAnchor.MiddleLeft, new RectOffset(76, 0, 0, 0));
             CreateAvatarLock(header, new Vector2(322f, -6f), PortraitKind.Worker, false, 92f);
 
-            var intent = CreateRounded(card.transform, "Resume Intent", PaperShiftTheme.White, 14f);
+            var intent = CreateRounded(card.transform, "Resume Packaging", PaperShiftTheme.White, 14f);
             AnchorTopLeft(intent, PageWidth - 48f, 92f, 24f, 134f);
-            AddText(intent, "Title", "求职意向", 17, PaperShiftTheme.Ink, TextAnchor.UpperLeft, new RectOffset(12, 0, 8, 0));
-            AddText(intent, "Hint", "决定刷到的岗位", 15, PaperShiftTheme.Blue, TextAnchor.UpperRight, new RectOffset(0, 12, 9, 0));
+            AddText(intent, "Title", "简历包装", 17, PaperShiftTheme.Ink, TextAnchor.UpperLeft, new RectOffset(12, 0, 8, 0));
+            AddText(intent, "Hint", "影响认可度与风险", 15, PaperShiftTheme.Blue, TextAnchor.UpperRight, new RectOffset(0, 12, 9, 0));
             var intentTags = CreateRect(intent, "Intent Tags");
             AnchorTopLeft(intentTags, PageWidth - 72f, 44f, 12f, 40f);
             var intentLayout = intentTags.gameObject.AddComponent<HorizontalLayoutGroup>();
@@ -327,10 +327,7 @@ namespace PaperShift.Editor
             intentLayout.childControlHeight = true;
             intentLayout.childForceExpandWidth = false;
             intentLayout.childForceExpandHeight = false;
-            for (var i = 0; i < model.ResumeIntent.Count; i++)
-            {
-                CreateTicket(intentTags, model.ResumeIntent[i], i == 0 ? TagRarity.Rare : TagRarity.Normal, true);
-            }
+            AddText(intentTags, "Packaging Hint", "隐藏或夸大会改变公司看到的适配画像", 15, PaperShiftTheme.MutedInk, TextAnchor.MiddleLeft);
 
             var lineList = CreateRect(card.transform, "Resume Lines");
             AnchorTopLeft(lineList, PageWidth - 48f, 326f, 24f, 238f);

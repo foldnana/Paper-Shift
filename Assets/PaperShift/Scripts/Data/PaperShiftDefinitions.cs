@@ -11,6 +11,7 @@ namespace PaperShift.Data
         public RarityDefinition[] Rarities = new RarityDefinition[0];
         public StatDefinition[] Stats = new StatDefinition[0];
         public TagDefinition[] Tags = new TagDefinition[0];
+        public WorkTagDefinition[] WorkTags = new WorkTagDefinition[0];
         public CompanyDefinition[] Companies = new CompanyDefinition[0];
         public GameEventDefinition[] Events = new GameEventDefinition[0];
         public string[] LastNames = new string[0];
@@ -50,6 +51,19 @@ namespace PaperShift.Data
                 if (Tags[i].Id == id)
                 {
                     return Tags[i];
+                }
+            }
+
+            return null;
+        }
+
+        public WorkTagDefinition FindWorkTag(string id)
+        {
+            for (var i = 0; i < WorkTags.Length; i++)
+            {
+                if (WorkTags[i].Id == id)
+                {
+                    return WorkTags[i];
                 }
             }
 
@@ -127,6 +141,51 @@ namespace PaperShift.Data
         public string[] EraIds = new string[0];
         public ConditionDefinition[] Conditions = new ConditionDefinition[0];
         public EffectDefinition[] Effects = new EffectDefinition[0];
+        public ConditionalEffectDefinition[] ConditionalEffects = new ConditionalEffectDefinition[0];
+    }
+
+    [Serializable]
+    public sealed class ConditionalEffectDefinition
+    {
+        public GameEventPhase Phase = GameEventPhase.Any;
+        public string[] WorkTagIds = new string[0];
+        public ConditionDefinition[] Conditions = new ConditionDefinition[0];
+        public EffectDefinition[] Effects = new EffectDefinition[0];
+    }
+
+    [Serializable]
+    public sealed class WorkTagDefinition
+    {
+        public string Id;
+        public string DisplayName;
+        [TextArea] public string Description;
+        public WorkRequirementDefinition[] Requirements = new WorkRequirementDefinition[0];
+        public EffectDefinition[] Effects = new EffectDefinition[0];
+        public EventWeightDefinition[] EventWeights = new EventWeightDefinition[0];
+    }
+
+    [Serializable]
+    public sealed class WorkRequirementDefinition
+    {
+        public RequirementTarget Target = RequirementTarget.FitDimension;
+        public FitDimension Dimension = FitDimension.Execution;
+        public string Key;
+        public CompareOperator Operator = CompareOperator.GreaterOrEqual;
+        public int IntValue = 50;
+        public bool HardFail;
+        public int RecognitionOnPass;
+        public int RecognitionOnFail = -8;
+        public int StressOnPass;
+        public int StressOnFail = 4;
+        public string FailEventId;
+    }
+
+    [Serializable]
+    public sealed class EventWeightDefinition
+    {
+        public string EventId;
+        public int WeightDelta;
+        public ConditionDefinition[] Conditions = new ConditionDefinition[0];
     }
 
     [Serializable]

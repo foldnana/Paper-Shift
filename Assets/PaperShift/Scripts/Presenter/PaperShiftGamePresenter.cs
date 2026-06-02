@@ -12,7 +12,7 @@ namespace PaperShift.Presenter
         public PaperShiftDatabase Database;
         public PaperShiftSceneController SceneController;
         public string InitialEraId = string.Empty;
-        public int StartingTagChoiceCount = 7;
+        public int StartingTagChoiceCount = 6;
         public int StartingTagLimit = 3;
         public PaperShiftRunState State;
         public List<TagDefinition> CurrentTagChoices = new List<TagDefinition>();
@@ -108,8 +108,7 @@ namespace PaperShift.Presenter
 
         public void ToggleResumeIntent(string intentTagId)
         {
-            var enabled = !State.Resume.IntentTagIds.Contains(intentTagId);
-            service.SetResumeIntent(State, intentTagId, enabled);
+            service.SetResumeIntent(State, intentTagId, false);
         }
 
         public void SetResumePackaging(string fieldId, ResumePackagingMode mode)

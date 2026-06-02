@@ -79,8 +79,25 @@ namespace PaperShift.Runtime
                 case EffectKind.AddResumeRisk:
                     state.Resume.DeceptionRisk = Clamp(state.Resume.DeceptionRisk + effect.IntValue, 0, 100);
                     break;
+                case EffectKind.AddRecognition:
+                    AddRecognition(state, effect.IntValue);
+                    break;
+                case EffectKind.SetRecognition:
+                    SetRecognition(state, effect.IntValue);
+                    break;
                 case EffectKind.EndRun:
                     EndRun(effect, state);
+                    break;
+                case EffectKind.DirectFail:
+                    state.AddLog(string.IsNullOrEmpty(effect.TextValue) ? "当前机会失败。" : effect.TextValue, EventNoticeType.Banner);
+                    state.CurrentJob = new CurrentJobState();
+                    state.Interview = new InterviewState();
+                    state.Phase = PaperShiftPhase.Interview;
+                    break;
+                case EffectKind.ReturnToJobSearch:
+                    state.CurrentJob = new CurrentJobState();
+                    state.Interview = new InterviewState();
+                    state.Phase = PaperShiftPhase.Interview;
                     break;
             }
         }
@@ -154,6 +171,28 @@ namespace PaperShift.Runtime
             state.Retirement.FinalSavings = state.Worker.Money;
             state.Retirement.WorkYears = state.CurrentJob.WorkYears;
             state.Retirement.FinalJobTitle = state.CurrentJob.JobTitle;
+        }
+
+        private static void AddRecognition(PaperShiftRunState state, int delta)
+        {
+            if (state.Phase == PaperShiftPhase.Probation || state.HasActiveJob)
+            {
+                state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + delta, 0, 100);
+                return;
+            }
+
+            state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + delta, 0, 100);
+        }
+
+        private static void SetRecognition(PaperShiftRunState state, int value)
+        {
+            if (state.Phase == PaperShiftPhase.Probation || state.HasActiveJob)
+            {
+                state.CurrentJob.PromotionProgress = Clamp(value, 0, 100);
+                return;
+            }
+
+            state.Interview.Satisfaction = Clamp(value, 0, 100);
         }
 
         private static int Clamp(int value, int min, int max)

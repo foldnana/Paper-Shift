@@ -77,7 +77,7 @@ namespace PaperShift.Editor
                 TextBinding("coin", TextUnder(root, "Coin", "Amount"))
             };
 
-            var eraIds = new[] { "agrarian", "industrial", "modern", "near_future", "far_future", "post_work" };
+            var eraIds = new[] { "timeline", "timeline", "timeline", "timeline", "timeline", "timeline" };
             var eraPicker = Find(root, "Era Picker");
             var tiles = new List<PaperShiftEraTileBinding>();
             for (var i = 0; eraPicker != null && i < eraPicker.childCount && i < eraIds.Length; i++)

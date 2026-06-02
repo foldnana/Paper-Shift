@@ -73,9 +73,27 @@ namespace PaperShift.Runtime
                     return state.Interview.Satisfaction >= condition.IntValue;
                 case ConditionKind.ResumeRiskAtLeast:
                     return state.Resume.DeceptionRisk >= condition.IntValue;
+                case ConditionKind.StressAtLeast:
+                    return state.Worker.Stress >= condition.IntValue;
+                case ConditionKind.StressAtMost:
+                    return state.Worker.Stress <= condition.IntValue;
+                case ConditionKind.RecognitionAtLeast:
+                    return Recognition(state) >= condition.IntValue;
+                case ConditionKind.RecognitionAtMost:
+                    return Recognition(state) <= condition.IntValue;
                 default:
                     return false;
             }
+        }
+
+        private static int Recognition(PaperShiftRunState state)
+        {
+            if (state.Phase == PaperShiftPhase.Probation || state.HasActiveJob)
+            {
+                return state.CurrentJob.PromotionProgress;
+            }
+
+            return state.Interview.Satisfaction;
         }
 
         private static bool Compare(int current, int expected, CompareOperator op)

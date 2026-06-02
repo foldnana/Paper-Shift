@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using PaperShift.Data;
-using PaperShift.Model;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +20,7 @@ namespace PaperShift.Presenter
         [HideInInspector] public Text ConfirmLabel;
         [HideInInspector] public Button StartJobButton;
         [HideInInspector] public Text StartJobLabel;
-        [HideInInspector] public int TagChoiceCount = 7;
+        [HideInInspector] public int TagChoiceCount = 6;
 
         private readonly PaperShiftTagSelectionView tagSelectionView = new PaperShiftTagSelectionView();
         private Coroutine rollAnimationRoutine;
@@ -48,7 +47,7 @@ namespace PaperShift.Presenter
             {
                 ApplyTagChoiceCount();
                 Presenter.RollTagsAndShow();
-                ShowBanner("时代机会刷新，出现了一组新标签。");
+                ShowBanner("标签机会刷新，出现了一组新标签。");
                 forceAnimateOnNextRefresh = true;
                 RefreshView();
             });
@@ -67,7 +66,7 @@ namespace PaperShift.Presenter
             ApplyTagChoiceCount();
             Presenter.EnsureTagChoices();
             Set(ActiveTitleText(), "选择" + State.Worker.FullName + "的标签");
-            Set(ActiveCoinText(), State.Worker.Money.ToString("N0"));
+            SetActive(ActiveCoinText() == null ? null : ActiveCoinText().gameObject, false);
             Set(ActiveConfirmLabel(), "确认标签 " + State.Worker.Tags.Count + "/" + Presenter.StartingTagLimit);
             Set(ActiveStartJobLabel(), "开始找工作");
             RefreshActionState();
@@ -85,7 +84,7 @@ namespace PaperShift.Presenter
 
             StopRollAnimation();
             tagSelectionView.TagRowPrefab = ActiveTagRowPrefab();
-            tagSelectionView.HideExistingRowsBeforeRefresh = View == null || View.HideExistingRowsBeforeRefresh;
+            tagSelectionView.HideExistingRowsBeforeRefresh = true;
             tagSelectionView.Refresh(listRoot, Presenter, () =>
             {
                 RefreshView();
@@ -210,8 +209,7 @@ namespace PaperShift.Presenter
 
         private void ApplyTagChoiceCount()
         {
-            var count = View == null ? TagChoiceCount : View.TagChoiceCount;
-            Presenter.StartingTagChoiceCount = Mathf.Max(1, count);
+            Presenter.StartingTagChoiceCount = 6;
         }
 
         private PaperShiftTagChoiceItemViewReferences ActiveTagRowPrefab()

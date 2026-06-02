@@ -43,9 +43,40 @@ namespace PaperShift.Domain
     {
         Any,
         Interview,
+        Probation,
         WorkYear,
         Budget,
         Retirement
+    }
+
+    public enum FitDimension
+    {
+        Maturity,
+        Physique,
+        Presence,
+        Credentials,
+        Professionalism,
+        Execution,
+        Communication,
+        Resilience
+    }
+
+    public enum RequirementTarget
+    {
+        FitDimension,
+        RawAttribute,
+        WorkerTag,
+        WorkTag,
+        ResumeField
+    }
+
+    public enum FlowDirective
+    {
+        None,
+        DirectPass,
+        DirectFail,
+        EndRun,
+        ReturnToJobSearch
     }
 
     public enum EventNoticeType
@@ -83,7 +114,11 @@ namespace PaperShift.Domain
         EventSeen,
         WorkYearsAtLeast,
         InterviewProgressAtLeast,
-        ResumeRiskAtLeast
+        ResumeRiskAtLeast,
+        StressAtLeast,
+        StressAtMost,
+        RecognitionAtLeast,
+        RecognitionAtMost
     }
 
     public enum EffectTiming
@@ -112,6 +147,15 @@ namespace PaperShift.Domain
         AddResumeRisk,
         EndRun,
         PassiveStatBonus,
+        AddFitScore,
+        AddRecognition,
+        SetRecognition,
+        AddJobWeight,
+        AddEventWeight,
+        TriggerEvent,
+        DirectPass,
+        DirectFail,
+        ReturnToJobSearch,
         PassiveInterviewScore,
         PassiveSalaryPercent,
         PassiveEventWeight,

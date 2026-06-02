@@ -1,5 +1,4 @@
 using PaperShift.Domain;
-using PaperShift.Model;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,7 +44,7 @@ namespace PaperShift.Presenter
             var worker = State.Worker;
             if (View != null)
             {
-                Set(View.CoinText, worker.Money.ToString("N0"));
+                SetActive(View.CoinText == null ? null : View.CoinText.gameObject, false);
                 Set(View.LastNameText, worker.LastName);
                 Set(View.FirstNameText, worker.FirstName);
                 Set(View.FullNameText, worker.FullName);
@@ -105,9 +104,9 @@ namespace PaperShift.Presenter
             Set(Texts, "ability", PaperShiftWorkerAttributes.DisplayValue(worker, PaperShiftWorkerAttributes.Ability));
             Set(Texts, "advantage", PaperShiftWorkerAttributes.BestAttributeLabel(worker) + " / " + WorkerTagSummary(worker));
             HideTextBindingRow(Texts, "asset");
+            HideTextBindingRow(Texts, "coin");
             Set(Texts, "lastName", worker.LastName);
             Set(Texts, "firstName", worker.FirstName);
-            Set(Texts, "coin", worker.Money.ToString("N0"));
         }
 
         private void HideTextBindingRow(PaperShiftTextBinding[] bindings, string id)
@@ -143,25 +142,25 @@ namespace PaperShift.Presenter
                     continue;
                 }
 
-                var selected = State.Worker.EraId == tile.EraId;
-                if (tile.Background != null)
-                {
-                    tile.Background.color = selected ? PaperShiftTheme.BlueLight : PaperShiftTheme.White;
-                }
+                SetEraTileActive(tile, false);
+            }
+        }
 
-                if (tile.Label != null)
-                {
-                    var era = Database == null ? null : Database.FindEra(tile.EraId);
-                    tile.Label.text = era == null ? tile.Label.text : FormatEraLabel(era.DisplayName);
-                    tile.Label.color = selected ? Color.white : PaperShiftTheme.Hex("#3a4350");
-                }
+        private static void SetEraTileActive(PaperShiftEraTileBinding tile, bool active)
+        {
+            if (tile.Button != null)
+            {
+                tile.Button.gameObject.SetActive(active);
+            }
 
-                var eraId = tile.EraId;
-                Bind(tile.Button, () =>
-                {
-                    Presenter.SetEraAndRandomize(eraId);
-                    RefreshAll();
-                });
+            if (tile.Background != null)
+            {
+                tile.Background.gameObject.SetActive(active);
+            }
+
+            if (tile.Label != null)
+            {
+                tile.Label.gameObject.SetActive(active);
             }
         }
 
@@ -201,17 +200,6 @@ namespace PaperShift.Presenter
         private Button ActiveNextButton()
         {
             return View != null && View.NextButton != null ? View.NextButton : NextButton;
-        }
-
-        private static string FormatEraLabel(string value)
-        {
-            return value
-                .Replace("时代", "\n时代")
-                .Replace("城市", "\n城市")
-                .Replace("工业", "\n工业")
-                .Replace("农耕", "\n农耕")
-                .Replace("智能", "\n智能")
-                .Replace("星际", "\n星际");
         }
 
         private static void ApplyRarityState(GameObject normal, GameObject rare, GameObject superRare, string rarityId)

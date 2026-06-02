@@ -12,13 +12,18 @@ namespace PaperShift.Runtime
         private readonly PaperShiftDatabase database;
         private readonly ConditionEvaluator conditions;
         private readonly EffectResolver effects;
+        private readonly FitProfileResolver fitProfiles;
+        private readonly FlowRuleResolver flowRules;
         private Random random;
 
         public PaperShiftGameService(PaperShiftDatabase database = null, int? seed = null)
         {
             this.database = database == null ? PaperShiftSeedData.CreateDefaultDatabase() : database;
+            PaperShiftSeedData.ApplyRuntimeDefaults(this.database);
             conditions = new ConditionEvaluator();
             effects = new EffectResolver(this.database);
+            fitProfiles = new FitProfileResolver(this.database);
+            flowRules = new FlowRuleResolver(this.database, conditions);
             random = new Random(seed.HasValue ? seed.Value : Environment.TickCount);
         }
 
@@ -101,16 +106,9 @@ namespace PaperShift.Runtime
 
         public void SetResumeIntent(PaperShiftRunState state, string intentTagId, bool enabled)
         {
-            if (enabled)
+            if (state != null && state.Resume != null && state.Resume.IntentTagIds != null)
             {
-                if (!state.Resume.IntentTagIds.Contains(intentTagId))
-                {
-                    state.Resume.IntentTagIds.Add(intentTagId);
-                }
-            }
-            else
-            {
-                state.Resume.IntentTagIds.Remove(intentTagId);
+                state.Resume.IntentTagIds.Clear();
             }
         }
 
@@ -170,7 +168,8 @@ namespace PaperShift.Runtime
                 for (var jobIndex = 0; jobIndex < company.Jobs.Length; jobIndex++)
                 {
                     var job = company.Jobs[jobIndex];
-                    var weight = 20 + MatchIntentWeight(state, job) + Math.Max(0, 70 - job.Difficulty);
+                    var profile = fitProfiles.Build(state);
+                    var weight = flowRules.JobRollWeight(state, company, job, profile, random);
                     picker.Add(new CompanyJobPair(company, job), weight);
                 }
             }
@@ -182,17 +181,18 @@ namespace PaperShift.Runtime
 
             var pair = picker.Pick(random);
             var salary = RollSalary(state, pair.Job);
+            var initialRecognition = InitialRecognition(state, pair.Company, pair.Job);
             state.Interview = new InterviewState
             {
                 CompanyId = pair.Company.Id,
                 CompanyName = pair.Company.DisplayName,
                 JobId = pair.Job.Id,
                 JobTitle = pair.Job.DisplayName,
-                MaxRounds = Math.Max(1, pair.Job.InterviewRounds),
+                MaxRounds = 0,
                 Round = 0,
                 OfferThreshold = pair.Job.OfferThreshold,
                 Salary = salary,
-                Satisfaction = StartingInterviewSuccessRate(state, pair.Job)
+                Satisfaction = initialRecognition
             };
             state.Phase = PaperShiftPhase.Interview;
             state.AddLog("投递到了 " + pair.Company.DisplayName + " · " + pair.Job.DisplayName + "。");
@@ -209,13 +209,30 @@ namespace PaperShift.Runtime
             }
 
             var satisfactionBefore = state.Interview.Satisfaction;
-            var score = ComputeInterviewPreparationDelta(state, company, job);
-            state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + score, 0, 100);
-            var satisfactionAfter = state.Interview.Satisfaction;
-            state.AddLog("准备面试，成功率变为 " + state.Interview.Satisfaction + "%。");
+            var profile = fitProfiles.Build(state);
+            var flow = flowRules.Evaluate(state, company, job, profile, GameEventPhase.Interview, random);
+            flow.RecognitionDelta += InterviewPreparationDelta(state, job, profile);
+            flow.StressDelta += 1;
+            ApplyFlowResult(state, flow, GameEventPhase.Interview);
 
-            var deltaText = score >= 0 ? "+" + score : score.ToString();
-            return InterviewStepResult.Continue("准备面试，成功率 " + deltaText + "%，当前 " + state.Interview.Satisfaction + "%。", satisfactionBefore, satisfactionAfter);
+            var triggered = ResolveTriggeredEvent(state, GameEventPhase.Interview, company, job, flow);
+            if (triggered != null)
+            {
+                return InterviewStepResult.Event(triggered, satisfactionBefore, state.Interview.Satisfaction);
+            }
+
+            if (flow.Directive == FlowDirective.DirectFail || state.Interview.Satisfaction <= 0)
+            {
+                var failed = "面试准备暴露了明显短板，这次机会失败。";
+                state.AddLog(failed, EventNoticeType.Banner);
+                return InterviewStepResult.Failed(failed, satisfactionBefore, state.Interview.Satisfaction);
+            }
+
+            var delta = state.Interview.Satisfaction - satisfactionBefore;
+            var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
+            var message = "准备面试后，认可度 " + deltaText + "%，当前 " + state.Interview.Satisfaction + "%。";
+            state.AddLog(message);
+            return InterviewStepResult.Continue(message, satisfactionBefore, state.Interview.Satisfaction);
         }
 
         public InterviewStepResult ApplyInterview(PaperShiftRunState state)
@@ -227,40 +244,39 @@ namespace PaperShift.Runtime
                 return InterviewStepResult.Failed("还没有可以参加的面试。");
             }
 
-            var stage = Math.Max(0, state.Interview.Round) + 1;
-            state.Interview.Round = stage;
-
             var satisfactionBefore = state.Interview.Satisfaction;
-            var score = ComputeInterviewMeetingDelta(state, company, job, stage);
-            state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + score, 0, 100);
-            var satisfactionAfter = state.Interview.Satisfaction;
+            var profile = fitProfiles.Build(state);
+            var flow = flowRules.Evaluate(state, company, job, profile, GameEventPhase.Interview, random);
+            flow.RecognitionDelta += InterviewActionDelta(state, job, profile);
+            flow.StressDelta += Math.Max(1, job.Difficulty / 18);
+            ApplyFlowResult(state, flow, GameEventPhase.Interview);
 
-            if (stage < 4)
+            var triggered = ResolveTriggeredEvent(state, GameEventPhase.Interview, company, job, flow);
+            if (triggered != null)
             {
-                var continueMessage = InterviewStageMessage(stage, score, satisfactionAfter);
-                state.AddLog(continueMessage);
-                return InterviewStepResult.Continue(continueMessage, satisfactionBefore, satisfactionAfter);
+                return InterviewStepResult.Event(triggered, satisfactionBefore, state.Interview.Satisfaction);
             }
 
-            if (satisfactionAfter >= 100 || random.Next(0, 100) < satisfactionAfter)
+            if (flow.Directive == FlowDirective.DirectPass || state.Interview.Satisfaction >= state.Interview.OfferThreshold)
             {
                 var message = "面试通过，" + company.DisplayName + " 发来了 Offer，进入 " + job.DisplayName + " 试用期。";
-                state.Interview.Satisfaction = Math.Max(satisfactionAfter, state.Interview.OfferThreshold);
+                state.Interview.Satisfaction = Math.Max(state.Interview.Satisfaction, state.Interview.OfferThreshold);
                 StartProbation(state);
-                return InterviewStepResult.Passed(message, satisfactionBefore, state.Interview.Satisfaction);
+                return InterviewStepResult.Passed(message, satisfactionBefore, state.CurrentJob.PromotionProgress);
             }
 
-            if (stage < 6 && random.Next(0, 100) < 35)
+            if (flow.Directive == FlowDirective.DirectFail || state.Interview.Satisfaction <= 8)
             {
-                var holdMessage = InterviewStageMessage(stage, score, satisfactionAfter);
-                state.AddLog(holdMessage);
-                return InterviewStepResult.Continue(holdMessage, satisfactionBefore, satisfactionAfter);
+                var failedMessage = "面试失败。对方认为匹配度不够，你还在求职状态。";
+                state.AddLog(failedMessage, EventNoticeType.Banner);
+                return InterviewStepResult.Failed(failedMessage, satisfactionBefore, state.Interview.Satisfaction);
             }
 
-            var failedMessage = "面试失败。对方认为匹配度不够，你还在求职状态。";
-            state.Worker.Stress = Clamp(state.Worker.Stress + 6, 0, 100);
-            state.AddLog(failedMessage, EventNoticeType.Banner);
-            return InterviewStepResult.Failed(failedMessage, satisfactionBefore, satisfactionAfter);
+            var delta = state.Interview.Satisfaction - satisfactionBefore;
+            var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
+            var continueMessage = "面试推进，认可度 " + deltaText + "%，当前 " + state.Interview.Satisfaction + "%。";
+            state.AddLog(continueMessage);
+            return InterviewStepResult.Continue(continueMessage, satisfactionBefore, state.Interview.Satisfaction);
         }
 
         public TriggeredEvent AdvanceInterview(PaperShiftRunState state)
@@ -286,7 +302,7 @@ namespace PaperShift.Runtime
                 JobTitle = job.DisplayName,
                 Salary = state.Interview.Salary,
                 Intensity = job.WorkIntensity,
-                PromotionProgress = StartingRegularizationChance(state, job),
+                PromotionProgress = InitialProbationRecognition(state, company, job),
                 QuitRisk = 0,
                 WorkYears = 0
             };
@@ -327,20 +343,42 @@ namespace PaperShift.Runtime
             }
 
             state.Phase = PaperShiftPhase.Probation;
-            state.CurrentJob.WorkYears++;
-            state.Worker.Stress = Clamp(state.Worker.Stress + Math.Max(1, state.CurrentJob.Intensity / 12), 0, 100);
+            var company = database.FindCompany(state.CurrentJob.CompanyId);
+            var progressBefore = state.CurrentJob.PromotionProgress;
+            var stressBefore = state.Worker.Stress;
+            var profile = fitProfiles.Build(state);
+            var flow = flowRules.Evaluate(state, company, job, profile, GameEventPhase.Probation, random);
+            flow.RecognitionDelta += ProbationActionDelta(state, job, profile);
+            flow.StressDelta += Math.Max(2, state.CurrentJob.Intensity / 14);
+            ApplyFlowResult(state, flow, GameEventPhase.Probation);
 
-            var chanceBefore = state.CurrentJob.PromotionProgress;
-            var aptitude = WorkerAptitude(state, job);
-            var chanceDelta = Clamp(8 + job.PromotionBase / 3 + aptitude / 12 + random.Next(-18, 19) - state.Worker.Stress / 20, -30, 32);
+            var triggered = ResolveTriggeredEvent(state, GameEventPhase.Probation, company, job, flow);
+            if (triggered != null)
+            {
+                return ProbationStepResult.Event(triggered, progressBefore, state.CurrentJob.PromotionProgress, stressBefore, state.Worker.Stress);
+            }
 
-            state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + chanceDelta, 0, 100);
-            state.CurrentJob.QuitRisk = 0;
+            if (flow.Directive == FlowDirective.DirectPass || state.CurrentJob.PromotionProgress >= 100)
+            {
+                CompleteGenerationByHire(state);
+                return ProbationStepResult.Passed("试用表现得到认可，正式入职。这一代结算。", progressBefore, state.CurrentJob.PromotionProgress, stressBefore, state.Worker.Stress);
+            }
 
-            var deltaText = chanceDelta >= 0 ? "+" + chanceDelta : chanceDelta.ToString();
-            var continueMessage = "试用期推进，转正概率 " + deltaText + "%，当前 " + state.CurrentJob.PromotionProgress + "%。";
+            if (flow.Directive == FlowDirective.DirectFail || state.CurrentJob.PromotionProgress <= 0)
+            {
+                var failed = "试用表现没有得到认可，已自动继续寻找下一家公司。";
+                state.AddLog(failed, EventNoticeType.Banner);
+                state.CurrentJob = new CurrentJobState();
+                state.Interview = new InterviewState();
+                state.Phase = PaperShiftPhase.Interview;
+                return ProbationStepResult.Failed(failed, progressBefore, 0, stressBefore, state.Worker.Stress);
+            }
+
+            var delta = state.CurrentJob.PromotionProgress - progressBefore;
+            var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
+            var continueMessage = "试用期推进，认可度 " + deltaText + "%，当前 " + state.CurrentJob.PromotionProgress + "%。";
             state.AddLog(continueMessage);
-            return ProbationStepResult.Continue(continueMessage, chanceBefore, state.CurrentJob.PromotionProgress, 0, 0);
+            return ProbationStepResult.Continue(continueMessage, progressBefore, state.CurrentJob.PromotionProgress, stressBefore, state.Worker.Stress);
         }
 
         public ProbationStepResult ApplyRegularization(PaperShiftRunState state)
@@ -350,29 +388,41 @@ namespace PaperShift.Runtime
                 return ProbationStepResult.Failed("当前没有可以申请入职的试用期。", 0, 0, 0, 0);
             }
 
-            var chanceBefore = state.CurrentJob.PromotionProgress;
-            if (chanceBefore < 100 && random.Next(0, 100) < 45)
-            {
-                var chanceDelta = ComputeRegularizationReviewDelta(state);
-                state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + chanceDelta, 0, 100);
-                var reviewMessage = RegularizationReviewMessage(chanceDelta, state.CurrentJob.PromotionProgress);
-                state.AddLog(reviewMessage);
-                return ProbationStepResult.Continue(reviewMessage, chanceBefore, state.CurrentJob.PromotionProgress, 0, 0);
-            }
-
-            if (chanceBefore >= 100 || random.Next(0, 100) < chanceBefore)
+            var progressBefore = state.CurrentJob.PromotionProgress;
+            var stressBefore = state.Worker.Stress;
+            if (state.CurrentJob.PromotionProgress >= 100)
             {
                 CompleteGenerationByHire(state);
-                return ProbationStepResult.Passed("申请入职成功，正式转正。这一代结算。", chanceBefore, chanceBefore, 0, 0);
+                return ProbationStepResult.Passed("申请入职成功，正式入职。这一代结算。", progressBefore, progressBefore, stressBefore, state.Worker.Stress);
             }
 
-            if (random.Next(0, 100) < 35)
+            var job = database.FindJob(state.CurrentJob.CompanyId, state.CurrentJob.JobId);
+            var company = database.FindCompany(state.CurrentJob.CompanyId);
+            var profile = fitProfiles.Build(state);
+            var flow = flowRules.Evaluate(state, company, job, profile, GameEventPhase.Probation, random);
+            flow.RecognitionDelta += ProbationApplyDelta(state, job, profile);
+            flow.StressDelta += 3;
+            ApplyFlowResult(state, flow, GameEventPhase.Probation);
+
+            var triggered = ResolveTriggeredEvent(state, GameEventPhase.Probation, company, job, flow);
+            if (triggered != null)
             {
-                var chanceDelta = ComputeRegularizationReviewDelta(state);
-                state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + chanceDelta, 0, 100);
-                var reviewMessage = RegularizationReviewMessage(chanceDelta, state.CurrentJob.PromotionProgress);
+                return ProbationStepResult.Event(triggered, progressBefore, state.CurrentJob.PromotionProgress, stressBefore, state.Worker.Stress);
+            }
+
+            if (flow.Directive == FlowDirective.DirectPass || state.CurrentJob.PromotionProgress >= 100)
+            {
+                CompleteGenerationByHire(state);
+                return ProbationStepResult.Passed("申请入职成功，正式入职。这一代结算。", progressBefore, state.CurrentJob.PromotionProgress, stressBefore, state.Worker.Stress);
+            }
+
+            if (state.CurrentJob.PromotionProgress > 20 && flow.Directive != FlowDirective.DirectFail)
+            {
+                var delta = state.CurrentJob.PromotionProgress - progressBefore;
+                var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
+                var reviewMessage = "申请入职暂未拍板，认可度 " + deltaText + "%，当前 " + state.CurrentJob.PromotionProgress + "%。";
                 state.AddLog(reviewMessage);
-                return ProbationStepResult.Continue(reviewMessage, chanceBefore, state.CurrentJob.PromotionProgress, 0, 0);
+                return ProbationStepResult.Continue(reviewMessage, progressBefore, state.CurrentJob.PromotionProgress, stressBefore, state.Worker.Stress);
             }
 
             var message = "申请入职没有通过，已自动继续寻找下一家公司。";
@@ -380,7 +430,7 @@ namespace PaperShift.Runtime
             state.CurrentJob = new CurrentJobState();
             state.Interview = new InterviewState();
             state.Phase = PaperShiftPhase.Interview;
-            return ProbationStepResult.Failed(message, chanceBefore, chanceBefore, 0, 0);
+            return ProbationStepResult.Failed(message, progressBefore, state.CurrentJob.PromotionProgress, stressBefore, state.Worker.Stress);
         }
 
         public void CompleteGenerationByHire(PaperShiftRunState state)
@@ -508,6 +558,11 @@ namespace PaperShift.Runtime
 
         public TriggeredEvent TryTriggerEvent(PaperShiftRunState state, GameEventPhase phase, CompanyDefinition company, JobDefinition job)
         {
+            return TryTriggerEvent(state, phase, company, job, null);
+        }
+
+        public TriggeredEvent TryTriggerEvent(PaperShiftRunState state, GameEventPhase phase, CompanyDefinition company, JobDefinition job, FlowRuleResult flow)
+        {
             if (phase == GameEventPhase.WorkYear && random.NextDouble() > 0.35f)
             {
                 return null;
@@ -538,6 +593,11 @@ namespace PaperShift.Runtime
                 }
 
                 var weight = gameEvent.BaseWeight + effects.SumPassive(state, EffectKind.PassiveEventWeight, gameEvent.Id);
+                if (flow != null)
+                {
+                    weight += flow.EventWeight(gameEvent.Id);
+                }
+
                 picker.Add(gameEvent, weight);
             }
 
@@ -560,6 +620,61 @@ namespace PaperShift.Runtime
 
             state.AddLog(picked.DisplayName + "：" + picked.Body, picked.NoticeType);
             return new TriggeredEvent(picked, AvailableOptions(picked, state, company, job));
+        }
+
+        private TriggeredEvent ResolveTriggeredEvent(PaperShiftRunState state, GameEventPhase phase, CompanyDefinition company, JobDefinition job, FlowRuleResult flow)
+        {
+            if (flow != null && !string.IsNullOrEmpty(flow.TriggerEventId))
+            {
+                var triggered = TriggerEventById(state, flow.TriggerEventId, company, job);
+                if (triggered != null)
+                {
+                    return triggered;
+                }
+            }
+
+            if (flow != null && state.Worker.Stress >= 100)
+            {
+                flow.AddEventWeight("stress_breakdown", 100);
+            }
+
+            return TryTriggerEvent(state, phase, company, job, flow);
+        }
+
+        private TriggeredEvent TriggerEventById(PaperShiftRunState state, string eventId, CompanyDefinition company, JobDefinition job)
+        {
+            var gameEvent = FindEvent(eventId);
+            if (gameEvent == null || !conditions.AreMet(gameEvent.Conditions, state, company, job, random))
+            {
+                return null;
+            }
+
+            state.MarkEventSeen(gameEvent.Id);
+            if (gameEvent.CooldownYears > 0)
+            {
+                state.SetEventCooldown(gameEvent.Id, gameEvent.CooldownYears);
+            }
+
+            state.AddLog(gameEvent.DisplayName + "：" + gameEvent.Body, gameEvent.NoticeType);
+            return new TriggeredEvent(gameEvent, AvailableOptions(gameEvent, state, company, job));
+        }
+
+        private GameEventDefinition FindEvent(string eventId)
+        {
+            if (string.IsNullOrEmpty(eventId))
+            {
+                return null;
+            }
+
+            for (var i = 0; i < database.Events.Length; i++)
+            {
+                if (database.Events[i].Id == eventId)
+                {
+                    return database.Events[i];
+                }
+            }
+
+            return null;
         }
 
         public bool ChooseEventOption(PaperShiftRunState state, TriggeredEvent triggeredEvent, string optionId)
@@ -645,100 +760,111 @@ namespace PaperShift.Runtime
             return picker.Pick(random);
         }
 
-        private int ComputeInterviewPreparationDelta(PaperShiftRunState state, CompanyDefinition company, JobDefinition job)
+        private int InitialRecognition(PaperShiftRunState state, CompanyDefinition company, JobDefinition job)
         {
-            var aptitude = WorkerAptitude(state, job);
-            var score = random.Next(-12, 13);
-            score += MatchIntentWeight(state, job) / 16;
-            score += aptitude / 28;
-            score -= job.Difficulty / 18;
-            score -= state.Resume.DeceptionRisk / 18;
-            score -= state.Worker.Stress / 25;
-
-            for (var i = 0; i < job.TagIds.Length; i++)
+            var profile = fitProfiles.Build(state);
+            var flow = flowRules.Evaluate(state, company, job, profile, GameEventPhase.Interview, random);
+            if (flow.Directive == FlowDirective.DirectFail)
             {
-                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, job.TagIds[i]) / 4;
+                return 0;
             }
 
-            for (var i = 0; i < company.TagIds.Length; i++)
-            {
-                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, company.TagIds[i]) / 4;
-            }
-
-            score += ResumePresentationBonus(state.Resume) / 3;
-            return Clamp(score, -18, 18);
+            var score = 36;
+            score += flow.RecognitionDelta;
+            score += (profile.Get(FitDimension.Professionalism) - 50) / 5;
+            score += (profile.Get(FitDimension.Communication) - 50) / 7;
+            score += (profile.Get(FitDimension.Presence) - 50) / 10;
+            score -= job.Difficulty / 6;
+            score -= state.Resume.DeceptionRisk / 5;
+            score -= state.Worker.Stress / 18;
+            return Clamp(score, 0, 85);
         }
 
-        private int ComputeInterviewMeetingDelta(PaperShiftRunState state, CompanyDefinition company, JobDefinition job, int stage)
+        private int InitialProbationRecognition(PaperShiftRunState state, CompanyDefinition company, JobDefinition job)
         {
-            var aptitude = WorkerAptitude(state, job);
-            var score = random.Next(-10, 11);
-            score += MatchIntentWeight(state, job) / 22;
-            score += aptitude / 36;
+            var profile = fitProfiles.Build(state);
+            var flow = flowRules.Evaluate(state, company, job, profile, GameEventPhase.Probation, random);
+            if (flow.Directive == FlowDirective.DirectFail)
+            {
+                return 0;
+            }
+
+            var score = 24 + state.Interview.Satisfaction / 2;
+            score += flow.RecognitionDelta;
+            score += (profile.Get(FitDimension.Execution) - 50) / 5;
+            score += (profile.Get(FitDimension.Resilience) - 50) / 8;
+            score -= job.WorkIntensity / 8;
+            score -= state.Worker.Stress / 18;
+            return Clamp(score, 0, 90);
+        }
+
+        private int InterviewPreparationDelta(PaperShiftRunState state, JobDefinition job, FitProfile profile)
+        {
+            var score = random.Next(-4, 9);
+            score += (profile.Get(FitDimension.Execution) - 50) / 12;
+            score += (profile.Get(FitDimension.Professionalism) - 50) / 15;
             score -= job.Difficulty / 24;
-            score -= state.Resume.DeceptionRisk / 22;
-            score -= state.Worker.Stress / 30;
-            score += Math.Min(stage, 4) * 2;
-
-            for (var i = 0; i < job.TagIds.Length; i++)
-            {
-                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, job.TagIds[i]) / 6;
-            }
-
-            for (var i = 0; i < company.TagIds.Length; i++)
-            {
-                score += effects.SumPassive(state, EffectKind.PassiveInterviewScore, company.TagIds[i]) / 6;
-            }
-
-            return Clamp(score, -14, 16);
+            score -= state.Resume.DeceptionRisk / 26;
+            score -= state.Worker.Stress / 32;
+            return Clamp(score, -10, 14);
         }
 
-        private static string InterviewStageMessage(int stage, int delta, int satisfaction)
+        private int InterviewActionDelta(PaperShiftRunState state, JobDefinition job, FitProfile profile)
         {
-            var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
-            var stageText = "进入下一轮沟通";
-            switch (stage)
-            {
-                case 1:
-                    stageText = "初面结束，对方约你进入二面";
-                    break;
-                case 2:
-                    stageText = "二面聊完，对方安排你进入三面";
-                    break;
-                case 3:
-                    stageText = "三面通过，对方把你推进到终面";
-                    break;
-                default:
-                    stageText = "终面暂时没有拍板，对方要求补充沟通";
-                    break;
-            }
-
-            return stageText + "。成功率 " + deltaText + "%，当前 " + satisfaction + "%。";
-        }
-
-        private int ComputeRegularizationReviewDelta(PaperShiftRunState state)
-        {
-            var score = random.Next(-14, 15);
-            score += state.CurrentJob.Intensity <= 55 ? 4 : -3;
+            var score = random.Next(-10, 16);
+            score += (profile.Get(FitDimension.Communication) - 50) / 10;
+            score += (profile.Get(FitDimension.Professionalism) - 50) / 12;
+            score += (profile.Get(FitDimension.Maturity) - 50) / 18;
+            score -= job.Difficulty / 18;
+            score -= state.Resume.DeceptionRisk / 20;
             score -= state.Worker.Stress / 28;
-            score += state.CurrentJob.WorkYears / 2;
-            return Clamp(score, -18, 18);
+            return Clamp(score, -22, 24);
         }
 
-        private static string RegularizationReviewMessage(int delta, int chance)
+        private int ProbationActionDelta(PaperShiftRunState state, JobDefinition job, FitProfile profile)
         {
-            var deltaText = delta >= 0 ? "+" + delta : delta.ToString();
-            if (delta > 0)
+            var score = random.Next(-10, 15);
+            score += job.PromotionBase / 3;
+            score += (profile.Get(FitDimension.Execution) - 50) / 9;
+            score += (profile.Get(FitDimension.Professionalism) - 50) / 11;
+            score += (profile.Get(FitDimension.Resilience) - 50) / 14;
+            score -= job.WorkIntensity / 18;
+            score -= state.Worker.Stress / 24;
+            return Clamp(score, -24, 26);
+        }
+
+        private int ProbationApplyDelta(PaperShiftRunState state, JobDefinition job, FitProfile profile)
+        {
+            var score = random.Next(-14, 18);
+            score += (profile.Get(FitDimension.Execution) - 50) / 8;
+            score += (profile.Get(FitDimension.Resilience) - 50) / 12;
+            score -= job.WorkIntensity / 20;
+            score -= state.Worker.Stress / 22;
+            return Clamp(score, -28, 28);
+        }
+
+        private void ApplyFlowResult(PaperShiftRunState state, FlowRuleResult flow, GameEventPhase phase)
+        {
+            if (flow == null)
             {
-                return "主管追加了一轮试用反馈，转正概率 " + deltaText + "%，当前 " + chance + "%。";
+                return;
             }
 
-            if (delta < 0)
+            if (phase == GameEventPhase.Probation || state.Phase == PaperShiftPhase.Probation)
             {
-                return "转正审批被要求补材料，转正概率 " + deltaText + "%，当前 " + chance + "%。";
+                state.CurrentJob.PromotionProgress = Clamp(flow.RecognitionOverride.HasValue ? flow.RecognitionOverride.Value : state.CurrentJob.PromotionProgress + flow.RecognitionDelta, 0, 100);
+            }
+            else
+            {
+                state.Interview.Satisfaction = Clamp(flow.RecognitionOverride.HasValue ? flow.RecognitionOverride.Value : state.Interview.Satisfaction + flow.RecognitionDelta, 0, 100);
             }
 
-            return "转正审批还在排队，概率暂时不变，当前 " + chance + "%。";
+            state.Worker.Stress = Clamp(state.Worker.Stress + flow.StressDelta, 0, 100);
+            state.Resume.DeceptionRisk = Clamp(state.Resume.DeceptionRisk + flow.ResumeRiskDelta, 0, 100);
+            for (var i = 0; i < flow.Logs.Count; i++)
+            {
+                state.AddLog(flow.Logs[i]);
+            }
         }
 
         private int WorkerAptitude(PaperShiftRunState state, JobDefinition job)
@@ -765,23 +891,6 @@ namespace PaperShift.Runtime
             }
 
             return salary + salary * percent / 100;
-        }
-
-        private int StartingInterviewSuccessRate(PaperShiftRunState state, JobDefinition job)
-        {
-            var chance = 22 + MatchIntentWeight(state, job) / 4 + WorkerAptitude(state, job) / 12;
-            chance -= job.Difficulty / 5;
-            chance -= state.Resume.DeceptionRisk / 4;
-            chance -= state.Worker.Stress / 16;
-            return Clamp(chance, 5, 65);
-        }
-
-        private int StartingRegularizationChance(PaperShiftRunState state, JobDefinition job)
-        {
-            var chance = 24 + job.PromotionBase / 2 + WorkerAptitude(state, job) / 14;
-            chance -= job.WorkIntensity / 8;
-            chance -= state.Worker.Stress / 18;
-            return Clamp(chance, 8, 70);
         }
 
         private void ApplyAnnualBudget(PaperShiftRunState state)
@@ -890,19 +999,6 @@ namespace PaperShift.Runtime
             }
         }
 
-        private EraDefinition NextEra(string currentEraId)
-        {
-            for (var i = 0; i < database.Eras.Length; i++)
-            {
-                if (database.Eras[i].Id == currentEraId)
-                {
-                    return database.Eras[Math.Min(i + 1, database.Eras.Length - 1)];
-                }
-            }
-
-            return database.Eras.Length == 0 ? null : database.Eras[0];
-        }
-
         private EventOptionDefinition[] AvailableOptions(GameEventDefinition gameEvent, PaperShiftRunState state, CompanyDefinition company, JobDefinition job)
         {
             var result = new List<EventOptionDefinition>();
@@ -975,23 +1071,6 @@ namespace PaperShift.Runtime
             }
 
             return bonus;
-        }
-
-        private static int MatchIntentWeight(PaperShiftRunState state, JobDefinition job)
-        {
-            var weight = 0;
-            for (var i = 0; i < state.Resume.IntentTagIds.Count; i++)
-            {
-                for (var j = 0; j < job.IntentTagIds.Length; j++)
-                {
-                    if (state.Resume.IntentTagIds[i] == job.IntentTagIds[j])
-                    {
-                        weight += 24;
-                    }
-                }
-            }
-
-            return weight;
         }
 
         private int RarityWeight(string rarityId)

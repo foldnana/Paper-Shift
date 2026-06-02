@@ -24,7 +24,7 @@ namespace PaperShift.Presenter
                 SetItemVisible(WorkStatus, true);
                 SetItemVisible(LayoffStatus, false);
                 SetItemVisible(InterviewStatus, false);
-                RefreshItem(WorkStatus, regularizationChance, "转正概率");
+                RefreshItem(WorkStatus, regularizationChance, "试用认可度");
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace PaperShift.Presenter
 
             if (showInterviewProgress)
             {
-                RefreshItem(InterviewStatus, state.Interview.Satisfaction, "面试成功率");
+                RefreshItem(InterviewStatus, state.Interview.Satisfaction, "面试认可度");
             }
             else if (InterviewStatus != null)
             {
