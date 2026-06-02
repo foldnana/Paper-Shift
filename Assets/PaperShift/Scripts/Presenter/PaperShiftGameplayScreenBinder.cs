@@ -513,33 +513,33 @@ namespace PaperShift.Presenter
                 Corner = "面试",
                 Name = EmptyFallback(State.Interview.CompanyName, "还没有公司"),
                 Subtitle = EmptyFallback(State.Interview.JobTitle, "先投递简历"),
-                RingText = "认可 " + State.Interview.Satisfaction + "%",
+                RingText = "认可 " + State.Interview.Recognition + "%",
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.Interview.CompanyName, "待投递")),
                     new UiPair("岗位", EmptyFallback(State.Interview.JobTitle, "未知")),
                     new UiPair("月薪", State.Interview.Salary.ToString()),
-                    new UiPair("认可度", State.Interview.Satisfaction + "%"),
+                    new UiPair("认可度", State.Interview.Recognition + "%"),
                     new UiPair("简历风险", State.Resume.DeceptionRisk + "%"),
-                    new UiPair("状态", State.Interview.Satisfaction >= 70 ? "有希望" : "推进中")
+                    new UiPair("状态", State.Interview.Recognition >= 70 ? "有希望" : "推进中")
                 },
                 Tags = InterviewTags(),
-                ProgressPercent = State.Interview.Satisfaction + "%",
-                ProgressLabel = InterviewProgressLabel(),
-                ProgressFill = State.Interview.Satisfaction / 100f
+                ProgressPercent = State.Interview.Recognition + "%",
+                ProgressLabel = InterviewRecognitionLabel(),
+                ProgressFill = State.Interview.Recognition / 100f
             };
         }
 
-        private string InterviewProgressLabel()
+        private string InterviewRecognitionLabel()
         {
             if (State.Interview.HasOffer)
             {
                 return "认可已达标";
             }
 
-            if (Presenter != null && Presenter.LastInterviewSatisfactionDelta != 0)
+            if (Presenter != null && Presenter.LastInterviewRecognitionDelta != 0)
             {
-                var delta = Presenter.LastInterviewSatisfactionDelta;
+                var delta = Presenter.LastInterviewRecognitionDelta;
                 return "认可度 " + (delta > 0 ? "+" : string.Empty) + delta + "%";
             }
 
@@ -554,20 +554,20 @@ namespace PaperShift.Presenter
                 Corner = "试用期",
                 Name = EmptyFallback(State.CurrentJob.CompanyName, "暂无工作"),
                 Subtitle = EmptyFallback(State.CurrentJob.JobTitle, "去投递简历"),
-                RingText = "认可 " + State.CurrentJob.PromotionProgress + "%",
+                RingText = "认可 " + State.CurrentJob.Recognition + "%",
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.CurrentJob.CompanyName, "暂无")),
                     new UiPair("岗位", EmptyFallback(State.CurrentJob.JobTitle, "暂无")),
                     new UiPair("月薪", State.CurrentJob.Salary.ToString()),
                     new UiPair("阶段", "试用中"),
-                    new UiPair("认可度", State.CurrentJob.PromotionProgress + "%"),
-                    new UiPair("状态", State.CurrentJob.PromotionProgress >= 70 ? "有希望" : "观察中")
+                    new UiPair("认可度", State.CurrentJob.Recognition + "%"),
+                    new UiPair("状态", State.CurrentJob.Recognition >= 70 ? "有希望" : "观察中")
                 },
                 Tags = CurrentJobTags(),
-                ProgressPercent = State.CurrentJob.PromotionProgress + "%",
+                ProgressPercent = State.CurrentJob.Recognition + "%",
                 ProgressLabel = "试用认可度",
-                ProgressFill = Mathf.Clamp01(State.CurrentJob.PromotionProgress / 100f)
+                ProgressFill = Mathf.Clamp01(State.CurrentJob.Recognition / 100f)
             };
         }
 

@@ -234,12 +234,10 @@ namespace PaperShift.Data
         public string[] TagIds = new string[0];
         public int SalaryMin = 6000;
         public int SalaryMax = 12000;
-        public int InterviewRounds = 2;
         public int Difficulty = 40;
         public int OfferThreshold = 70;
         public int WorkIntensity = 40;
         public int PromotionBase = 8;
-        public int QuitRiskBase = 5;
         public StatRequirement[] Requirements = new StatRequirement[0];
 
         public bool HasTag(string tagId)
@@ -284,6 +282,7 @@ namespace PaperShift.Data
     {
         public string Id;
         public string Label;
+        public bool RunCheckpointAfterChoice;
         public ConditionDefinition[] Conditions = new ConditionDefinition[0];
         public EffectDefinition[] Effects = new EffectDefinition[0];
     }

@@ -64,18 +64,6 @@ namespace PaperShift.Runtime
                 case EffectKind.AddBanner:
                     state.AddLog(effect.TextValue, EventNoticeType.Banner);
                     break;
-                case EffectKind.AddInterviewProgress:
-                    state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + effect.IntValue, 0, 100);
-                    break;
-                case EffectKind.SetInterviewProgress:
-                    state.Interview.Satisfaction = Clamp(effect.IntValue, 0, 100);
-                    break;
-                case EffectKind.AddPromotionProgress:
-                    state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + effect.IntValue, 0, 100);
-                    break;
-                case EffectKind.AddQuitRisk:
-                    state.CurrentJob.QuitRisk = Clamp(state.CurrentJob.QuitRisk + effect.IntValue, 0, 100);
-                    break;
                 case EffectKind.AddResumeRisk:
                     state.Resume.DeceptionRisk = Clamp(state.Resume.DeceptionRisk + effect.IntValue, 0, 100);
                     break;
@@ -177,22 +165,22 @@ namespace PaperShift.Runtime
         {
             if (state.Phase == PaperShiftPhase.Probation || state.HasActiveJob)
             {
-                state.CurrentJob.PromotionProgress = Clamp(state.CurrentJob.PromotionProgress + delta, 0, 100);
+                state.CurrentJob.Recognition = Clamp(state.CurrentJob.Recognition + delta, 0, 100);
                 return;
             }
 
-            state.Interview.Satisfaction = Clamp(state.Interview.Satisfaction + delta, 0, 100);
+            state.Interview.Recognition = Clamp(state.Interview.Recognition + delta, 0, 100);
         }
 
         private static void SetRecognition(PaperShiftRunState state, int value)
         {
             if (state.Phase == PaperShiftPhase.Probation || state.HasActiveJob)
             {
-                state.CurrentJob.PromotionProgress = Clamp(value, 0, 100);
+                state.CurrentJob.Recognition = Clamp(value, 0, 100);
                 return;
             }
 
-            state.Interview.Satisfaction = Clamp(value, 0, 100);
+            state.Interview.Recognition = Clamp(value, 0, 100);
         }
 
         private static int Clamp(int value, int min, int max)

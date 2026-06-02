@@ -16,7 +16,7 @@ namespace PaperShift.Presenter
         public int StartingTagLimit = 3;
         public PaperShiftRunState State;
         public List<TagDefinition> CurrentTagChoices = new List<TagDefinition>();
-        public int LastInterviewSatisfactionDelta { get; private set; }
+        public int LastInterviewRecognitionDelta { get; private set; }
 
         private PaperShiftGameService service;
         private TriggeredEvent pendingEvent;
@@ -142,7 +142,7 @@ namespace PaperShift.Presenter
             service.RestartJobSearch(State);
             if (service.FindInterviewOffer(State))
             {
-                LastInterviewSatisfactionDelta = 0;
+                LastInterviewRecognitionDelta = 0;
                 ShowJobSearch();
                 return true;
             }
@@ -161,7 +161,7 @@ namespace PaperShift.Presenter
 
             pendingEvent = result.TriggeredEvent;
             message = result.Message;
-            LastInterviewSatisfactionDelta = result.SatisfactionDelta;
+            LastInterviewRecognitionDelta = result.RecognitionDelta;
             ShowJobSearch();
             return result.Outcome;
         }
@@ -177,7 +177,7 @@ namespace PaperShift.Presenter
 
             pendingEvent = result.TriggeredEvent;
             message = result.Message;
-            LastInterviewSatisfactionDelta = result.SatisfactionDelta;
+            LastInterviewRecognitionDelta = result.RecognitionDelta;
             switch (result.Outcome)
             {
                 case InterviewStepOutcome.Event:
@@ -307,6 +307,9 @@ namespace PaperShift.Presenter
             message = result.Message;
             switch (result.Outcome)
             {
+                case ProbationStepOutcome.Event:
+                    ShowNews();
+                    break;
                 case ProbationStepOutcome.Passed:
                     ShowRetirement();
                     break;
@@ -358,24 +361,114 @@ namespace PaperShift.Presenter
                 return;
             }
 
-            service.ChooseEventOption(State, pendingEvent, pendingEvent.Options[optionIndex].Id);
+            var result = service.ChooseEventOption(State, pendingEvent, pendingEvent.Options[optionIndex].Id);
             pendingEvent = null;
+            NavigateAfterEventChoice(result);
+        }
+
+        private void NavigateAfterEventChoice(EventOptionChoiceResult result)
+        {
+            if (TryShowFollowUpEvent(result))
+            {
+                return;
+            }
+
+            var checkpoint = result == null ? null : result.CheckpointResult;
+            if (checkpoint != null)
+            {
+                NavigateAfterEventCheckpoint(checkpoint);
+                return;
+            }
+
+            NavigateAfterCurrentRunState(allowAutoJobRefresh: true);
+        }
+
+        private bool TryShowFollowUpEvent(EventOptionChoiceResult result)
+        {
+            return result != null && TryShowFollowUpEvent(result.TriggeredEvent);
+        }
+
+        private bool TryShowFollowUpEvent(TriggeredEvent triggeredEvent)
+        {
+            if (triggeredEvent == null)
+            {
+                return false;
+            }
+
+            pendingEvent = triggeredEvent;
+            ShowNews();
+            return true;
+        }
+
+        private void NavigateAfterEventCheckpoint(FlowCheckpointResult checkpoint)
+        {
             if (State.Phase == PaperShiftPhase.Retirement)
             {
                 ShowRetirement();
+                return;
             }
-            else if (State.HasActiveJob)
+
+            switch (checkpoint.Outcome)
+            {
+                case FlowCheckpointOutcome.Event:
+                    if (!TryShowFollowUpEvent(checkpoint.TriggeredEvent))
+                    {
+                        NavigateAfterCurrentRunState(allowAutoJobRefresh: true);
+                    }
+                    break;
+                case FlowCheckpointOutcome.Passed:
+                case FlowCheckpointOutcome.Continue:
+                    NavigateAfterCurrentRunState(allowAutoJobRefresh: false);
+                    break;
+                case FlowCheckpointOutcome.Failed:
+                    MoveToNextInterviewOrResume();
+                    break;
+                default:
+                    NavigateAfterCurrentRunState(allowAutoJobRefresh: true);
+                    break;
+            }
+        }
+
+        private void NavigateAfterCurrentRunState(bool allowAutoJobRefresh)
+        {
+            if (State.Phase == PaperShiftPhase.Retirement)
+            {
+                ShowRetirement();
+                return;
+            }
+
+            if (State.HasActiveJob)
             {
                 ShowWork();
+                return;
             }
-            else if (State.Phase == PaperShiftPhase.Interview)
+
+            if (HasInterviewOpportunity())
             {
                 ShowJobSearch();
+                return;
             }
-            else
+
+            if (allowAutoJobRefresh && State.Phase == PaperShiftPhase.Interview)
+            {
+                MoveToNextInterviewOrResume();
+                return;
+            }
+
+            ShowResume();
+        }
+
+        private void MoveToNextInterviewOrResume()
+        {
+            if (!FindInterviewAndShowInternal())
             {
                 ShowResume();
             }
+        }
+
+        private bool HasInterviewOpportunity()
+        {
+            return State != null && State.Interview != null && !string.IsNullOrEmpty(State.Interview.JobId);
         }
 
         public void QuitJob()

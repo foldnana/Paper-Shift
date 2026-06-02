@@ -253,7 +253,6 @@ namespace PaperShift.Data
                             Difficulty = 58,
                             WorkIntensity = 45,
                             PromotionBase = 12,
-                            QuitRiskBase = 8,
                             Requirements = new[]
                             {
                                 new StatRequirement { StatId = PaperShiftWorkerAttributes.Major, MinValue = 55, Weight = 3 },
@@ -281,9 +280,9 @@ namespace PaperShift.Data
                     Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.ResumeRiskAtLeast, IntValue = 20 } },
                     Options = new[]
                     {
-                        Option("confess", "坦白解释", Effect(EffectKind.AddInterviewProgress, "", -8), Effect(EffectKind.AddStress, "", 4), Log("你解释了包装痕迹，面试官有点失望。")),
-                        Option("double_down", "继续圆谎", Effect(EffectKind.AddInterviewProgress, "", 10), Effect(EffectKind.AddResumeRisk, "", 15), Log("你暂时圆过去了，但被识破的风险更高。")),
-                        Option("caught", "被当场识破", Effect(EffectKind.AddInterviewProgress, "", -25), AddTag("dishonest_resume"), Banner("你获得了负面标签：不诚实"))
+                        CheckedOption("confess", "坦白解释", Effect(EffectKind.AddRecognition, "", -8), Effect(EffectKind.AddStress, "", 4), Log("你解释了包装痕迹，面试官有点失望。")),
+                        CheckedOption("double_down", "继续圆谎", Effect(EffectKind.AddRecognition, "", 10), Effect(EffectKind.AddResumeRisk, "", 15), Log("你暂时圆过去了，但被识破的风险更高。")),
+                        CheckedOption("caught", "被当场识破", Effect(EffectKind.AddRecognition, "", -25), AddTag("dishonest_resume"), Banner("你获得了负面标签：不诚实"))
                     }
                 },
                 new GameEventDefinition
@@ -297,8 +296,8 @@ namespace PaperShift.Data
                     Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.HasTag, Key = "ai_pioneer" } },
                     Options = new[]
                     {
-                        Option("use", "谨慎使用", Effect(EffectKind.AddPromotionProgress, "", 12), Effect(EffectKind.AddStress, "", -3), Log("AI先行者标签发挥了作用，主管注意到了效率提升。")),
-                        Option("teach", "教给同事", Effect(EffectKind.AddStat, PaperShiftWorkerAttributes.Ability, 4), Effect(EffectKind.AddPromotionProgress, "", 6), Log("你教会了同事，团队关系更好了。"))
+                        Option("use", "谨慎使用", Effect(EffectKind.AddRecognition, "", 12), Effect(EffectKind.AddStress, "", -3), Log("AI先行者标签发挥了作用，主管注意到了效率提升。")),
+                        Option("teach", "教给同事", Effect(EffectKind.AddStat, PaperShiftWorkerAttributes.Ability, 4), Effect(EffectKind.AddRecognition, "", 6), Log("你教会了同事，团队关系更好了。"))
                     }
                 },
                 new GameEventDefinition
@@ -312,8 +311,8 @@ namespace PaperShift.Data
                     CooldownYears = 2,
                     Options = new[]
                     {
-                        Option("work", "接下救火", Effect(EffectKind.AddPromotionProgress, "", 10), Effect(EffectKind.AddStress, "", 12), Log("你扛住了周末救火，升职进度上涨。")),
-                        Option("refuse", "拒绝加班", Effect(EffectKind.AddQuitRisk, "", 9), Effect(EffectKind.AddStress, "", -5), Log("你保住了休息，但离职风险上升。"))
+                        CheckedOption("work", "接下救火", Effect(EffectKind.AddRecognition, "", 10), Effect(EffectKind.AddStress, "", 12), Log("你扛住了周末救火，认可度上涨。")),
+                        CheckedOption("refuse", "拒绝加班", Effect(EffectKind.AddRecognition, "", -9), Effect(EffectKind.AddStress, "", -5), Log("你保住了休息，但主管对你的认可下降。"))
                     }
                 },
                 new GameEventDefinition
@@ -327,9 +326,9 @@ namespace PaperShift.Data
                     Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.StressAtLeast, IntValue = 90 } },
                     Options = new[]
                     {
-                        Option("rest", "强制休息", Effect(EffectKind.AddStress, "", -35), Effect(EffectKind.DirectFail, "", 0, "你不得不暂停这份机会，先把自己拉回来。")),
-                        Option("lie_flat", "直接躺平", Effect(EffectKind.AddStress, "", -55), AddTag("lying_flat"), Effect(EffectKind.ReturnToJobSearch, "", 0), Log("你选择暂时躺平，重新寻找更能承受的工作。")),
-                        Option("collapse", "硬扛到底", Effect(EffectKind.EndRun, "", 0, "压力彻底压垮了这一代打工人生。"))
+                        CheckedOption("rest", "强制休息", Effect(EffectKind.AddStress, "", -35), Effect(EffectKind.DirectFail, "", 0, "你不得不暂停这份机会，先把自己拉回来。")),
+                        CheckedOption("lie_flat", "直接躺平", Effect(EffectKind.AddStress, "", -55), AddTag("lying_flat"), Effect(EffectKind.ReturnToJobSearch, "", 0), Log("你选择暂时躺平，重新寻找更能承受的工作。")),
+                        CheckedOption("collapse", "硬扛到底", Effect(EffectKind.EndRun, "", 0, "压力彻底压垮了这一代打工人生。"))
                     }
                 },
                 new GameEventDefinition
@@ -545,6 +544,11 @@ namespace PaperShift.Data
         private static EventOptionDefinition Option(string id, string label, params EffectDefinition[] effects)
         {
             return new EventOptionDefinition { Id = id, Label = label, Effects = effects };
+        }
+
+        private static EventOptionDefinition CheckedOption(string id, string label, params EffectDefinition[] effects)
+        {
+            return new EventOptionDefinition { Id = id, Label = label, Effects = effects, RunCheckpointAfterChoice = true };
         }
     }
 }

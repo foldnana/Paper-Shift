@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using PaperShift.Data;
+using PaperShift.Model;
 using UnityEngine;
 using UnityEngine.UI;
 

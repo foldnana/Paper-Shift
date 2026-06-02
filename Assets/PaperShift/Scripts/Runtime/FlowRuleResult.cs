@@ -13,6 +13,8 @@ namespace PaperShift.Runtime
         public int StressDelta;
         public int ResumeRiskDelta;
         public FlowDirective Directive = FlowDirective.None;
+        public string DirectiveMessage;
+        public RunEndReason EndReason = RunEndReason.None;
         public string TriggerEventId;
         public readonly List<string> Logs = new List<string>();
 
@@ -39,12 +41,19 @@ namespace PaperShift.Runtime
 
         public void SetDirective(FlowDirective directive)
         {
+            SetDirective(directive, null, RunEndReason.None);
+        }
+
+        public void SetDirective(FlowDirective directive, string message, RunEndReason endReason)
+        {
             if (directive == FlowDirective.None || Directive != FlowDirective.None)
             {
                 return;
             }
 
             Directive = directive;
+            DirectiveMessage = message;
+            EndReason = endReason;
         }
     }
 }

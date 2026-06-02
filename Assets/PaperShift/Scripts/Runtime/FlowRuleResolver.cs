@@ -339,16 +339,16 @@ namespace PaperShift.Runtime
                     result.TriggerEventId = effect.Key;
                     break;
                 case EffectKind.DirectPass:
-                    result.SetDirective(FlowDirective.DirectPass);
+                    result.SetDirective(FlowDirective.DirectPass, effect.TextValue, effect.EndReason);
                     break;
                 case EffectKind.DirectFail:
-                    result.SetDirective(FlowDirective.DirectFail);
+                    result.SetDirective(FlowDirective.DirectFail, effect.TextValue, effect.EndReason);
                     break;
                 case EffectKind.ReturnToJobSearch:
-                    result.SetDirective(FlowDirective.ReturnToJobSearch);
+                    result.SetDirective(FlowDirective.ReturnToJobSearch, effect.TextValue, effect.EndReason);
                     break;
                 case EffectKind.EndRun:
-                    result.SetDirective(FlowDirective.EndRun);
+                    result.SetDirective(FlowDirective.EndRun, effect.TextValue, effect.EndReason);
                     break;
                 case EffectKind.AddLog:
                     if (!string.IsNullOrEmpty(effect.TextValue))

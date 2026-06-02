@@ -229,15 +229,13 @@ namespace PaperShift.Domain
         public string JobId;
         public string CompanyName;
         public string JobTitle;
-        public int Round;
-        public int MaxRounds;
-        public int Satisfaction;
+        public int Recognition;
         public int OfferThreshold = 70;
         public int Salary;
 
         public bool HasOffer
         {
-            get { return Satisfaction >= OfferThreshold; }
+            get { return Recognition >= OfferThreshold; }
         }
     }
 
@@ -250,8 +248,7 @@ namespace PaperShift.Domain
         public string JobTitle;
         public int Salary;
         public int WorkYears;
-        public int PromotionProgress;
-        public int QuitRisk;
+        public int Recognition;
         public int Intensity;
     }
 

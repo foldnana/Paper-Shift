@@ -10,21 +10,21 @@ namespace PaperShift.Presenter
         public PaperShiftBottomStatusItemBinding LayoffStatus;
         public PaperShiftBottomStatusItemBinding InterviewStatus;
 
-        public void Refresh(PaperShiftRunState state, bool showInterviewProgress)
+        public void Refresh(PaperShiftRunState state, bool showInterviewRecognition)
         {
             if (state == null)
             {
                 return;
             }
 
-            var regularizationChance = state.HasActiveJob ? state.CurrentJob.PromotionProgress : 0;
+            var recognition = state.HasActiveJob ? state.CurrentJob.Recognition : 0;
 
             if (state.Phase == PaperShiftPhase.Probation && state.HasActiveJob)
             {
                 SetItemVisible(WorkStatus, true);
                 SetItemVisible(LayoffStatus, false);
                 SetItemVisible(InterviewStatus, false);
-                RefreshItem(WorkStatus, regularizationChance, "试用认可度");
+                RefreshItem(WorkStatus, recognition, "试用认可度");
                 return;
             }
 
@@ -34,9 +34,9 @@ namespace PaperShift.Presenter
             RefreshInactive(WorkStatus, "待进入试用期");
             RefreshInactive(LayoffStatus, "待评估风险");
 
-            if (showInterviewProgress)
+            if (showInterviewRecognition)
             {
-                RefreshItem(InterviewStatus, state.Interview.Satisfaction, "面试认可度");
+                RefreshItem(InterviewStatus, state.Interview.Recognition, "面试认可度");
             }
             else if (InterviewStatus != null)
             {

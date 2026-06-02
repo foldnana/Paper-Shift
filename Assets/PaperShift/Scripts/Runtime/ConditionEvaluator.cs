@@ -69,8 +69,6 @@ namespace PaperShift.Runtime
                     return state.HasSeenEvent(condition.Key);
                 case ConditionKind.WorkYearsAtLeast:
                     return state.CurrentJob.WorkYears >= condition.IntValue;
-                case ConditionKind.InterviewProgressAtLeast:
-                    return state.Interview.Satisfaction >= condition.IntValue;
                 case ConditionKind.ResumeRiskAtLeast:
                     return state.Resume.DeceptionRisk >= condition.IntValue;
                 case ConditionKind.StressAtLeast:
@@ -90,10 +88,10 @@ namespace PaperShift.Runtime
         {
             if (state.Phase == PaperShiftPhase.Probation || state.HasActiveJob)
             {
-                return state.CurrentJob.PromotionProgress;
+                return state.CurrentJob.Recognition;
             }
 
-            return state.Interview.Satisfaction;
+            return state.Interview.Recognition;
         }
 
         private static bool Compare(int current, int expected, CompareOperator op)

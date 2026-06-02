@@ -1,4 +1,5 @@
 using PaperShift.Domain;
+using PaperShift.Model;
 using UnityEngine;
 using UnityEngine.UI;
 
