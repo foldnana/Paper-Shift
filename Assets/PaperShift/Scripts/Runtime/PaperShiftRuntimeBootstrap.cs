@@ -27,12 +27,18 @@ namespace PaperShift.Runtime
 
             presenter.SceneController = controller;
 
-            var binder = controller.GetComponent<PaperShiftPrototypeBinder>();
+            var binder = controller.PrototypeBinder;
+            if (binder == null)
+            {
+                binder = controller.GetComponent<PaperShiftPrototypeBinder>();
+            }
+
             if (binder == null)
             {
                 binder = controller.gameObject.AddComponent<PaperShiftPrototypeBinder>();
             }
 
+            controller.PrototypeBinder = binder;
             binder.Presenter = presenter;
             binder.SceneController = controller;
             if (binder.GameplayView == null)

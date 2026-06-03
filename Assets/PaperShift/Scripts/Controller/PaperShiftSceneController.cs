@@ -9,8 +9,10 @@ namespace PaperShift.Controller
     {
         public PaperShiftScreen InitialScreen = PaperShiftScreen.Create;
         public PaperShiftScreenView[] ScreenViews = new PaperShiftScreenView[0];
+        public PaperShiftPrototypeBinder PrototypeBinder;
 
         public PaperShiftScreen CurrentScreen { get; private set; }
+        public bool NewsPopupRequested { get; private set; }
 
         private void Awake()
         {
@@ -24,7 +26,17 @@ namespace PaperShift.Controller
         public void ShowInterviewFailure() => ShowScreen(PaperShiftScreen.InterviewFailure);
         public void ShowWork() => ShowScreen(PaperShiftScreen.Work);
         public void ShowBudget() => ShowScreen(PaperShiftScreen.Budget);
-        public void ShowNews() => ShowScreen(PaperShiftScreen.News);
+        public void ShowNews()
+        {
+            NewsPopupRequested = true;
+            RefreshNewsPopup();
+        }
+
+        public void HideNews()
+        {
+            NewsPopupRequested = false;
+            RefreshNewsPopup();
+        }
         public void ShowRetirement() => ShowScreen(PaperShiftScreen.Retirement);
         public void ShowInheritance() => ShowScreen(PaperShiftScreen.Inheritance);
 
@@ -48,6 +60,12 @@ namespace PaperShift.Controller
 
         public void ShowScreen(PaperShiftScreen screen)
         {
+            if (screen != PaperShiftScreen.News)
+            {
+                NewsPopupRequested = false;
+                RefreshNewsPopup();
+            }
+
             CurrentScreen = screen;
             var visibleScreen = ResolveVisibleScreen(screen);
             PaperShiftScreenView activeView = null;
@@ -112,6 +130,14 @@ namespace PaperShift.Controller
             return false;
         }
 
+        private void RefreshNewsPopup()
+        {
+            if (PrototypeBinder != null)
+            {
+                PrototypeBinder.RefreshScreen(PaperShiftScreen.News);
+            }
+        }
+
         private static void ResetScrollRects(Transform root)
         {
             Canvas.ForceUpdateCanvases();
@@ -144,12 +170,18 @@ namespace PaperShift.Controller
 
         private PaperShiftPrototypeBinder EnsurePrototypeBinder(PaperShiftGamePresenter presenter)
         {
-            var binder = GetComponent<PaperShiftPrototypeBinder>();
+            var binder = PrototypeBinder;
+            if (binder == null)
+            {
+                binder = GetComponent<PaperShiftPrototypeBinder>();
+            }
+
             if (binder == null)
             {
                 binder = gameObject.AddComponent<PaperShiftPrototypeBinder>();
             }
 
+            PrototypeBinder = binder;
             binder.Presenter = presenter;
             binder.SceneController = this;
             return binder;

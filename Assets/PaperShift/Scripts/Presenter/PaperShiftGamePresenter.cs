@@ -20,10 +20,28 @@ namespace PaperShift.Presenter
 
         private PaperShiftGameService service;
         private TriggeredEvent pendingEvent;
+        private EventOptionChoiceResult pendingEventResultNavigation;
+        private string pendingEventResultTitle;
+        private string pendingEventResultBody;
 
         public TriggeredEvent PendingEvent
         {
             get { return pendingEvent; }
+        }
+
+        public bool HasPendingEventResult
+        {
+            get { return !string.IsNullOrEmpty(pendingEventResultTitle) || !string.IsNullOrEmpty(pendingEventResultBody); }
+        }
+
+        public string PendingEventResultTitle
+        {
+            get { return pendingEventResultTitle; }
+        }
+
+        public string PendingEventResultBody
+        {
+            get { return pendingEventResultBody; }
         }
 
         public PaperShiftDatabase ActiveDatabase
@@ -139,6 +157,7 @@ namespace PaperShift.Presenter
         private bool FindInterviewAndShowInternal()
         {
             pendingEvent = null;
+            ClearPendingEventResult();
             service.RestartJobSearch(State);
             if (service.FindInterviewOffer(State))
             {
@@ -160,6 +179,11 @@ namespace PaperShift.Presenter
             }
 
             pendingEvent = result.TriggeredEvent;
+            if (pendingEvent != null)
+            {
+                ClearPendingEventResult();
+            }
+
             message = result.Message;
             LastInterviewRecognitionDelta = result.RecognitionDelta;
             ShowJobSearch();
@@ -176,6 +200,11 @@ namespace PaperShift.Presenter
             }
 
             pendingEvent = result.TriggeredEvent;
+            if (pendingEvent != null)
+            {
+                ClearPendingEventResult();
+            }
+
             message = result.Message;
             LastInterviewRecognitionDelta = result.RecognitionDelta;
             switch (result.Outcome)
@@ -218,6 +247,7 @@ namespace PaperShift.Presenter
         public bool AskInterviewResult(out string message)
         {
             pendingEvent = null;
+            ClearPendingEventResult();
             var success = service.ResolveInterviewResult(State, out message);
             if (success)
             {
@@ -261,6 +291,11 @@ namespace PaperShift.Presenter
             }
 
             pendingEvent = result.TriggeredEvent;
+            if (pendingEvent != null)
+            {
+                ClearPendingEventResult();
+            }
+
             message = result.Message;
             switch (result.Outcome)
             {
@@ -304,6 +339,11 @@ namespace PaperShift.Presenter
             }
 
             pendingEvent = result.TriggeredEvent;
+            if (pendingEvent != null)
+            {
+                ClearPendingEventResult();
+            }
+
             message = result.Message;
             switch (result.Outcome)
             {
@@ -347,6 +387,7 @@ namespace PaperShift.Presenter
             pendingEvent = service.SaveBudget(State, State.Budget);
             if (pendingEvent != null)
             {
+                ClearPendingEventResult();
                 ShowNews();
                 return;
             }
@@ -356,13 +397,24 @@ namespace PaperShift.Presenter
 
         public void ChoosePendingEventOption(int optionIndex)
         {
-            if (pendingEvent == null || optionIndex < 0 || optionIndex >= pendingEvent.Options.Length)
+            if (pendingEvent == null || pendingEvent.Options == null || optionIndex < 0 || optionIndex >= pendingEvent.Options.Length)
             {
                 return;
             }
 
-            var result = service.ChooseEventOption(State, pendingEvent, pendingEvent.Options[optionIndex].Id);
+            var sourceEvent = pendingEvent;
+            var option = pendingEvent.Options[optionIndex];
+            var logStart = State == null || State.Logs == null ? 0 : State.Logs.Count;
+            var result = service.ChooseEventOption(State, sourceEvent, option.Id);
             pendingEvent = null;
+            StageEventChoiceResult(sourceEvent, option, result, logStart);
+            ShowNews();
+        }
+
+        public void ContinueAfterEventResult()
+        {
+            var result = pendingEventResultNavigation;
+            ClearPendingEventResult();
             NavigateAfterEventChoice(result);
         }
 
@@ -396,8 +448,111 @@ namespace PaperShift.Presenter
             }
 
             pendingEvent = triggeredEvent;
+            ClearPendingEventResult();
             ShowNews();
             return true;
+        }
+
+        private void StageEventChoiceResult(TriggeredEvent sourceEvent, EventOptionDefinition option, EventOptionChoiceResult result, int logStart)
+        {
+            pendingEventResultNavigation = result;
+            pendingEventResultTitle = BuildEventResultTitle(sourceEvent);
+            pendingEventResultBody = BuildEventResultBody(option, result, logStart);
+        }
+
+        private void ClearPendingEventResult()
+        {
+            pendingEventResultNavigation = null;
+            pendingEventResultTitle = string.Empty;
+            pendingEventResultBody = string.Empty;
+        }
+
+        private static string BuildEventResultTitle(TriggeredEvent sourceEvent)
+        {
+            if (sourceEvent == null || sourceEvent.Event == null || string.IsNullOrEmpty(sourceEvent.Event.DisplayName))
+            {
+                return "事件结果";
+            }
+
+            return sourceEvent.Event.DisplayName + "结果";
+        }
+
+        private string BuildEventResultBody(EventOptionDefinition option, EventOptionChoiceResult result, int logStart)
+        {
+            var lines = new List<string>();
+            if (option != null && !string.IsNullOrEmpty(option.Label))
+            {
+                AddUniqueLine(lines, "你选择了：" + option.Label);
+            }
+
+            AddNewLogLines(lines, logStart, result == null ? null : result.TriggeredEvent);
+
+            var checkpoint = result == null ? null : result.CheckpointResult;
+            if (checkpoint != null && !string.IsNullOrEmpty(checkpoint.Message))
+            {
+                AddUniqueLine(lines, checkpoint.Message);
+            }
+
+            if (result != null && result.TriggeredEvent != null)
+            {
+                AddUniqueLine(lines, "你的选择引发了新的事件。");
+            }
+
+            if (lines.Count == 0)
+            {
+                lines.Add("事件已结算。");
+            }
+
+            return string.Join("\n", lines.ToArray());
+        }
+
+        private void AddNewLogLines(List<string> lines, int logStart, TriggeredEvent followUpEvent)
+        {
+            if (State == null || State.Logs == null)
+            {
+                return;
+            }
+
+            var start = logStart < 0 ? 0 : logStart;
+            for (var i = start; i < State.Logs.Count; i++)
+            {
+                var text = State.Logs[i].Text;
+                if (ShouldSkipFollowUpEventLog(text, followUpEvent))
+                {
+                    continue;
+                }
+
+                AddUniqueLine(lines, text);
+            }
+        }
+
+        private static bool ShouldSkipFollowUpEventLog(string text, TriggeredEvent followUpEvent)
+        {
+            if (string.IsNullOrEmpty(text) || followUpEvent == null || followUpEvent.Event == null)
+            {
+                return false;
+            }
+
+            var prefix = followUpEvent.Event.DisplayName + "：";
+            return text.StartsWith(prefix);
+        }
+
+        private static void AddUniqueLine(List<string> lines, string line)
+        {
+            if (string.IsNullOrEmpty(line))
+            {
+                return;
+            }
+
+            for (var i = 0; i < lines.Count; i++)
+            {
+                if (lines[i] == line)
+                {
+                    return;
+                }
+            }
+
+            lines.Add(line);
         }
 
         private void NavigateAfterEventCheckpoint(FlowCheckpointResult checkpoint)

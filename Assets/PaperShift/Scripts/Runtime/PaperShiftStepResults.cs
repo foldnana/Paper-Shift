@@ -1,4 +1,5 @@
 using PaperShift.Data;
+using PaperShift.Domain;
 
 namespace PaperShift.Runtime
 {
@@ -122,11 +123,27 @@ namespace PaperShift.Runtime
     {
         public readonly GameEventDefinition Event;
         public readonly EventOptionDefinition[] Options;
+        public readonly bool HasSourceAction;
+        public readonly FlowCheckpointAction SourceAction;
+        public readonly GameEventPhase SourcePhase;
 
         public TriggeredEvent(GameEventDefinition gameEvent, EventOptionDefinition[] options)
+            : this(gameEvent, options, FlowCheckpointAction.EventChoice, GameEventPhase.Any, false)
+        {
+        }
+
+        public TriggeredEvent(GameEventDefinition gameEvent, EventOptionDefinition[] options, FlowCheckpointAction sourceAction, GameEventPhase sourcePhase)
+            : this(gameEvent, options, sourceAction, sourcePhase, true)
+        {
+        }
+
+        private TriggeredEvent(GameEventDefinition gameEvent, EventOptionDefinition[] options, FlowCheckpointAction sourceAction, GameEventPhase sourcePhase, bool hasSourceAction)
         {
             Event = gameEvent;
             Options = options;
+            SourceAction = sourceAction;
+            SourcePhase = sourcePhase;
+            HasSourceAction = hasSourceAction;
         }
     }
 

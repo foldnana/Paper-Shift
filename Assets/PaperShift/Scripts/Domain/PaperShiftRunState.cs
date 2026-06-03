@@ -8,6 +8,9 @@ namespace PaperShift.Domain
     {
         public int Seed;
         public int CurrentYear;
+        public int CurrentMonth = 1;
+        public int GenerationStartYear;
+        public int GenerationStartMonth = 1;
         public int Generation = 1;
         public PaperShiftPhase Phase = PaperShiftPhase.CreateWorker;
         public WorkerProfile Worker = new WorkerProfile();
@@ -36,6 +39,7 @@ namespace PaperShift.Domain
             Logs.Add(new GameLogEntry
             {
                 Year = CurrentYear,
+                Month = CurrentMonth,
                 Text = text,
                 NoticeType = type
             });
@@ -266,6 +270,7 @@ namespace PaperShift.Domain
     public sealed class GameLogEntry
     {
         public int Year;
+        public int Month;
         public string Text;
         public EventNoticeType NoticeType = EventNoticeType.Log;
     }

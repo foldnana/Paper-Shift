@@ -26,9 +26,11 @@ namespace PaperShift.Editor
             var host = controller.GetComponent<PaperShiftPrototypeBinder>();
             Require(presenter != null, "UI Controller is missing PaperShiftGamePresenter.", issues);
             Require(host != null, "UI Controller is missing PaperShiftPrototypeBinder.", issues);
+            Require(controller.PrototypeBinder != null, "SceneController.PrototypeBinder is missing.", issues);
 
             if (host != null)
             {
+                Require(controller.PrototypeBinder == host, "SceneController.PrototypeBinder should reference the scene PaperShiftPrototypeBinder.", issues);
                 Require(host.SceneController != null, "PrototypeBinder.SceneController is missing.", issues);
                 Require(host.Presenter != null, "PrototypeBinder.Presenter is missing.", issues);
                 Require(host.ScreenBinders != null && host.ScreenBinders.Length > 0, "PrototypeBinder.ScreenBinders is empty.", issues);
@@ -98,6 +100,8 @@ namespace PaperShift.Editor
                 else if (binder is PaperShiftRetirementScreenBinder retirement)
                 {
                     Require(retirement.FinishButton != null, "Retirement.FinishButton is missing.", issues);
+                    Require(retirement.ScoreRows != null && retirement.ScoreRows.Length > 0, "Retirement.ScoreRows is empty.", issues);
+                    ValidateHireScoreRows(retirement, issues);
                 }
                 else if (binder is PaperShiftInheritanceScreenBinder inheritance)
                 {
@@ -117,6 +121,30 @@ namespace PaperShift.Editor
 
             Require(binder.SelfCardView != null, "Gameplay.SelfCardView is missing.", issues);
             Require(binder.JobCardView != null, "Gameplay.JobCardView is missing.", issues);
+        }
+
+        private static void ValidateHireScoreRows(PaperShiftRetirementScreenBinder binder, ICollection<string> issues)
+        {
+            if (binder.ScoreRows == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i < binder.ScoreRows.Length; i++)
+            {
+                var row = binder.ScoreRows[i];
+                if (row == null)
+                {
+                    issues.Add("Retirement.ScoreRows[" + i + "] is null.");
+                    continue;
+                }
+
+                var id = string.IsNullOrEmpty(row.Id) ? i.ToString() : row.Id;
+                Require(row.ValueText != null, "Retirement.ScoreRow " + id + " ValueText is missing.", issues);
+                Require(row.PointsText != null, "Retirement.ScoreRow " + id + " PointsText is missing.", issues);
+                Require(row.RareTierRoot != null, "Retirement.ScoreRow " + id + " RareTierRoot is missing.", issues);
+                Require(row.SuperRareTierRoot != null, "Retirement.ScoreRow " + id + " SuperRareTierRoot is missing.", issues);
+            }
         }
 
         private static void ValidateCreate(PaperShiftCreateScreenBinder binder, ICollection<string> issues)

@@ -20,9 +20,11 @@ namespace PaperShift.Runtime
             get { return randomProvider == null ? null : randomProvider(); }
         }
 
-        public WorkerProfile CreateRandomWorker(int currentYear, int generation)
+        public WorkerProfile CreateRandomWorker(int currentYear, int currentMonth, int generation)
         {
             var random = Random;
+            var age = random.Next(18, 31);
+            var birthMonth = random.Next(1, 13);
             var worker = new WorkerProfile
             {
                 Id = Guid.NewGuid().ToString("N"),
@@ -32,13 +34,13 @@ namespace PaperShift.Runtime
                 EraId = string.Empty,
                 EraName = currentYear + "年",
                 Generation = generation,
-                Age = random.Next(18, 31),
+                Age = age,
                 Stress = random.Next(5, 26),
                 Health = random.Next(65, 96),
                 Money = 0
             };
             worker.FirstName = worker.Gender == "女" ? Pick(database.FemaleFirstNames, "小满") : Pick(database.MaleFirstNames, "知行");
-            worker.BirthYear = currentYear - worker.Age;
+            SetBirthDateForAge(worker, currentYear, currentMonth, age, birthMonth);
 
             for (var i = 0; i < database.Stats.Length; i++)
             {
@@ -94,11 +96,12 @@ namespace PaperShift.Runtime
             var heir = state.Worker.Heirs[heirIndex];
             var yearAdvance = Math.Max(1, 18 - heir.Age);
             var nextYear = state.CurrentYear + yearAdvance;
-            var next = CreateRandomWorker(nextYear, state.Generation + 1);
+            var nextMonth = NormalizeMonth(state.CurrentMonth);
+            var next = CreateRandomWorker(nextYear, nextMonth, state.Generation + 1);
             next.FirstName = heir.Name.Length > state.Worker.LastName.Length ? heir.Name.Substring(state.Worker.LastName.Length) : heir.Name;
             next.Gender = heir.Gender;
             next.Age = Math.Max(18, heir.Age + yearAdvance);
-            next.BirthYear = nextYear - next.Age;
+            SetBirthDateForAge(next, nextYear, nextMonth, next.Age, next.BirthMonth);
             next.Tags.AddRange(heir.Tags);
             for (var i = 0; i < heir.Stats.Count; i++)
             {
@@ -107,6 +110,9 @@ namespace PaperShift.Runtime
 
             state.Generation++;
             state.CurrentYear = nextYear;
+            state.CurrentMonth = nextMonth;
+            state.GenerationStartYear = nextYear;
+            state.GenerationStartMonth = nextMonth;
             state.Worker = next;
             state.Resume = new ResumeProfile();
             state.Interview = new InterviewState();
@@ -210,6 +216,53 @@ namespace PaperShift.Runtime
             }
 
             return random.Next(165, 189);
+        }
+
+        internal static void SetBirthDateForAge(WorkerProfile worker, int currentYear, int currentMonth, int age, int birthMonth)
+        {
+            if (worker == null)
+            {
+                return;
+            }
+
+            currentMonth = NormalizeMonth(currentMonth);
+            birthMonth = NormalizeMonth(birthMonth);
+            worker.BirthMonth = birthMonth;
+            worker.BirthYear = currentYear - age - (currentMonth < birthMonth ? 1 : 0);
+            worker.Age = AgeAt(currentYear, currentMonth, worker.BirthYear, worker.BirthMonth);
+        }
+
+        internal static void RefreshAgeAt(WorkerProfile worker, int currentYear, int currentMonth)
+        {
+            if (worker == null || worker.BirthYear <= 0)
+            {
+                return;
+            }
+
+            worker.BirthMonth = NormalizeMonth(worker.BirthMonth);
+            worker.Age = AgeAt(currentYear, currentMonth, worker.BirthYear, worker.BirthMonth);
+            worker.EraName = currentYear + "年";
+        }
+
+        private static int AgeAt(int currentYear, int currentMonth, int birthYear, int birthMonth)
+        {
+            var age = currentYear - birthYear;
+            if (NormalizeMonth(currentMonth) < NormalizeMonth(birthMonth))
+            {
+                age--;
+            }
+
+            return Math.Max(0, age);
+        }
+
+        private static int NormalizeMonth(int month)
+        {
+            if (month < 1)
+            {
+                return 1;
+            }
+
+            return month > 12 ? 12 : month;
         }
 
         private void InheritTag(PaperShiftRunState state, HeirProfile heir, string tagId)

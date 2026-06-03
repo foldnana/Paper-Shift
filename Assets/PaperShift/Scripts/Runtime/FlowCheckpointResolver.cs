@@ -73,12 +73,27 @@ namespace PaperShift.Runtime
                 return directed;
             }
 
-            var triggered = service.ResolveTriggeredEventForCheckpoint(state, phase, company, job, flow);
-            if (triggered != null)
+            if (ShouldTriggerCheckpointEvent(action))
             {
-                return FlowCheckpointResult.Event(action, phase, triggered, snapshot);
+                var triggered = service.ResolveTriggeredEventForCheckpoint(state, phase, company, job, flow);
+                if (triggered != null)
+                {
+                    return FlowCheckpointResult.Event(action, phase, WithCheckpointSource(triggered, action, phase), snapshot);
+                }
             }
 
+            return ResolveNaturalOutcome(state, action, phase, company, job, snapshot);
+        }
+
+        internal FlowCheckpointResult ResolveNaturalOnly(PaperShiftRunState state, FlowCheckpointAction action, GameEventPhase phase)
+        {
+            var snapshot = FlowCheckpointSnapshot.Capture(state, phase);
+            if (!TryResolveCheckpointTarget(state, action, phase, out var company, out var job, out var invalidMessage))
+            {
+                return FlowCheckpointResult.Failed(action, phase, invalidMessage, snapshot);
+            }
+
+            snapshot.CaptureAfter(state, phase);
             return ResolveNaturalOutcome(state, action, phase, company, job, snapshot);
         }
 
@@ -207,11 +222,6 @@ namespace PaperShift.Runtime
             switch (action)
             {
                 case FlowCheckpointAction.PrepareInterview:
-                    if (state.Interview.Recognition <= 0)
-                    {
-                        return FailCheckpoint(state, action, phase, snapshot, "面试准备暴露了明显短板，这次机会失败。");
-                    }
-
                     return ContinueCheckpoint(state, action, phase, snapshot);
                 case FlowCheckpointAction.AttendInterview:
                     if (state.Interview.Recognition >= state.Interview.OfferThreshold)
@@ -355,6 +365,16 @@ namespace PaperShift.Runtime
                 : GameEventPhase.Probation;
         }
 
+        private static TriggeredEvent WithCheckpointSource(TriggeredEvent triggered, FlowCheckpointAction action, GameEventPhase phase)
+        {
+            return triggered == null ? null : new TriggeredEvent(triggered.Event, triggered.Options, action, phase);
+        }
+
+        private static bool ShouldTriggerCheckpointEvent(FlowCheckpointAction action)
+        {
+            return action != FlowCheckpointAction.PrepareInterview;
+        }
+
         private static string ContinueMessage(FlowCheckpointAction action, FlowCheckpointSnapshot snapshot)
         {
             var deltaText = SignedPercent(snapshot.RecognitionDelta);
@@ -394,7 +414,7 @@ namespace PaperShift.Runtime
             switch (action)
             {
                 case FlowCheckpointAction.PrepareInterview:
-                    return "面试准备暴露了明显短板，这次机会失败。";
+                    return "准备不足，这次机会没有继续推进。";
                 case FlowCheckpointAction.AttendInterview:
                     return "面试失败。对方认为匹配度不够，你还在求职状态。";
                 case FlowCheckpointAction.WorkProbation:

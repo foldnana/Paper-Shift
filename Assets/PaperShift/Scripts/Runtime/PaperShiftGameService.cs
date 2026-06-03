@@ -8,6 +8,17 @@ namespace PaperShift.Runtime
     public sealed class PaperShiftGameService
     {
         public const int FirstGenerationStartYear = 2026;
+        public const int FirstGenerationStartMonth = 1;
+
+        private const int JobSearchMonths = 1;
+        private const int InterviewPreparationMonths = 1;
+        private const int InterviewAttendanceMonths = 1;
+        private const int ProbationWorkMonths = 1;
+        private const int RegularizationMonths = 1;
+        private const int EventChoiceMonths = 1;
+        private const int BudgetPlanMonths = 1;
+        private const int QuitJobMonths = 1;
+        private const int WorkYearMonths = 12;
 
         private readonly PaperShiftDatabase database;
         private readonly ConditionEvaluator conditions;
@@ -45,7 +56,10 @@ namespace PaperShift.Runtime
             state.Seed = actualSeed;
             state.Generation = 1;
             state.CurrentYear = FirstGenerationStartYear;
-            state.Worker = workerLifecycle.CreateRandomWorker(state.CurrentYear, 1);
+            state.CurrentMonth = FirstGenerationStartMonth;
+            state.GenerationStartYear = FirstGenerationStartYear;
+            state.GenerationStartMonth = FirstGenerationStartMonth;
+            state.Worker = workerLifecycle.CreateRandomWorker(state.CurrentYear, state.CurrentMonth, 1);
             state.Phase = PaperShiftPhase.CreateWorker;
             state.AddLog("新的打工人生开始了。");
             return state;
@@ -53,7 +67,8 @@ namespace PaperShift.Runtime
 
         public void RandomizeWorker(PaperShiftRunState state, string eraId)
         {
-            state.Worker = workerLifecycle.CreateRandomWorker(state.CurrentYear, state.Generation);
+            EnsureDate(state);
+            state.Worker = workerLifecycle.CreateRandomWorker(state.CurrentYear, state.CurrentMonth, state.Generation);
             state.Phase = PaperShiftPhase.CreateWorker;
             state.AddLog("已随机生成新的劳动者。");
         }
@@ -160,6 +175,7 @@ namespace PaperShift.Runtime
 
         public bool FindInterviewOffer(PaperShiftRunState state)
         {
+            AdvanceTime(state, JobSearchMonths);
             var picker = new WeightedPicker<CompanyJobPair>();
             for (var companyIndex = 0; companyIndex < database.Companies.Length; companyIndex++)
             {
@@ -203,11 +219,13 @@ namespace PaperShift.Runtime
 
         public InterviewStepResult PrepareInterviewStep(PaperShiftRunState state)
         {
+            AdvanceTime(state, InterviewPreparationMonths);
             return checkpoints.ResolveInterviewStep(state, FlowCheckpointAction.PrepareInterview);
         }
 
         public InterviewStepResult ApplyInterview(PaperShiftRunState state)
         {
+            AdvanceTime(state, InterviewAttendanceMonths);
             return checkpoints.ResolveInterviewStep(state, FlowCheckpointAction.AttendInterview);
         }
 
@@ -262,11 +280,13 @@ namespace PaperShift.Runtime
 
         public ProbationStepResult AdvanceProbationStep(PaperShiftRunState state)
         {
+            AdvanceTime(state, ProbationWorkMonths);
             return checkpoints.ResolveProbationStep(state, FlowCheckpointAction.WorkProbation);
         }
 
         public ProbationStepResult ApplyRegularization(PaperShiftRunState state)
         {
+            AdvanceTime(state, RegularizationMonths);
             return checkpoints.ResolveProbationStep(state, FlowCheckpointAction.ApplyRegularization);
         }
 
@@ -296,7 +316,7 @@ namespace PaperShift.Runtime
                 return null;
             }
 
-            TickYear(state);
+            AdvanceTime(state, WorkYearMonths);
 
             var stressDelta = state.CurrentJob.Intensity / 8;
             stressDelta += effects.SumPassive(state, EffectKind.PassiveStressPerYear, "remote");
@@ -319,6 +339,7 @@ namespace PaperShift.Runtime
 
         public TriggeredEvent SaveBudget(PaperShiftRunState state, BudgetPlan budget)
         {
+            AdvanceTime(state, BudgetPlanMonths);
             state.Budget = budget;
             state.Budget.NormalizeTo100();
             state.Phase = PaperShiftPhase.Working;
@@ -333,6 +354,7 @@ namespace PaperShift.Runtime
                 return;
             }
 
+            AdvanceTime(state, QuitJobMonths);
             state.AddLog("你主动离开了 " + state.CurrentJob.CompanyName + "。");
             state.CurrentJob = new CurrentJobState();
             state.Phase = PaperShiftPhase.EditResume;
@@ -512,6 +534,7 @@ namespace PaperShift.Runtime
                     continue;
                 }
 
+                AdvanceTime(state, EventChoiceMonths);
                 if (!option.RunCheckpointAfterChoice)
                 {
                     effects.Apply(option.Effects, state);
@@ -528,10 +551,25 @@ namespace PaperShift.Runtime
                 var optionFlow = BuildEventOptionFlow(option);
                 ApplyNonCheckpointOptionEffects(option.Effects, state);
                 var checkpoint = checkpoints.Resolve(state, FlowCheckpointAction.EventChoice, phase, optionFlow);
+                if (ShouldResolveSourceCheckpointAfterEvent(triggeredEvent, checkpoint, phase))
+                {
+                    checkpoint = checkpoints.ResolveNaturalOnly(state, triggeredEvent.SourceAction, phase);
+                }
+
                 return EventOptionChoiceResult.Applied(option, checkpoint);
             }
 
             return EventOptionChoiceResult.Ignored();
+        }
+
+        private static bool ShouldResolveSourceCheckpointAfterEvent(TriggeredEvent triggeredEvent, FlowCheckpointResult checkpoint, GameEventPhase phase)
+        {
+            return triggeredEvent != null &&
+                triggeredEvent.HasSourceAction &&
+                triggeredEvent.SourceAction == FlowCheckpointAction.ApplyRegularization &&
+                phase == GameEventPhase.Probation &&
+                checkpoint != null &&
+                checkpoint.Outcome == FlowCheckpointOutcome.Continue;
         }
 
         private static FlowRuleResult BuildEventOptionFlow(EventOptionDefinition option)
@@ -724,17 +762,66 @@ namespace PaperShift.Runtime
             }
         }
 
-        private void TickYear(PaperShiftRunState state)
-        {
-            state.CurrentYear++;
-            state.Worker.Age++;
-            state.Worker.TickTemporaryTags();
-            state.TickEventCooldowns();
-        }
-
         internal void EnsureHeirsForCheckpoint(PaperShiftRunState state)
         {
             workerLifecycle.EnsureHeirs(state);
+        }
+
+        private void AdvanceTime(PaperShiftRunState state, int months)
+        {
+            if (state == null || months <= 0)
+            {
+                return;
+            }
+
+            EnsureDate(state);
+            for (var i = 0; i < months; i++)
+            {
+                state.CurrentMonth++;
+                if (state.CurrentMonth > 12)
+                {
+                    state.CurrentMonth = 1;
+                    state.CurrentYear++;
+                    if (state.Worker != null)
+                    {
+                        state.Worker.TickTemporaryTags();
+                    }
+
+                    state.TickEventCooldowns();
+                }
+
+                WorkerLifecycleResolver.RefreshAgeAt(state.Worker, state.CurrentYear, state.CurrentMonth);
+            }
+        }
+
+        private static void EnsureDate(PaperShiftRunState state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            if (state.CurrentYear <= 0)
+            {
+                state.CurrentYear = FirstGenerationStartYear;
+            }
+
+            if (state.CurrentMonth < 1 || state.CurrentMonth > 12)
+            {
+                state.CurrentMonth = FirstGenerationStartMonth;
+            }
+
+            if (state.GenerationStartYear <= 0)
+            {
+                state.GenerationStartYear = state.CurrentYear;
+            }
+
+            if (state.GenerationStartMonth < 1 || state.GenerationStartMonth > 12)
+            {
+                state.GenerationStartMonth = state.CurrentMonth;
+            }
+
+            WorkerLifecycleResolver.RefreshAgeAt(state.Worker, state.CurrentYear, state.CurrentMonth);
         }
 
         private EventOptionDefinition[] AvailableOptions(GameEventDefinition gameEvent, PaperShiftRunState state, CompanyDefinition company, JobDefinition job)

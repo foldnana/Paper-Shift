@@ -22,6 +22,7 @@ namespace PaperShift.Editor
             }
 
             var host = GetOrAdd<PaperShiftPrototypeBinder>(controller.gameObject);
+            controller.PrototypeBinder = host;
             host.SceneController = controller;
             host.Presenter = GetOrAdd<PaperShiftGamePresenter>(controller.gameObject);
 
@@ -42,6 +43,7 @@ namespace PaperShift.Editor
             host.BannerRoot = bannerRoot as RectTransform;
             host.BannerText = TextUnder(bannerRoot, "Text");
 
+            EditorUtility.SetDirty(controller);
             EditorUtility.SetDirty(host);
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             EditorSceneManager.SaveOpenScenes();
@@ -261,18 +263,83 @@ namespace PaperShift.Editor
 
             var binder = GetOrAdd<PaperShiftRetirementScreenBinder>(root.gameObject);
             binder.Screen = PaperShiftScreen.Retirement;
-            binder.CoinText = TextUnder(root, "Coin", "Amount");
-            binder.ReasonTitleText = TextUnder(root, "Reason Title");
-            binder.FinishButton = Button(root, "Finish Retirement Button");
-            binder.SettlementTexts = new[]
+
+            var hireLayout = Find(root, "找到工作结算界面");
+            if (hireLayout != null)
             {
-                TextBinding("workYears", TextUnder(root, "Settlement 工作年限", "Value")),
-                TextBinding("finalJob", TextUnder(root, "Settlement 最终职业", "Value")),
-                TextBinding("savings", TextUnder(root, "Settlement 留下存款", "Value")),
-                TextBinding("stress", TextUnder(root, "Settlement 精神状态", "Value"))
-            };
+                InstallHireSettlement(binder, hireLayout);
+            }
+            else
+            {
+                binder.CoinText = TextUnder(root, "Coin", "Amount");
+                binder.ReasonTitleText = TextUnder(root, "Reason Title");
+                binder.FinishButton = Button(root, "Finish Retirement Button");
+                binder.ScoreRows = new PaperShiftHireScoreRowBinding[0];
+                binder.ScoreTotalText = null;
+                binder.SettlementTexts = new[]
+                {
+                    TextBinding("workYears", TextUnder(root, "Settlement 工作年限", "Value")),
+                    TextBinding("finalJob", TextUnder(root, "Settlement 最终职业", "Value")),
+                    TextBinding("savings", TextUnder(root, "Settlement 留下存款", "Value")),
+                    TextBinding("stress", TextUnder(root, "Settlement 精神状态", "Value"))
+                };
+            }
+
             Dirty(binder);
             return binder;
+        }
+
+        private static void InstallHireSettlement(PaperShiftRetirementScreenBinder binder, Transform layout)
+        {
+            var header = Find(layout, "顶部信息");
+            var hero = Find(layout, "庆祝展示");
+            var ribbon = Find(layout, "结算横幅");
+            var panel = Find(layout, "入职奖励面板");
+            var rowsRoot = Find(panel, "奖励列表");
+            var workerCard = Find(hero, "劳动者卡片");
+            var jobCard = Find(hero, "工作卡片");
+
+            binder.CoinText = TextUnder(header, "金币数");
+            binder.ReasonTitleText = TextUnder(ribbon, "标题");
+            binder.FinishButton = Button(layout, "领取奖励按钮");
+            binder.ScoreTotalText = DirectTextUnder(panel, "总计数值");
+            binder.SettlementTexts = new[]
+            {
+                TextBinding("workerName", TextUnder(workerCard, "姓名")),
+                TextBinding("workerMeta", TextUnder(hero, "劳动者信息")),
+                TextBinding("jobTitle", TextUnder(jobCard, "岗位")),
+                TextBinding("companyName", TextUnder(hero, "公司信息")),
+                TextBinding("job", TextUnder(jobCard, "岗位")),
+                TextBinding("totalReward", binder.ScoreTotalText)
+            };
+            binder.ScoreRows = new[]
+            {
+                HireScoreRow("job", Find(rowsRoot, "奖励 工作岗位")),
+                HireScoreRow("income", Find(rowsRoot, "奖励 月收入")),
+                HireScoreRow("prospect", Find(rowsRoot, "奖励 前景")),
+                HireScoreRow("efficiency", Find(rowsRoot, "奖励 效率")),
+                HireScoreRow("fit", Find(rowsRoot, "奖励 适配"))
+            };
+        }
+
+        private static PaperShiftHireScoreRowBinding HireScoreRow(string id, Transform row)
+        {
+            var normal = FindDirect(row, "普通");
+            var rare = FindDirect(row, "稀有");
+            var superRare = FindDirect(row, "超稀有");
+            return new PaperShiftHireScoreRowBinding
+            {
+                Id = id,
+                Root = row == null ? null : row.gameObject,
+                ValueText = TextUnder(row, "值"),
+                PointsText = TextUnder(row, "总计数值"),
+                NormalTierRoot = normal == null ? null : normal.gameObject,
+                RareTierRoot = rare == null ? null : rare.gameObject,
+                SuperRareTierRoot = superRare == null ? null : superRare.gameObject,
+                NormalTierText = TierText(normal),
+                RareTierText = TierText(rare),
+                SuperRareTierText = TierText(superRare)
+            };
         }
 
         private static PaperShiftResumeLineBinding[] InstallResumeLines(Transform root)
@@ -463,6 +530,18 @@ namespace PaperShift.Editor
             return TextUnder(Find(root, containerName), childName);
         }
 
+        private static Text DirectTextUnder(Transform root, string name)
+        {
+            var target = FindDirect(root, name);
+            return target == null ? null : target.GetComponent<Text>();
+        }
+
+        private static Text TierText(Transform tierRoot)
+        {
+            var text = TextUnder(tierRoot, "Badge");
+            return text == null ? TextUnder(tierRoot, "Text") : text;
+        }
+
         private static Transform Screen(PaperShiftSceneController controller, PaperShiftScreen screen)
         {
             if (controller == null || controller.ScreenViews == null)
@@ -500,6 +579,25 @@ namespace PaperShift.Editor
                 if (found != null)
                 {
                     return found;
+                }
+            }
+
+            return null;
+        }
+
+        private static Transform FindDirect(Transform root, string name)
+        {
+            if (root == null || string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+
+            for (var i = 0; i < root.childCount; i++)
+            {
+                var child = root.GetChild(i);
+                if (child != null && child.name == name)
+                {
+                    return child;
                 }
             }
 

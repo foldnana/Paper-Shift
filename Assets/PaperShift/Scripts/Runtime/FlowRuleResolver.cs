@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using PaperShift.Data;
 using PaperShift.Domain;
 
@@ -39,11 +40,12 @@ namespace PaperShift.Runtime
 
         private void ApplyWorkTags(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random)
         {
-            ApplyWorkTagList(result, state, company, job, profile, phase, random, company == null ? null : company.TagIds);
-            ApplyWorkTagList(result, state, company, job, profile, phase, random, job.TagIds);
+            var appliedTagIds = new HashSet<string>();
+            ApplyWorkTagList(result, state, company, job, profile, phase, random, company == null ? null : company.TagIds, appliedTagIds);
+            ApplyWorkTagList(result, state, company, job, profile, phase, random, job.TagIds, appliedTagIds);
         }
 
-        private void ApplyWorkTagList(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random, string[] tagIds)
+        private void ApplyWorkTagList(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random, string[] tagIds, HashSet<string> appliedTagIds)
         {
             if (tagIds == null)
             {
@@ -52,7 +54,13 @@ namespace PaperShift.Runtime
 
             for (var i = 0; i < tagIds.Length; i++)
             {
-                var workTag = database.FindWorkTag(tagIds[i]);
+                var tagId = tagIds[i];
+                if (string.IsNullOrEmpty(tagId) || !appliedTagIds.Add(tagId))
+                {
+                    continue;
+                }
+
+                var workTag = database.FindWorkTag(tagId);
                 if (workTag == null)
                 {
                     continue;

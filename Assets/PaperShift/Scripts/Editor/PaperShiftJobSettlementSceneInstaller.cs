@@ -61,6 +61,7 @@ namespace PaperShift.Editor
             SetScreenBackground(root);
 
             var bindings = new List<PaperShiftTextBinding>();
+            var scoreRows = new List<PaperShiftHireScoreRowBinding>();
             var layout = CreateRect(root, LayoutName);
             Stretch(layout);
             layout.gameObject.SetActive(true);
@@ -105,22 +106,24 @@ namespace PaperShift.Editor
             var fitter = rowsRoot.gameObject.AddComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            CreateRewardRow(rowsRoot, "形象", "appearance", "较善 4分", false, bindings);
-            CreateRewardRow(rowsRoot, "身高", "height", "162cm", true, bindings);
-            CreateRewardRow(rowsRoot, "教育", "education", "普通高中", false, bindings);
-            CreateRewardRow(rowsRoot, "家境", "family", "温饱", false, bindings);
-            CreateRewardRow(rowsRoot, "职业", "job", "新岗位", false, bindings);
-            CreateRewardRow(rowsRoot, "月入", "salary", "0元", false, bindings);
+            CreateRewardRow(rowsRoot, "岗位", "job", "新岗位 0分", scoreRows);
+            CreateRewardRow(rowsRoot, "收入", "income", "月薪 0元 0分", scoreRows);
+            CreateRewardRow(rowsRoot, "前景", "prospect", "成长空间一般 0分", scoreRows);
+            CreateRewardRow(rowsRoot, "效率", "efficiency", "耗时 0个月 0分", scoreRows);
+            CreateRewardRow(rowsRoot, "适配", "fit", "认可度 0% 0分", scoreRows);
 
             AddText(panel, "总计标签", "总计:", 17, PaperShiftTheme.Ink, TextAnchor.LowerLeft, new RectOffset(18, 0, 0, 18));
             CreateCoin(panel, new Vector2(351f, -354f), 22f);
-            bindings.Add(Binding("totalReward", AddText(panel, "总计数值", "0", 17, PaperShiftTheme.Ink, TextAnchor.LowerRight, new RectOffset(0, 28, 0, 18))));
+            var totalText = AddText(panel, "总计数值", "0", 17, PaperShiftTheme.Ink, TextAnchor.LowerRight, new RectOffset(0, 28, 0, 18));
+            bindings.Add(Binding("totalReward", totalText));
 
             var button = CreateButton(layout, "领取奖励按钮", "领取奖励", 431f, 67f);
             AnchorTopCenter(button.GetComponent<RectTransform>(), 431f, 67f, 800f);
             binder.FinishButton = button;
 
             binder.SettlementTexts = bindings.ToArray();
+            binder.ScoreRows = scoreRows.ToArray();
+            binder.ScoreTotalText = totalText;
             EditorUtility.SetDirty(binder);
             EditorUtility.SetDirty(root.gameObject);
             EditorSceneManager.MarkSceneDirty(root.gameObject.scene);
@@ -167,23 +170,46 @@ namespace PaperShift.Editor
             return card;
         }
 
-        private static void CreateRewardRow(Transform parent, string label, string id, string value, bool rewardCoin, List<PaperShiftTextBinding> bindings)
+        private static void CreateRewardRow(Transform parent, string label, string id, string value, List<PaperShiftHireScoreRowBinding> scoreRows)
         {
             var row = CreateRounded(parent, "奖励 " + label, PaperShiftTheme.White, 8f);
             var layout = row.gameObject.AddComponent<LayoutElement>();
             layout.preferredHeight = 48f;
 
+            var rare = CreateTierBadge(row, "稀有", "★ 稀有!", PaperShiftTheme.Hex("#caa5ff"));
+            var superRare = CreateTierBadge(row, "超稀有", "★★超稀有!", PaperShiftTheme.Hex("#d7b8ff"));
+
             var labelShade = CreateRounded(row, "标签底", PaperShiftTheme.Hex("#f0f0f0"), 7f);
             AnchorLeft(labelShade, 58f, 48f, 0f);
             AddText(labelShade, "标签", label, 15, PaperShiftTheme.MutedInk, TextAnchor.MiddleCenter);
 
-            bindings.Add(Binding(id, AddText(row, "值", value, 16, PaperShiftTheme.Ink, TextAnchor.MiddleCenter, new RectOffset(74, rewardCoin ? 72 : 18, 0, 0))));
+            var valueText = AddText(row, "值", value, 16, PaperShiftTheme.Ink, TextAnchor.MiddleCenter, new RectOffset(74, 72, 0, 0));
 
-            if (rewardCoin)
+            CreateCoin(row, new Vector2(350f, -24f), 22f);
+            var pointsText = AddText(row, "总计数值", "0", 15, PaperShiftTheme.Ink, TextAnchor.MiddleRight, new RectOffset(0, 28, 0, 0));
+            if (scoreRows != null)
             {
-                CreateCoin(row, new Vector2(350f, -24f), 22f);
-                AddText(row, "奖励值", "10", 15, PaperShiftTheme.Ink, TextAnchor.MiddleRight, new RectOffset(0, 28, 0, 0));
+                scoreRows.Add(new PaperShiftHireScoreRowBinding
+                {
+                    Id = id,
+                    Root = row.gameObject,
+                    ValueText = valueText,
+                    PointsText = pointsText,
+                    RareTierRoot = rare.gameObject,
+                    SuperRareTierRoot = superRare.gameObject,
+                    RareTierText = rare.GetComponentInChildren<Text>(true),
+                    SuperRareTierText = superRare.GetComponentInChildren<Text>(true)
+                });
             }
+        }
+
+        private static RectTransform CreateTierBadge(Transform parent, string name, string label, Color color)
+        {
+            var badge = CreateRounded(parent, name, color, 8f);
+            Anchor(badge, new Vector2(144f, -24f), new Vector2(104f, 34f), new Vector2(0f, 1f));
+            AddText(badge, "Badge", label, 16, PaperShiftTheme.White, TextAnchor.MiddleCenter);
+            badge.gameObject.SetActive(false);
+            return badge;
         }
 
         private static Button CreateButton(Transform parent, string name, string label, float width, float height)

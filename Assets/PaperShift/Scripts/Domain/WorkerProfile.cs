@@ -15,6 +15,7 @@ namespace PaperShift.Domain
         public string EraName;
         public int Generation = 1;
         public int BirthYear;
+        public int BirthMonth = 1;
         public int Age;
         public int Money;
         public int Stress;

@@ -134,4 +134,19 @@ namespace PaperShift.Presenter
         public Text Label;
     }
 
+    [System.Serializable]
+    public sealed class PaperShiftHireScoreRowBinding
+    {
+        public string Id;
+        public GameObject Root;
+        public Text ValueText;
+        public Text PointsText;
+        public GameObject NormalTierRoot;
+        public GameObject RareTierRoot;
+        public GameObject SuperRareTierRoot;
+        public Text NormalTierText;
+        public Text RareTierText;
+        public Text SuperRareTierText;
+    }
+
 }

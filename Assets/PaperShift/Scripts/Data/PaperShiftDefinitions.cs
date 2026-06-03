@@ -194,6 +194,8 @@ namespace PaperShift.Data
         public string Id;
         public string DisplayName;
         public string Industry;
+        public int FoundedYear = 2020;
+        public int FoundedMonth = 1;
         public string[] EraIds = new string[0];
         public string[] TagIds = new string[0];
         public JobDefinition[] Jobs = new JobDefinition[0];

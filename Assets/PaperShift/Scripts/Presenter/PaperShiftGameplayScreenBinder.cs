@@ -517,6 +517,7 @@ namespace PaperShift.Presenter
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.Interview.CompanyName, "待投递")),
+                    new UiPair("经营", CompanyOperatingAgeLabel(State.Interview.CompanyId)),
                     new UiPair("岗位", EmptyFallback(State.Interview.JobTitle, "未知")),
                     new UiPair("月薪", State.Interview.Salary.ToString()),
                     new UiPair("认可度", State.Interview.Recognition + "%"),
@@ -546,6 +547,25 @@ namespace PaperShift.Presenter
             return "面试认可度";
         }
 
+        private string CompanyOperatingAgeLabel(string companyId)
+        {
+            var company = Database == null ? null : Database.FindCompany(companyId);
+            if (company == null)
+            {
+                return "未知";
+            }
+
+            var foundedYear = company.FoundedYear <= 0 ? PaperShiftGameService.FirstGenerationStartYear : company.FoundedYear;
+            var foundedMonth = Mathf.Clamp(company.FoundedMonth <= 0 ? 1 : company.FoundedMonth, 1, 12);
+            var years = State.CurrentYear - foundedYear;
+            if (State.CurrentMonth < foundedMonth)
+            {
+                years--;
+            }
+
+            return years <= 0 ? "未满1年" : years + "年";
+        }
+
         private CandidateUiData BuildJobCardData()
         {
             return new CandidateUiData
@@ -558,6 +578,7 @@ namespace PaperShift.Presenter
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.CurrentJob.CompanyName, "暂无")),
+                    new UiPair("经营", CompanyOperatingAgeLabel(State.CurrentJob.CompanyId)),
                     new UiPair("岗位", EmptyFallback(State.CurrentJob.JobTitle, "暂无")),
                     new UiPair("月薪", State.CurrentJob.Salary.ToString()),
                     new UiPair("阶段", "试用中"),
@@ -678,7 +699,7 @@ namespace PaperShift.Presenter
             }
 
             Set(gameplay.CalendarYearText, State.CurrentYear.ToString());
-            Set(gameplay.CalendarMonthText, "1");
+            Set(gameplay.CalendarMonthText, Mathf.Clamp(State.CurrentMonth, 1, 12).ToString("00"));
         }
 
         private PaperShiftGameplayViewReferences ResolveGameplayView()

@@ -213,6 +213,8 @@ namespace PaperShift.Data
                     Id = "cloud_farm",
                     DisplayName = "云端农场",
                     Industry = "智慧农业",
+                    FoundedYear = 2019,
+                    FoundedMonth = 4,
                     EraIds = new string[0],
                     TagIds = new[] { "local", "ai" },
                     Jobs = new[]
@@ -239,6 +241,8 @@ namespace PaperShift.Data
                     Id = "white_tower_tech",
                     DisplayName = "白塔科技",
                     Industry = "AI 服务",
+                    FoundedYear = 2023,
+                    FoundedMonth = 9,
                     EraIds = new string[0],
                     TagIds = new[] { "ai", "remote", "strict_rules" },
                     Jobs = new[]
@@ -293,6 +297,7 @@ namespace PaperShift.Data
                     Phase = GameEventPhase.Probation,
                     NoticeType = EventNoticeType.Log,
                     BaseWeight = 18,
+                    CooldownYears = 1,
                     Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.HasTag, Key = "ai_pioneer" } },
                     Options = new[]
                     {
