@@ -135,6 +135,26 @@ namespace PaperShift.Presenter
     }
 
     [System.Serializable]
+    public sealed class PaperShiftMilestoneBinding
+    {
+        public Text AgeText;
+        public Text BodyText;
+
+        public void Set(string age, string body)
+        {
+            if (AgeText != null)
+            {
+                AgeText.text = age;
+            }
+
+            if (BodyText != null)
+            {
+                BodyText.text = body;
+            }
+        }
+    }
+
+    [System.Serializable]
     public sealed class PaperShiftHireScoreRowBinding
     {
         public string Id;

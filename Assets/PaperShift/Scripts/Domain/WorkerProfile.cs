@@ -190,10 +190,30 @@ namespace PaperShift.Domain
         public string Id;
         public string Name;
         public string Gender;
+        public string Personality;
         public int Age;
+        public int Stress;
         public int InheritancePercent;
         public string TraitSummary;
         public List<StatValue> Stats = new List<StatValue>();
         public List<TagInstance> Tags = new List<TagInstance>();
+
+        public int GetStat(string statId, int fallback = 0)
+        {
+            if (string.IsNullOrEmpty(statId))
+            {
+                return fallback;
+            }
+
+            for (var i = 0; i < Stats.Count; i++)
+            {
+                if (Stats[i].Id == statId)
+                {
+                    return Stats[i].Value;
+                }
+            }
+
+            return fallback;
+        }
     }
 }

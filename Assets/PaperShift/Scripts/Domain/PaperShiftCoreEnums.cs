@@ -167,4 +167,48 @@ namespace PaperShift.Domain
         Accident,
         Custom
     }
+
+    public enum LaterLifeConditionKind
+    {
+        Always,
+        ScoreAtLeast,
+        ScoreAtMost,
+        WorkerAgeAtLeast,
+        WorkerAgeAtMost,
+        StressAtLeast,
+        StressAtMost,
+        ResumeRiskAtLeast,
+        WorkerStatAtLeast,
+        WorkerStatAtMost,
+        HasWorkerTag,
+        CompanyHasTag,
+        JobHasTag,
+        EventSeen,
+        RandomChance,
+        LaterLifeValueAtLeast,
+        LaterLifeValueAtMost
+    }
+
+    public enum LaterLifeEffectKind
+    {
+        None,
+        AddFamilyStability,
+        AddEducationResource,
+        AddIndustryInsight,
+        AddLifePressure,
+        AddParentCare,
+        AddFamilyReputation,
+        AddLifeRisk,
+        AddSpecialOpportunity,
+        AddChildChance,
+        AddChildCount,
+        AddHeirStat,
+        AddHeirStress,
+        AddHeirTag,
+        AddMilestone,
+        AddStoryFragment,
+        AddWorkYears,
+        AddProspectScore,
+        AddPressureScore
+    }
 }

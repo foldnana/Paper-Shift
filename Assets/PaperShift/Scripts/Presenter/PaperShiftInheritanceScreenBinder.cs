@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using PaperShift.Domain;
 using PaperShift.Model;
+using PaperShift.Runtime;
 using UnityEngine;
 
 namespace PaperShift.Presenter
@@ -56,13 +57,18 @@ namespace PaperShift.Presenter
                 return;
             }
 
-            Set(View.CoinText, State.Retirement.FinalSavings.ToString("N0"));
+            var later = State.LaterLife;
+            var totalScore = later != null && later.TotalScore > 0
+                ? later.TotalScore
+                : HireSettlementScoreCalculator.Calculate(State, Database).TotalPoints;
+            Set(View.CoinText, totalScore.ToString("N0"));
             RefreshSummary();
             RefreshHeirs();
         }
 
         private void RefreshSummary()
         {
+            var later = State.LaterLife;
             var jobTitle = string.IsNullOrEmpty(State.Retirement.FinalJobTitle)
                 ? State.CurrentJob.JobTitle
                 : State.Retirement.FinalJobTitle;
@@ -71,24 +77,82 @@ namespace PaperShift.Presenter
                 jobTitle = "这份工作";
             }
 
-            var pressure = EstimatePressure();
-            var years = EstimateWorkYears(pressure);
-            var prospect = EstimateProspect();
-            var marriageAge = Mathf.Clamp(State.Worker.Age + 4 + pressure / 40, State.Worker.Age + 1, 45);
-            var houseAge = Mathf.Clamp(marriageAge + 4 + (State.Worker.GetStat(PaperShiftWorkerAttributes.Family) < 45 ? 2 : 0), marriageAge + 1, 55);
-            var childAge = Mathf.Clamp(marriageAge + 6, marriageAge + 1, 56);
+            Set(View.SummaryTexts, "job", later == null || string.IsNullOrEmpty(later.FinalCareer) ? jobTitle : later.FinalCareer);
+            Set(View.SummaryTexts, "years", later == null || later.WorkYears <= 0 ? "-" : later.WorkYears + "年");
+            Set(View.SummaryTexts, "pressure", later == null || string.IsNullOrEmpty(later.PressureLabel) ? "-" : later.PressureLabel);
+            Set(View.SummaryTexts, "prospect", later == null || string.IsNullOrEmpty(later.ProspectLabel) ? "-" : later.ProspectLabel);
+            Set(View.SummaryTexts, "story", later == null || string.IsNullOrEmpty(later.StoryText) ? "后来的人生还没有被推演。" : later.StoryText);
+            RefreshMilestones();
+        }
 
-            Set(View.SummaryTexts, "job", jobTitle);
-            Set(View.SummaryTexts, "years", years + "年");
-            Set(View.SummaryTexts, "pressure", PressureLabel(pressure));
-            Set(View.SummaryTexts, "prospect", ProspectLabel(prospect));
-            Set(View.SummaryTexts, "story", BuildStory(jobTitle, pressure, prospect));
-            Set(View.SummaryTexts, "marriageAge", marriageAge + "岁");
-            Set(View.SummaryTexts, "marriageText", "结婚\n生活合并账本");
-            Set(View.SummaryTexts, "houseAge", houseAge + "岁");
-            Set(View.SummaryTexts, "houseText", "买房\n家境变得稳定");
-            Set(View.SummaryTexts, "childAge", childAge + "岁");
-            Set(View.SummaryTexts, "childText", "生子\n下一代登场");
+        private void RefreshMilestones()
+        {
+            for (var i = 0; i < 6; i++)
+            {
+                var milestone = LaterLifeMilestoneAt(i);
+                SetMilestoneSlot(i, milestone);
+                SetNumberedMilestone(i, milestone);
+            }
+
+            SetLegacyMilestone("marriage", 0);
+            SetLegacyMilestone("house", 1);
+            SetLegacyMilestone("child", 2);
+        }
+
+        private void SetLegacyMilestone(string legacyIdPrefix, int index)
+        {
+            var milestone = LaterLifeMilestoneAt(index);
+            Set(View.SummaryTexts, legacyIdPrefix + "Age", milestone == null ? "-" : milestone.Age + "岁");
+            Set(View.SummaryTexts, legacyIdPrefix + "Text", milestone == null ? "未发生" : MilestoneText(milestone));
+        }
+
+        private void SetMilestoneSlot(int index, LaterLifeMilestone milestone)
+        {
+            if (View.Milestones == null || index < 0 || index >= View.Milestones.Length || View.Milestones[index] == null)
+            {
+                return;
+            }
+
+            View.Milestones[index].Set(milestone == null ? "-" : milestone.Age + "岁", milestone == null ? string.Empty : MilestoneText(milestone));
+        }
+
+        private void SetNumberedMilestone(int index, LaterLifeMilestone milestone)
+        {
+            var id = "milestone" + (index + 1);
+            Set(View.SummaryTexts, id + "Age", milestone == null ? "-" : milestone.Age + "岁");
+            Set(View.SummaryTexts, id + "Text", milestone == null ? string.Empty : MilestoneText(milestone));
+        }
+
+        private static string MilestoneText(LaterLifeMilestone milestone)
+        {
+            if (milestone == null)
+            {
+                return string.Empty;
+            }
+
+            return CompactMilestoneLine(milestone.Title, 4) + "\n" + CompactMilestoneLine(milestone.Body, 8);
+        }
+
+        private static string CompactMilestoneLine(string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return string.Empty;
+            }
+
+            var normalized = value.Replace("\r", string.Empty).Replace("\n", string.Empty).Trim();
+            return normalized.Length <= maxLength ? normalized : normalized.Substring(0, maxLength);
+        }
+
+        private LaterLifeMilestone LaterLifeMilestoneAt(int index)
+        {
+            var later = State == null ? null : State.LaterLife;
+            if (later == null || later.Milestones == null || index < 0 || index >= later.Milestones.Count)
+            {
+                return null;
+            }
+
+            return later.Milestones[index];
         }
 
         private void RefreshHeirs()
@@ -138,7 +202,7 @@ namespace PaperShift.Presenter
                 Set(View.SelectedHeirTexts, "height", "-");
                 Set(View.SelectedHeirTexts, "personality", "-");
                 Set(View.SelectedHeirTexts, "income", "0元");
-                SetInitialTags(new[] { "等待下一代" });
+                SetInitialTags(new[] { "没有后代", "游戏结束" });
                 if (View.ContinueButton != null)
                 {
                     View.ContinueButton.interactable = false;
@@ -203,26 +267,25 @@ namespace PaperShift.Presenter
                 }
             }
 
-            var finalJobTitle = State.Retirement.FinalJobTitle ?? string.Empty;
-            var currentJobTitle = State.CurrentJob.JobTitle ?? string.Empty;
-            if (finalJobTitle.Contains("AI") || currentJobTitle.Contains("AI"))
+            var later = State == null ? null : State.LaterLife;
+            if (later != null && later.IndustryInsight >= 65)
             {
-                tags.Add("AI耳濡目染");
+                tags.Add("行业见识");
             }
 
-            if (HeirStat(heir, PaperShiftWorkerAttributes.Family, 0) >= 55)
+            if (later != null && later.FamilyStability >= 65)
             {
-                tags.Add("小康家庭");
+                tags.Add("稳定家庭");
             }
 
-            if (HeirStat(heir, PaperShiftWorkerAttributes.Education, 0) >= 65)
+            if (later != null && later.LifePressure >= 70)
             {
-                tags.Add("受过教育");
+                tags.Add("压力遗产");
             }
 
-            if (EstimatePressure() >= 55)
+            if (later != null && later.SpecialOpportunity >= 35)
             {
-                tags.Add("父母期望");
+                tags.Add("特殊机遇");
             }
 
             tags.Add(HeirPersonality(heir, selectedHeirIndex) + "做事");
@@ -243,65 +306,16 @@ namespace PaperShift.Presenter
                 FirstName = ShortName(heir.Name),
                 Gender = heir.Gender,
                 Personality = HeirPersonality(heir, index),
-                Age = DisplayHeirAge(heir, index)
+                Age = DisplayHeirAge(heir, index),
+                Stress = Mathf.Clamp(heir.Stress, 0, 100)
             };
 
-            preview.SetStat(PaperShiftWorkerAttributes.Height, heir.Gender == "男" ? 172 + index * 2 : 162 + index * 2);
-            preview.SetStat(PaperShiftWorkerAttributes.Appearance, Mathf.Clamp(48 + State.Worker.GetStat(PaperShiftWorkerAttributes.Appearance) / 3 + index * 3, 0, 100));
+            preview.SetStat(PaperShiftWorkerAttributes.Height, HeirStat(heir, PaperShiftWorkerAttributes.Height, heir.Gender == "男" ? 172 : 162));
+            preview.SetStat(PaperShiftWorkerAttributes.Appearance, HeirStat(heir, PaperShiftWorkerAttributes.Appearance, 50));
             preview.SetStat(PaperShiftWorkerAttributes.Family, HeirStat(heir, PaperShiftWorkerAttributes.Family, State.Worker.GetStat(PaperShiftWorkerAttributes.Family)));
             preview.SetStat(PaperShiftWorkerAttributes.Education, HeirStat(heir, PaperShiftWorkerAttributes.Education, State.Worker.GetStat(PaperShiftWorkerAttributes.Education)));
             preview.SetStat(PaperShiftWorkerAttributes.Ability, HeirStat(heir, PaperShiftWorkerAttributes.Ability, State.Worker.GetStat(PaperShiftWorkerAttributes.Ability)));
             return preview;
-        }
-
-        private int EstimatePressure()
-        {
-            var intensity = State.CurrentJob.Intensity > 0 ? State.CurrentJob.Intensity : State.Worker.Stress;
-            return Mathf.Clamp(intensity, 20, 90);
-        }
-
-        private int EstimateProspect()
-        {
-            var salary = State.CurrentJob.Salary;
-            var ability = State.Worker.GetStat(PaperShiftWorkerAttributes.Ability);
-            return Mathf.Clamp(45 + salary / 500 + ability / 5 - EstimatePressure() / 6, 20, 95);
-        }
-
-        private int EstimateWorkYears(int pressure)
-        {
-            if (State.Retirement.WorkYears > 0)
-            {
-                return State.Retirement.WorkYears;
-            }
-
-            return Mathf.Clamp(10 + EstimateProspect() / 8 + (100 - pressure) / 12 + Mathf.Max(0, 45 - State.Worker.Age) / 3, 6, 32);
-        }
-
-        private string BuildStory(string jobTitle, int pressure, int prospect)
-        {
-            var pressureText = pressure >= 65 ? "压力不小" : pressure >= 45 ? "压力适中" : "节奏还算平稳";
-            var prospectText = prospect >= 68 ? "行业还在往上走" : prospect >= 45 ? "行业没有太差，也不算轻松" : "行业前景开始变窄";
-            return "他把「" + jobTitle + "」干成了长期饭碗。" + prospectText + "，所以日子比刚入职时稳了许多；只是" + pressureText + "，后来的人生一直带着一点“不能停下”的习惯。";
-        }
-
-        private static string PressureLabel(int pressure)
-        {
-            if (pressure >= 65)
-            {
-                return "偏高";
-            }
-
-            return pressure >= 45 ? "适中" : "较低";
-        }
-
-        private static string ProspectLabel(int prospect)
-        {
-            if (prospect >= 68)
-            {
-                return "上升";
-            }
-
-            return prospect >= 45 ? "平稳" : "收缩";
         }
 
         private static int HeirStat(HeirProfile heir, string statId, int fallback)
@@ -339,11 +353,16 @@ namespace PaperShift.Presenter
                 return 18;
             }
 
-            return Mathf.Clamp(heir.Age < 18 ? 22 + index : heir.Age, 18, 30);
+            return Mathf.Clamp(heir.Age, 18, 40);
         }
 
         private static string HeirPersonality(HeirProfile heir, int index)
         {
+            if (heir != null && !string.IsNullOrEmpty(heir.Personality))
+            {
+                return heir.Personality;
+            }
+
             var options = new[] { "谨慎", "开朗", "沉稳", "灵活" };
             return options[Mathf.Abs(index) % options.Length];
         }

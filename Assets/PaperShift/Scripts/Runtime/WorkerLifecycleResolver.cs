@@ -8,11 +8,13 @@ namespace PaperShift.Runtime
     {
         private readonly PaperShiftDatabase database;
         private readonly Func<Random> randomProvider;
+        private readonly LaterLifeSimulator laterLifeSimulator;
 
         public WorkerLifecycleResolver(PaperShiftDatabase database, Func<Random> randomProvider)
         {
             this.database = database;
             this.randomProvider = randomProvider;
+            laterLifeSimulator = new LaterLifeSimulator(database, randomProvider);
         }
 
         private Random Random
@@ -62,7 +64,7 @@ namespace PaperShift.Runtime
             state.Phase = PaperShiftPhase.Retirement;
             state.Retirement.Reason = RunEndReason.Custom;
             state.Retirement.ReasonText = "通过试用期，正式入职，这一代结算。";
-            state.Retirement.FinalSavings = state.Worker.Money;
+            state.Retirement.FinalSavings = 0;
             state.Retirement.WorkYears = state.CurrentJob.WorkYears;
             state.Retirement.FinalJobTitle = state.CurrentJob.JobTitle;
             EnsureHeirs(state);
@@ -79,7 +81,7 @@ namespace PaperShift.Runtime
             state.Phase = PaperShiftPhase.Retirement;
             state.Retirement.Reason = reason;
             state.Retirement.ReasonText = ReasonText(reason);
-            state.Retirement.FinalSavings = state.Worker.Money;
+            state.Retirement.FinalSavings = 0;
             state.Retirement.WorkYears = state.CurrentJob.WorkYears;
             state.Retirement.FinalJobTitle = state.CurrentJob.JobTitle;
             EnsureHeirs(state);
@@ -94,13 +96,20 @@ namespace PaperShift.Runtime
             }
 
             var heir = state.Worker.Heirs[heirIndex];
-            var yearAdvance = Math.Max(1, 18 - heir.Age);
-            var nextYear = state.CurrentYear + yearAdvance;
-            var nextMonth = NormalizeMonth(state.CurrentMonth);
+            var nextYear = state.LaterLife != null && state.LaterLife.NextGenerationYear > 0
+                ? state.LaterLife.NextGenerationYear
+                : state.CurrentYear + Math.Max(1, 18 - heir.Age);
+            var nextMonth = state.LaterLife != null && state.LaterLife.NextGenerationMonth > 0
+                ? NormalizeMonth(state.LaterLife.NextGenerationMonth)
+                : NormalizeMonth(state.CurrentMonth);
             var next = CreateRandomWorker(nextYear, nextMonth, state.Generation + 1);
-            next.FirstName = heir.Name.Length > state.Worker.LastName.Length ? heir.Name.Substring(state.Worker.LastName.Length) : heir.Name;
+            var heirName = string.IsNullOrEmpty(heir.Name) ? state.Worker.LastName + next.FirstName : heir.Name;
+            next.FirstName = heirName.Length > state.Worker.LastName.Length ? heirName.Substring(state.Worker.LastName.Length) : heirName;
             next.Gender = heir.Gender;
-            next.Age = Math.Max(18, heir.Age + yearAdvance);
+            next.Personality = string.IsNullOrEmpty(heir.Personality) ? next.Personality : heir.Personality;
+            next.Age = Math.Max(18, heir.Age);
+            next.Stress = Clamp(heir.Stress, 0, 100);
+            next.Money = 0;
             SetBirthDateForAge(next, nextYear, nextMonth, next.Age, next.BirthMonth);
             next.Tags.AddRange(heir.Tags);
             for (var i = 0; i < heir.Stats.Count; i++)
@@ -118,6 +127,7 @@ namespace PaperShift.Runtime
             state.Interview = new InterviewState();
             state.CurrentJob = new CurrentJobState();
             state.Retirement = new RetirementState();
+            state.LaterLife = new LaterLifeState();
             state.Logs.Clear();
             state.Banners.Clear();
             state.Phase = PaperShiftPhase.CreateWorker;
@@ -157,33 +167,12 @@ namespace PaperShift.Runtime
 
         public void EnsureHeirs(PaperShiftRunState state)
         {
-            if (state == null || state.Worker == null || state.Worker.Heirs.Count > 0)
+            if (state == null || state.Worker == null)
             {
                 return;
             }
 
-            var random = Random;
-            var count = random.Next(2, 4);
-            for (var i = 0; i < count; i++)
-            {
-                var gender = random.NextDouble() < 0.5 ? "女" : "男";
-                var first = gender == "女" ? Pick(database.FemaleFirstNames, "君语") : Pick(database.MaleFirstNames, "知行");
-                var heir = new HeirProfile
-                {
-                    Id = "heir_" + (i + 1),
-                    Name = state.Worker.LastName + first,
-                    Gender = gender,
-                    Age = random.Next(0, 22),
-                    InheritancePercent = i == 0 ? 50 : 25,
-                    TraitSummary = i == 0 ? "学习好，适合接班" : "属性随机，路线未定"
-                };
-                heir.Stats.Add(new StatValue { Id = PaperShiftWorkerAttributes.Family, Value = Clamp(state.Worker.GetStat(PaperShiftWorkerAttributes.Family) + state.Budget.Savings / 5, 0, 100) });
-                heir.Stats.Add(new StatValue { Id = PaperShiftWorkerAttributes.Education, Value = Clamp(state.Worker.GetStat(PaperShiftWorkerAttributes.Education) + state.Budget.Education / 4, 0, 100) });
-                heir.Stats.Add(new StatValue { Id = PaperShiftWorkerAttributes.Ability, Value = Clamp(state.Worker.GetStat(PaperShiftWorkerAttributes.Ability), 0, 100) });
-                InheritTag(state, heir, "family_craft");
-                InheritTag(state, heir, "good_accounting");
-                state.Worker.Heirs.Add(heir);
-            }
+            laterLifeSimulator.EnsureSimulated(state);
         }
 
         public static string ReasonText(RunEndReason reason)

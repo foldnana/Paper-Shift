@@ -14,6 +14,7 @@ namespace PaperShift.Data
         public WorkTagDefinition[] WorkTags = new WorkTagDefinition[0];
         public CompanyDefinition[] Companies = new CompanyDefinition[0];
         public GameEventDefinition[] Events = new GameEventDefinition[0];
+        public LaterLifeRuleDefinition[] LaterLifeRules = new LaterLifeRuleDefinition[0];
         public string[] LastNames = new string[0];
         public string[] MaleFirstNames = new string[0];
         public string[] FemaleFirstNames = new string[0];
@@ -315,5 +316,35 @@ namespace PaperShift.Data
         public RunEndReason EndReason = RunEndReason.None;
         public bool Temporary;
         public int DurationYears;
+    }
+
+    [Serializable]
+    public sealed class LaterLifeRuleDefinition
+    {
+        public string Id;
+        public string DisplayName;
+        public int Priority;
+        public LaterLifeConditionDefinition[] Conditions = new LaterLifeConditionDefinition[0];
+        public LaterLifeEffectDefinition[] Effects = new LaterLifeEffectDefinition[0];
+    }
+
+    [Serializable]
+    public sealed class LaterLifeConditionDefinition
+    {
+        public LaterLifeConditionKind Kind = LaterLifeConditionKind.Always;
+        public string Key;
+        public int IntValue;
+        public float FloatValue;
+        public bool Invert;
+    }
+
+    [Serializable]
+    public sealed class LaterLifeEffectDefinition
+    {
+        public LaterLifeEffectKind Kind = LaterLifeEffectKind.None;
+        public string Key;
+        public int IntValue;
+        public string TextValue;
+        public string SecondaryText;
     }
 }

@@ -69,6 +69,7 @@ namespace PaperShift.Runtime
         {
             EnsureDate(state);
             state.Worker = workerLifecycle.CreateRandomWorker(state.CurrentYear, state.CurrentMonth, state.Generation);
+            state.LaterLife = new LaterLifeState();
             state.Phase = PaperShiftPhase.CreateWorker;
             state.AddLog("已随机生成新的劳动者。");
         }

@@ -19,6 +19,7 @@ namespace PaperShift.Domain
         public InterviewState Interview = new InterviewState();
         public CurrentJobState CurrentJob = new CurrentJobState();
         public RetirementState Retirement = new RetirementState();
+        public LaterLifeState LaterLife = new LaterLifeState();
         public List<GameLogEntry> Logs = new List<GameLogEntry>();
         public List<string> Banners = new List<string>();
         public List<string> SeenEventIds = new List<string>();
@@ -264,6 +265,42 @@ namespace PaperShift.Domain
         public int FinalSavings;
         public int WorkYears;
         public string FinalJobTitle;
+    }
+
+    [Serializable]
+    public sealed class LaterLifeState
+    {
+        public bool Simulated;
+        public bool LineageEnded;
+        public string FinalCareer;
+        public int WorkYears;
+        public int PressureScore;
+        public string PressureLabel;
+        public int ProspectScore;
+        public string ProspectLabel;
+        public string StoryText;
+        public int TotalScore;
+        public int FamilyStability;
+        public int EducationResource;
+        public int IndustryInsight;
+        public int LifePressure;
+        public int ParentCare;
+        public int FamilyReputation;
+        public int LifeRisk;
+        public int SpecialOpportunity;
+        public int ChildChance;
+        public int NextGenerationYear;
+        public int NextGenerationMonth = 1;
+        public List<LaterLifeMilestone> Milestones = new List<LaterLifeMilestone>();
+        public List<string> StoryFragments = new List<string>();
+    }
+
+    [Serializable]
+    public sealed class LaterLifeMilestone
+    {
+        public int Age;
+        public string Title;
+        public string Body;
     }
 
     [Serializable]

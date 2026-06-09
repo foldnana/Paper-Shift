@@ -156,7 +156,7 @@ namespace PaperShift.Runtime
             state.Phase = PaperShiftPhase.Retirement;
             state.Retirement.Reason = effect.EndReason == RunEndReason.None ? RunEndReason.Custom : effect.EndReason;
             state.Retirement.ReasonText = string.IsNullOrEmpty(effect.TextValue) ? "这一代打工人生结束了" : effect.TextValue;
-            state.Retirement.FinalSavings = state.Worker.Money;
+            state.Retirement.FinalSavings = 0;
             state.Retirement.WorkYears = state.CurrentJob.WorkYears;
             state.Retirement.FinalJobTitle = state.CurrentJob.JobTitle;
         }

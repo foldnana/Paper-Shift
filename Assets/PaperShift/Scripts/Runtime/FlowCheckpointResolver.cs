@@ -351,7 +351,7 @@ namespace PaperShift.Runtime
             state.Phase = PaperShiftPhase.Retirement;
             state.Retirement.Reason = flow.EndReason == RunEndReason.None ? RunEndReason.Custom : flow.EndReason;
             state.Retirement.ReasonText = Fallback(flow.DirectiveMessage, PaperShiftGameService.ReasonTextForCheckpoint(state.Retirement.Reason));
-            state.Retirement.FinalSavings = state.Worker.Money;
+            state.Retirement.FinalSavings = 0;
             state.Retirement.WorkYears = state.CurrentJob.WorkYears;
             state.Retirement.FinalJobTitle = state.CurrentJob.JobTitle;
             service.EnsureHeirsForCheckpoint(state);

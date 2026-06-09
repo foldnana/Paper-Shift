@@ -40104,6 +40104,43 @@ MonoBehaviour:
     Text: {fileID: 248926074}
   - Id: childText
     Text: {fileID: 155631624}
+  - Id: milestone1Age
+    Text: {fileID: 261821454}
+  - Id: milestone1Text
+    Text: {fileID: 1608957483}
+  - Id: milestone2Age
+    Text: {fileID: 854721428}
+  - Id: milestone2Text
+    Text: {fileID: 227255511}
+  - Id: milestone3Age
+    Text: {fileID: 248926074}
+  - Id: milestone3Text
+    Text: {fileID: 155631624}
+  - Id: milestone4Age
+    Text: {fileID: 1401511001}
+  - Id: milestone4Text
+    Text: {fileID: 100484699}
+  - Id: milestone5Age
+    Text: {fileID: 277415645}
+  - Id: milestone5Text
+    Text: {fileID: 1168269339}
+  - Id: milestone6Age
+    Text: {fileID: 1553142837}
+  - Id: milestone6Text
+    Text: {fileID: 956149880}
+  Milestones:
+  - AgeText: {fileID: 261821454}
+    BodyText: {fileID: 1608957483}
+  - AgeText: {fileID: 854721428}
+    BodyText: {fileID: 227255511}
+  - AgeText: {fileID: 248926074}
+    BodyText: {fileID: 155631624}
+  - AgeText: {fileID: 1401511001}
+    BodyText: {fileID: 100484699}
+  - AgeText: {fileID: 277415645}
+    BodyText: {fileID: 1168269339}
+  - AgeText: {fileID: 1553142837}
+    BodyText: {fileID: 956149880}
   HeirCards:
   - {fileID: 1932366144}
   - {fileID: 910699147}

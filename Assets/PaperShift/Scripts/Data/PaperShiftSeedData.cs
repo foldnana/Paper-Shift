@@ -15,6 +15,7 @@ namespace PaperShift.Data
             database.WorkTags = CreateWorkTags();
             database.Companies = CreateCompanies();
             database.Events = CreateEvents();
+            database.LaterLifeRules = CreateLaterLifeRules();
             database.LastNames = new[] { "李", "王", "林", "赵", "陈", "周", "顾", "许" };
             database.MaleFirstNames = new[] { "知行", "安和", "星远", "景明", "修远" };
             database.FemaleFirstNames = new[] { "小满", "君语", "安禾", "清许", "南星" };
@@ -39,7 +40,7 @@ namespace PaperShift.Data
             }
             else
             {
-                MergeTagRuntimeDefaults(database.Tags, CreateTags());
+                database.Tags = MergeTagRuntimeDefaults(database.Tags, CreateTags());
             }
 
             if (database.Events == null || database.Events.Length == 0)
@@ -53,6 +54,11 @@ namespace PaperShift.Data
                 {
                     database.Events = Append(database.Events, FindEvent(CreateEvents(), "stress_breakdown"));
                 }
+            }
+
+            if (database.LaterLifeRules == null || database.LaterLifeRules.Length == 0)
+            {
+                database.LaterLifeRules = CreateLaterLifeRules();
             }
         }
 
@@ -114,7 +120,28 @@ namespace PaperShift.Data
                 Tag("remote_first", "远程优先", "更适合远程和独立作业环境。", "normal", TagPolarity.Neutral,
                     Passive(EffectKind.AddFitScore, "execution", 2)),
                 Tag("ai_intent", "AI/技术岗", "技术和工具相关工作上手更快。", "rare", TagPolarity.Neutral,
-                    Passive(EffectKind.AddFitScore, "professionalism", 4))
+                    Passive(EffectKind.AddFitScore, "professionalism", 4)),
+                Tag("ai_influence", "AI耳濡目染", "从小接触工具化工作，对新工具更敏感。", "rare", TagPolarity.Positive,
+                    Passive(EffectKind.AddFitScore, "professionalism", 5),
+                    Passive(EffectKind.AddFitScore, "execution", 3)),
+                Tag("city_life", "城市生活", "成长资源更稳定，但生活成本和比较压力也更明显。", "normal", TagPolarity.Mixed,
+                    Passive(EffectKind.AddFitScore, "communication", 2),
+                    Passive(EffectKind.AddFitScore, "resilience", -1)),
+                Tag("stable_family", "稳定家庭", "家庭节奏较稳，抗压和沟通更自然。", "normal", TagPolarity.Positive,
+                    Passive(EffectKind.AddFitScore, "resilience", 4),
+                    Passive(EffectKind.AddFitScore, "communication", 2)),
+                Tag("parent_expectation", "父母期望", "从小被要求不能掉队，执行力高，但压力风险也高。", "rare", TagPolarity.Mixed,
+                    Passive(EffectKind.AddFitScore, "execution", 5),
+                    Passive(EffectKind.AddFitScore, "resilience", -5),
+                    Passive(EffectKind.PassiveEventWeight, "stress_breakdown", 10)),
+                Tag("upward_seed", "逆袭苗子", "资源不多，但有罕见的上冲势头。", "super_rare", TagPolarity.Positive,
+                    Passive(EffectKind.AddFitScore, "execution", 8),
+                    Passive(EffectKind.AddFitScore, "professionalism", 6),
+                    Passive(EffectKind.AddFitScore, "resilience", 4)),
+                Tag("early_mature", "早熟", "很早就理解生活的压力，做事稳但不太松弛。", "normal", TagPolarity.Mixed,
+                    Passive(EffectKind.AddFitScore, "maturity", 6),
+                    Passive(EffectKind.AddFitScore, "resilience", 2),
+                    Passive(EffectKind.AddFitScore, "communication", -2))
             };
 
             FindTag(tags, "hard_worker").ConditionalEffects = new[]
@@ -165,6 +192,19 @@ namespace PaperShift.Data
                     Effect(EffectKind.AddRecognition, "", 4),
                     Effect(EffectKind.AddEventWeight, "ai_shortcut", 8))
             };
+            FindTag(tags, "ai_influence").Conditions = InheritanceOnlyConditions();
+            FindTag(tags, "ai_influence").ConditionalEffects = new[]
+            {
+                Conditional(new[] { "ai", "tooling", "fast_change" }, GameEventPhase.Any,
+                    Effect(EffectKind.AddJobWeight, "", 12),
+                    Effect(EffectKind.AddRecognition, "", 5),
+                    Effect(EffectKind.AddEventWeight, "ai_shortcut", 8))
+            };
+            FindTag(tags, "city_life").Conditions = InheritanceOnlyConditions();
+            FindTag(tags, "stable_family").Conditions = InheritanceOnlyConditions();
+            FindTag(tags, "parent_expectation").Conditions = InheritanceOnlyConditions();
+            FindTag(tags, "upward_seed").Conditions = InheritanceOnlyConditions();
+            FindTag(tags, "early_mature").Conditions = InheritanceOnlyConditions();
 
             return tags;
         }
@@ -354,6 +394,111 @@ namespace PaperShift.Data
             };
         }
 
+        private static LaterLifeRuleDefinition[] CreateLaterLifeRules()
+        {
+            return new[]
+            {
+                LifeRule("high_income_home", "收入转化为稳定生活", 10,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.ScoreAtLeast, "income", 70)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddFamilyStability, "", 10),
+                        LifeEffect(LaterLifeEffectKind.AddEducationResource, "", 6),
+                        LifeEffect(LaterLifeEffectKind.AddLifePressure, "", 4),
+                        LifeEffect(LaterLifeEffectKind.AddMilestone, "", 0, "买房", "家境稳定"))),
+                LifeRule("excellent_fit_family", "适配高带来更稳的家庭节奏", 20,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.ScoreAtLeast, "fit", 75)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddParentCare, "", 8),
+                        LifeEffect(LaterLifeEffectKind.AddLifePressure, "", -8),
+                        LifeEffect(LaterLifeEffectKind.AddChildChance, "", 10),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "stable_family", 0))),
+                LifeRule("high_score_parent_expectation", "成功家庭的竞争压力", 30,
+                    LifeConditions(
+                        LifeCondition(LaterLifeConditionKind.ScoreAtLeast, "total", 3800),
+                        LifeChance(0.55f)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddLifePressure, "", 12),
+                        LifeEffect(LaterLifeEffectKind.AddParentCare, "", -8),
+                        LifeEffect(LaterLifeEffectKind.AddHeirStress, "", 10),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "parent_expectation", 0),
+                        LifeEffect(LaterLifeEffectKind.AddMilestone, "", 0, "补课", "竞争加剧"),
+                        LifeEffect(LaterLifeEffectKind.AddStoryFragment, "", 0, "家里条件变好了，但比较和期待也一起变多。"))),
+                LifeRule("city_success_cost", "高收入城市生活的代价", 40,
+                    LifeConditions(
+                        LifeCondition(LaterLifeConditionKind.ScoreAtLeast, "income", 80),
+                        LifeChance(0.35f)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddFamilyStability, "", -6),
+                        LifeEffect(LaterLifeEffectKind.AddLifePressure, "", 8),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "city_life", 0),
+                        LifeEffect(LaterLifeEffectKind.AddMilestone, "", 0, "房贷", "城市变贵"))),
+                LifeRule("good_prospect_industry_insight", "高前景岗位带来行业见识", 50,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.ScoreAtLeast, "prospect", 72)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddIndustryInsight, "", 12),
+                        LifeEffect(LaterLifeEffectKind.AddFamilyReputation, "", 6),
+                        LifeEffect(LaterLifeEffectKind.AddChildChance, "", 5))),
+                LifeRule("good_prospect_turbulence", "风口行业的波动", 60,
+                    LifeConditions(
+                        LifeCondition(LaterLifeConditionKind.ScoreAtLeast, "prospect", 78),
+                        LifeChance(0.35f)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddLifeRisk, "", 12),
+                        LifeEffect(LaterLifeEffectKind.AddProspectScore, "", -8),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "early_mature", 0),
+                        LifeEffect(LaterLifeEffectKind.AddMilestone, "", 0, "转向", "风口变脸"),
+                        LifeEffect(LaterLifeEffectKind.AddStoryFragment, "", 0, "行业不是一直往上，后来也经历过几次风口变脸。"))),
+                LifeRule("ai_work_lineage", "AI岗位影响下一代", 70,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.JobHasTag, "ai", 0)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddIndustryInsight, "", 12),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "ai_influence", 0),
+                        LifeEffect(LaterLifeEffectKind.AddHeirStat, PaperShiftWorkerAttributes.Major, 5),
+                        LifeEffect(LaterLifeEffectKind.AddStoryFragment, "", 0, "孩子很早就听过工具、模型和自动化这些词。"))),
+                LifeRule("late_settle_down", "太晚稳定下来", 80,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.WorkerAgeAtLeast, "", 35)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddChildChance, "", -32),
+                        LifeEffect(LaterLifeEffectKind.AddLifePressure, "", 8),
+                        LifeEffect(LaterLifeEffectKind.AddMilestone, "", 0, "晚定", "稳定来迟"),
+                        LifeEffect(LaterLifeEffectKind.AddStoryFragment, "", 0, "稳定来得有点晚，很多人生选择都被压缩了。"))),
+                LifeRule("high_pressure_home", "高压工作影响家庭氛围", 90,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.StressAtLeast, "", 65)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddLifePressure, "", 10),
+                        LifeEffect(LaterLifeEffectKind.AddParentCare, "", -10),
+                        LifeEffect(LaterLifeEffectKind.AddHeirStress, "", 8),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "parent_expectation", 0),
+                        LifeEffect(LaterLifeEffectKind.AddMilestone, "", 0, "忙碌", "很少闲下"))),
+                LifeRule("low_income_hard_start", "收入低导致家庭起步艰难", 100,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.ScoreAtMost, "income", 45)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddFamilyStability, "", -14),
+                        LifeEffect(LaterLifeEffectKind.AddEducationResource, "", -6),
+                        LifeEffect(LaterLifeEffectKind.AddChildChance, "", -18),
+                        LifeEffect(LaterLifeEffectKind.AddStoryFragment, "", 0, "钱一直不宽裕，很多计划只能往后拖。"))),
+                LifeRule("poor_miracle_child", "低资源家庭的小概率翻盘后代", 110,
+                    LifeConditions(
+                        LifeCondition(LaterLifeConditionKind.ScoreAtMost, "income", 45),
+                        LifeChance(0.28f)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddSpecialOpportunity, "", 35),
+                        LifeEffect(LaterLifeEffectKind.AddChildCount, "", 1),
+                        LifeEffect(LaterLifeEffectKind.AddHeirStat, PaperShiftWorkerAttributes.Ability, 16),
+                        LifeEffect(LaterLifeEffectKind.AddHeirStat, PaperShiftWorkerAttributes.Education, 10),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "upward_seed", 0),
+                        LifeEffect(LaterLifeEffectKind.AddMilestone, "", 0, "贵人", "改写路径"),
+                        LifeEffect(LaterLifeEffectKind.AddStoryFragment, "", 0, "但低处也会冒出意外的火星，一个孩子抓住了罕见的机会。"))),
+                LifeRule("resume_risk_shadow", "简历风险留下处事阴影", 120,
+                    LifeConditions(LifeCondition(LaterLifeConditionKind.ResumeRiskAtLeast, "", 45)),
+                    LifeEffects(
+                        LifeEffect(LaterLifeEffectKind.AddFamilyReputation, "", -8),
+                        LifeEffect(LaterLifeEffectKind.AddLifeRisk, "", 10),
+                        LifeEffect(LaterLifeEffectKind.AddHeirTag, "early_mature", 0),
+                        LifeEffect(LaterLifeEffectKind.AddStoryFragment, "", 0, "那次包装简历的经验后来成了家里偶尔会提起的提醒。")))
+            };
+        }
+
         private static TagDefinition Tag(string id, string name, string description, string rarity, TagPolarity polarity, params EffectDefinition[] effects)
         {
             return new TagDefinition
@@ -381,18 +526,33 @@ namespace PaperShift.Data
             return null;
         }
 
+        private static ConditionDefinition[] InheritanceOnlyConditions()
+        {
+            return new[]
+            {
+                new ConditionDefinition { Kind = ConditionKind.EventSeen, Key = "__inheritance_only__" }
+            };
+        }
+
         private static bool HasEvent(GameEventDefinition[] events, string id)
         {
             return FindEvent(events, id) != null;
         }
 
-        private static void MergeTagRuntimeDefaults(TagDefinition[] tags, TagDefinition[] defaults)
+        private static TagDefinition[] MergeTagRuntimeDefaults(TagDefinition[] tags, TagDefinition[] defaults)
         {
+            var result = new System.Collections.Generic.List<TagDefinition>();
+            if (tags != null)
+            {
+                result.AddRange(tags);
+            }
+
             for (var i = 0; i < defaults.Length; i++)
             {
-                var target = FindTag(tags, defaults[i].Id);
+                var target = FindTag(result.ToArray(), defaults[i].Id);
                 if (target == null)
                 {
+                    result.Add(defaults[i]);
                     continue;
                 }
 
@@ -400,7 +560,10 @@ namespace PaperShift.Data
                 target.ConditionalEffects = defaults[i].ConditionalEffects;
                 target.Polarity = defaults[i].Polarity;
                 target.RarityId = defaults[i].RarityId;
+                target.Conditions = defaults[i].Conditions;
             }
+
+            return result.ToArray();
         }
 
         private static void MergeEventRuntimeDefaults(GameEventDefinition[] events, GameEventDefinition[] defaults)
@@ -554,6 +717,48 @@ namespace PaperShift.Data
         private static EventOptionDefinition CheckedOption(string id, string label, params EffectDefinition[] effects)
         {
             return new EventOptionDefinition { Id = id, Label = label, Effects = effects, RunCheckpointAfterChoice = true };
+        }
+
+        private static LaterLifeRuleDefinition LifeRule(
+            string id,
+            string name,
+            int priority,
+            LaterLifeConditionDefinition[] conditions,
+            LaterLifeEffectDefinition[] effects)
+        {
+            return new LaterLifeRuleDefinition
+            {
+                Id = id,
+                DisplayName = name,
+                Priority = priority,
+                Conditions = conditions,
+                Effects = effects
+            };
+        }
+
+        private static LaterLifeConditionDefinition[] LifeConditions(params LaterLifeConditionDefinition[] conditions)
+        {
+            return conditions;
+        }
+
+        private static LaterLifeConditionDefinition LifeCondition(LaterLifeConditionKind kind, string key, int value)
+        {
+            return new LaterLifeConditionDefinition { Kind = kind, Key = key, IntValue = value };
+        }
+
+        private static LaterLifeConditionDefinition LifeChance(float chance)
+        {
+            return new LaterLifeConditionDefinition { Kind = LaterLifeConditionKind.RandomChance, FloatValue = chance };
+        }
+
+        private static LaterLifeEffectDefinition[] LifeEffects(params LaterLifeEffectDefinition[] effects)
+        {
+            return effects;
+        }
+
+        private static LaterLifeEffectDefinition LifeEffect(LaterLifeEffectKind kind, string key, int value, string text = null, string secondary = null)
+        {
+            return new LaterLifeEffectDefinition { Kind = kind, Key = key, IntValue = value, TextValue = text, SecondaryText = secondary };
         }
     }
 }
