@@ -253,6 +253,8 @@ namespace PaperShift.Domain
         public string JobTitle;
         public int Salary;
         public int WorkYears;
+        public int StartYear;
+        public int StartMonth = 1;
         public int Recognition;
         public int Intensity;
     }

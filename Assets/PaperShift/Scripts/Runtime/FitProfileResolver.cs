@@ -25,8 +25,8 @@ namespace PaperShift.Runtime
             var appearance = PresentStat(state, PaperShiftWorkerAttributes.Appearance, 8);
             var education = PresentStat(state, PaperShiftWorkerAttributes.Education, 16);
             var family = PresentStat(state, PaperShiftWorkerAttributes.Family, 14);
-            var major = PresentStat(state, PaperShiftWorkerAttributes.Major, 14);
-            var ability = PresentStat(state, PaperShiftWorkerAttributes.Ability, 12);
+            var major = PresentStat(state, PaperShiftWorkerAttributes.Major, 14, "career", "experience");
+            var ability = PresentStat(state, PaperShiftWorkerAttributes.Ability, 12, "income", "experience", "salary");
 
             profile.Set(FitDimension.Maturity, Average(age, 2, ability, 2, education, 1));
             profile.Set(FitDimension.Physique, Average(height, 3, age, 1));
@@ -59,9 +59,9 @@ namespace PaperShift.Runtime
             return PresentedValue.Shown(AgeScore(age));
         }
 
-        private PresentedValue PresentStat(PaperShiftRunState state, string statId, int exaggerateDelta)
+        private PresentedValue PresentStat(PaperShiftRunState state, string statId, int exaggerateDelta, params string[] aliases)
         {
-            var mode = PackagingMode(state, statId);
+            var mode = PackagingMode(state, statId, aliases);
             if (mode == ResumePackagingMode.Hide)
             {
                 return PresentedValue.Hidden();
@@ -81,7 +81,7 @@ namespace PaperShift.Runtime
             return PresentedValue.Shown(Clamp(value, 0, 100));
         }
 
-        private ResumePackagingMode PackagingMode(PaperShiftRunState state, string fieldId)
+        private ResumePackagingMode PackagingMode(PaperShiftRunState state, string fieldId, params string[] aliases)
         {
             if (state.Resume == null || state.Resume.Packaging == null)
             {
@@ -92,13 +92,37 @@ namespace PaperShift.Runtime
             for (var i = 0; i < state.Resume.Packaging.Count; i++)
             {
                 var choice = state.Resume.Packaging[i];
-                if (choice != null && PaperShiftWorkerAttributes.Canonicalize(choice.FieldId) == fieldId)
+                if (choice != null && IsPackagingFieldMatch(choice.FieldId, fieldId, aliases))
                 {
                     return choice.Mode;
                 }
             }
 
             return ResumePackagingMode.Normal;
+        }
+
+        private static bool IsPackagingFieldMatch(string choiceFieldId, string fieldId, string[] aliases)
+        {
+            var choice = PaperShiftWorkerAttributes.Canonicalize(choiceFieldId);
+            if (choice == PaperShiftWorkerAttributes.Canonicalize(fieldId))
+            {
+                return true;
+            }
+
+            if (aliases == null)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < aliases.Length; i++)
+            {
+                if (choice == PaperShiftWorkerAttributes.Canonicalize(aliases[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void ApplyTagBaseEffects(FitProfile profile, PaperShiftRunState state)

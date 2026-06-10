@@ -15,6 +15,7 @@ namespace PaperShift.Data
             database.WorkTags = CreateWorkTags();
             database.Companies = CreateCompanies();
             database.Events = CreateEvents();
+            database.FlowMoments = CreateFlowMoments();
             database.LaterLifeRules = CreateLaterLifeRules();
             database.LastNames = new[] { "李", "王", "林", "赵", "陈", "周", "顾", "许" };
             database.MaleFirstNames = new[] { "知行", "安和", "星远", "景明", "修远" };
@@ -54,6 +55,11 @@ namespace PaperShift.Data
                 {
                     database.Events = Append(database.Events, FindEvent(CreateEvents(), "stress_breakdown"));
                 }
+            }
+
+            if (database.FlowMoments == null || database.FlowMoments.Length == 0)
+            {
+                database.FlowMoments = CreateFlowMoments();
             }
 
             if (database.LaterLifeRules == null || database.LaterLifeRules.Length == 0)
@@ -394,6 +400,56 @@ namespace PaperShift.Data
             };
         }
 
+        private static FlowMomentDefinition[] CreateFlowMoments()
+        {
+            return new[]
+            {
+                Moment("prepare_company_notes", "PrepareInterview", "他把公司和岗位信息重新梳理了一遍，回答时心里有了底。", 12, null,
+                    Effect(EffectKind.AddRecognition, "", 4),
+                    Effect(EffectKind.AddStress, "", 1)),
+                Moment("prepare_overthinking", "PrepareInterview", "资料越查越多，他反而开始担心自己准备错了方向。", 8,
+                    Conditions(Condition(ConditionKind.StressAtLeast, 45)),
+                    Effect(EffectKind.AddRecognition, "", -2),
+                    Effect(EffectKind.AddStress, "", 5)),
+                Moment("prepare_mock_answer", "PrepareInterview", "他提前把一段经历讲顺了，至少不再像背稿。", 10, null,
+                    Effect(EffectKind.AddRecognition, "", 3),
+                    Effect(EffectKind.AddStress, "", -1)),
+                Moment("interview_clear_case", "AttendInterview", "他把一个具体案例讲清楚了，面试官开始追问细节。", 12, null,
+                    Effect(EffectKind.AddRecognition, "", 6),
+                    Effect(EffectKind.AddStress, "", 2)),
+                Moment("interview_stumble", "AttendInterview", "问到关键细节时他卡了一下，气氛短暂地冷了下来。", 10, null,
+                    Effect(EffectKind.AddRecognition, "", -5),
+                    Effect(EffectKind.AddStress, "", 5)),
+                Moment("interview_honest_limit", "AttendInterview", "他承认自己有一块短板，但顺手讲了补救办法。", 8,
+                    Conditions(Condition(ConditionKind.RecognitionAtMost, 65)),
+                    Effect(EffectKind.AddRecognition, "", 3),
+                    Effect(EffectKind.AddStress, "", 3)),
+                Moment("probation_clean_delivery", "WorkProbation", "今天交出去的活很干净，主管没有多说，但明显少皱了几次眉。", 12, null,
+                    Effect(EffectKind.AddRecognition, "", 5),
+                    Effect(EffectKind.AddStress, "", 4)),
+                Moment("probation_small_miss", "WorkProbation", "一个小错误被指出来了，问题不大，但他得把坑补上。", 12, null,
+                    Effect(EffectKind.AddRecognition, "", -4),
+                    Effect(EffectKind.AddStress, "", 5)),
+                Moment("probation_helped_by_peer", "WorkProbation", "旁边的老员工顺手提醒了一句，他少走了一段弯路。", 7,
+                    Conditions(Condition(ConditionKind.RecognitionAtMost, 70)),
+                    Effect(EffectKind.AddRecognition, "", 4),
+                    Effect(EffectKind.AddStress, "", -2)),
+                Moment("probation_expectation_rises", "WorkProbation", "前几天表现不错后，主管开始把更麻烦的活也交给他。", 8,
+                    Conditions(Condition(ConditionKind.RecognitionAtLeast, 75)),
+                    Effect(EffectKind.AddRecognition, "", 2),
+                    Effect(EffectKind.AddStress, "", 7)),
+                Moment("regularization_materials_checked", "ApplyRegularization", "申请递上去后，人事把材料转给主管确认。", 12, null,
+                    Effect(EffectKind.AddStress, "", 2)),
+                Moment("regularization_recent_work_speaks", "ApplyRegularization", "最近几次稳定交付帮他说了话，主管的态度缓和了一些。", 8,
+                    Conditions(Condition(ConditionKind.RecognitionAtLeast, 65)),
+                    Effect(EffectKind.AddRecognition, "", 3),
+                    Effect(EffectKind.AddStress, "", 1)),
+                Moment("regularization_extra_question", "ApplyRegularization", "临到转正前，主管又补问了一个之前没谈清楚的问题。", 8, null,
+                    Effect(EffectKind.AddRecognition, "", -3),
+                    Effect(EffectKind.AddStress, "", 4))
+            };
+        }
+
         private static LaterLifeRuleDefinition[] CreateLaterLifeRules()
         {
             return new[]
@@ -717,6 +773,30 @@ namespace PaperShift.Data
         private static EventOptionDefinition CheckedOption(string id, string label, params EffectDefinition[] effects)
         {
             return new EventOptionDefinition { Id = id, Label = label, Effects = effects, RunCheckpointAfterChoice = true };
+        }
+
+        private static FlowMomentDefinition Moment(string id, string action, string text, int weight, ConditionDefinition[] conditions, params EffectDefinition[] effects)
+        {
+            return new FlowMomentDefinition
+            {
+                Id = id,
+                DisplayName = id,
+                Text = text,
+                Action = action,
+                BaseWeight = weight,
+                Conditions = conditions ?? new ConditionDefinition[0],
+                Effects = effects ?? new EffectDefinition[0]
+            };
+        }
+
+        private static ConditionDefinition[] Conditions(params ConditionDefinition[] conditions)
+        {
+            return conditions;
+        }
+
+        private static ConditionDefinition Condition(ConditionKind kind, int value, string key = null, string text = null)
+        {
+            return new ConditionDefinition { Kind = kind, Key = key, IntValue = value, TextValue = text };
         }
 
         private static LaterLifeRuleDefinition LifeRule(

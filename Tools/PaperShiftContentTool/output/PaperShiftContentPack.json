@@ -1,0 +1,7892 @@
+{
+  "Format": "PaperShiftContentPack",
+  "Version": 1,
+  "MergeMode": "merge",
+  "Rarities": [],
+  "Stats": [],
+  "Tags": [
+    {
+      "Id": "quick_learner",
+      "DisplayName": "学得快",
+      "Description": "新东西上手很快，但容易三分钟热度。",
+      "Scope": 0,
+      "Polarity": 1,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "professionalism",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 25,
+          "Key": "",
+          "IntValue": 1,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "fast_change",
+            "tooling"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 17,
+              "Key": "fast_change",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "night_owl",
+      "DisplayName": "夜猫子",
+      "Description": "习惯了晚睡晚起，夜班反而更适应。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": -2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "maturity",
+          "IntValue": -2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "night_shift"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "office",
+            "customer_contact"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "smooth_talker",
+      "DisplayName": "嘴甜",
+      "Description": "说话讨喜，面试容易过，但容易说多露馅。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": 5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "presence",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 24,
+          "Key": "resume_audit",
+          "IntValue": 6,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 1,
+          "WorkTagIds": [
+            "customer_contact",
+            "high_communication"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "perfectionist",
+      "DisplayName": "完美主义",
+      "Description": "做事追求不出错，但更容易累和崩。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "rare",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "professionalism",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 25,
+          "Key": "",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "strict_rules",
+            "high_pressure"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "lazy_bone",
+      "DisplayName": "能拖就拖",
+      "Description": "不到最后不动手，执行力打折。",
+      "Scope": 0,
+      "Polarity": 2,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": -5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": -2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "strict_rules",
+            "performance_pay"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -7,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 7,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "frugal",
+      "DisplayName": "精打细算",
+      "Description": "花钱很谨慎，对成本和收益敏感。",
+      "Scope": 0,
+      "Polarity": 1,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "professionalism",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "performance_pay"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "good_look",
+      "DisplayName": "长得好看",
+      "Description": "形象分天然加成，但也容易被看轻能力。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "rare",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "presence",
+          "IntValue": 7,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": 1,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "credentials",
+          "IntValue": -2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "appearance_sensitive",
+            "customer_contact"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 18,
+              "Key": "appearance_question",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Phase": 1,
+          "WorkTagIds": [
+            "office"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "tough_body",
+      "DisplayName": "身体硬",
+      "Description": "体力好，扛得住累活。",
+      "Scope": 0,
+      "Polarity": 1,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "physique",
+          "IntValue": 5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "physical",
+            "outdoor"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 17,
+              "Key": "physical",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "thin_skin",
+      "DisplayName": "脸皮薄",
+      "Description": "经不起说，被批评容易内耗。",
+      "Scope": 0,
+      "Polarity": 2,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": -5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": -2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "high_pressure",
+            "customer_contact"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 9,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "street_smart",
+      "DisplayName": "路子野",
+      "Description": "没学历但有办法，本地和人情场景特别有用。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "rare",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "maturity",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "credentials",
+          "IntValue": -5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "local",
+            "customer_contact"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 17,
+              "Key": "local",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "overconfident",
+      "DisplayName": "自视甚高",
+      "Description": "觉得自己比实际强，面试容易翻车。",
+      "Scope": 0,
+      "Polarity": 2,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": -3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 24,
+          "Key": "resume_audit",
+          "IntValue": 10,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 1,
+          "WorkTagIds": [],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "family_burden",
+      "DisplayName": "家里有负担",
+      "Description": "赚钱压力比别人大，也更拼。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": -4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 25,
+          "Key": "",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": []
+    },
+    {
+      "Id": "small_town",
+      "DisplayName": "小镇来的人",
+      "Description": "没什么人脉和资源，但更舍得下功夫。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "normal",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": -4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "credentials",
+          "IntValue": -3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "local"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "lying_flat",
+      "DisplayName": "躺平",
+      "Description": "已经不太想卷了，压力事件后容易获得。",
+      "Scope": 0,
+      "Polarity": 2,
+      "RarityId": "rare",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": -5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 24,
+          "Key": "stress_breakdown",
+          "IntValue": -12,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "performance_pay",
+            "high_pressure"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "broken_home",
+      "DisplayName": "家庭裂痕",
+      "Description": "父母关系不好，对亲密和稳定更渴望也更焦虑。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "rare",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "maturity",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": -5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": -3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 25,
+          "Key": "",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "customer_contact"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "second_gen_migrant",
+      "DisplayName": "流动二代",
+      "Description": "跟着打工父母在城市长大，哪里都不算自己人。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "rare",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "maturity",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "credentials",
+          "IntValue": -4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "local"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 17,
+              "Key": "ai",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "survivor_instinct",
+      "DisplayName": "逆境求生",
+      "Description": "经历过真正的困难，不容易被打倒但也不太快乐。",
+      "Scope": 0,
+      "Polarity": 3,
+      "RarityId": "super_rare",
+      "Unique": true,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "resilience",
+          "IntValue": 7,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "execution",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 16,
+          "Key": "communication",
+          "IntValue": -4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 1,
+          "Kind": 25,
+          "Key": "",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ],
+      "ConditionalEffects": [
+        {
+          "Phase": 0,
+          "WorkTagIds": [
+            "high_pressure",
+            "physical"
+          ],
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "WorkTags": [
+    {
+      "Id": "appearance_sensitive",
+      "DisplayName": "形象要求",
+      "Description": "会明显看重外在、表达和第一印象。",
+      "Requirements": [
+        {
+          "Target": 0,
+          "Dimension": 2,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 58,
+          "HardFail": false,
+          "RecognitionOnPass": 6,
+          "RecognitionOnFail": -10,
+          "StressOnPass": 0,
+          "StressOnFail": 5,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": [
+        {
+          "EventId": "appearance_question",
+          "WeightDelta": 16,
+          "Conditions": [
+            {
+              "Kind": 19,
+              "Key": "",
+              "Operator": 2,
+              "IntValue": 55,
+              "FloatValue": 0,
+              "TextValue": "",
+              "Invert": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "age_sensitive",
+      "DisplayName": "年龄敏感",
+      "Description": "偏好年轻劳动者，年龄大容易吃亏。",
+      "Requirements": [
+        {
+          "Target": 1,
+          "Dimension": 5,
+          "Key": "age",
+          "Operator": 4,
+          "IntValue": 35,
+          "HardFail": false,
+          "RecognitionOnPass": 4,
+          "RecognitionOnFail": -10,
+          "StressOnPass": 0,
+          "StressOnFail": 6,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": [
+        {
+          "EventId": "age_question",
+          "WeightDelta": 20,
+          "Conditions": [
+            {
+              "Kind": 7,
+              "Key": "",
+              "Operator": 2,
+              "IntValue": 33,
+              "FloatValue": 0,
+              "TextValue": "",
+              "Invert": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "height_sensitive",
+      "DisplayName": "身高敏感",
+      "Description": "对身高有硬性或软性要求，常见于体力、外勤、安保类。",
+      "Requirements": [
+        {
+          "Target": 1,
+          "Dimension": 5,
+          "Key": "height",
+          "Operator": 2,
+          "IntValue": 168,
+          "HardFail": false,
+          "RecognitionOnPass": 3,
+          "RecognitionOnFail": -7,
+          "StressOnPass": 0,
+          "StressOnFail": 4,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": [
+        {
+          "EventId": "height_doubt",
+          "WeightDelta": 14,
+          "Conditions": [
+            {
+              "Kind": 1,
+              "Key": "height",
+              "Operator": 4,
+              "IntValue": 165,
+              "FloatValue": 0,
+              "TextValue": "",
+              "Invert": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "performance_pay",
+      "DisplayName": "绩效制",
+      "Description": "收入和表现直接挂钩，做得好多拿，做不好白干。",
+      "Requirements": [
+        {
+          "Target": 0,
+          "Dimension": 5,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 55,
+          "HardFail": false,
+          "RecognitionOnPass": 5,
+          "RecognitionOnFail": -7,
+          "StressOnPass": 0,
+          "StressOnFail": 7,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": [
+        {
+          "EventId": "kpi_review",
+          "WeightDelta": 18,
+          "Conditions": [
+            {
+              "Kind": 19,
+              "Key": "",
+              "Operator": 2,
+              "IntValue": 50,
+              "FloatValue": 0,
+              "TextValue": "",
+              "Invert": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "high_communication",
+      "DisplayName": "高频沟通",
+      "Description": "大量会议、协调、汇报，社恐会很痛苦。",
+      "Requirements": [
+        {
+          "Target": 0,
+          "Dimension": 6,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 58,
+          "HardFail": false,
+          "RecognitionOnPass": 7,
+          "RecognitionOnFail": -9,
+          "StressOnPass": 0,
+          "StressOnFail": 9,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": [
+        {
+          "EventId": "meeting_mess",
+          "WeightDelta": 14,
+          "Conditions": []
+        }
+      ]
+    },
+    {
+      "Id": "outdoor",
+      "DisplayName": "外勤",
+      "Description": "需要户外跑动，日晒雨淋，体力消耗大。",
+      "Requirements": [
+        {
+          "Target": 0,
+          "Dimension": 1,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 54,
+          "HardFail": false,
+          "RecognitionOnPass": 3,
+          "RecognitionOnFail": -6,
+          "StressOnPass": 0,
+          "StressOnFail": 6,
+          "FailEventId": ""
+        },
+        {
+          "Target": 0,
+          "Dimension": 7,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 50,
+          "HardFail": false,
+          "RecognitionOnPass": 2,
+          "RecognitionOnFail": -5,
+          "StressOnPass": 0,
+          "StressOnFail": 5,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": []
+    },
+    {
+      "Id": "team_collab",
+      "DisplayName": "团队协作",
+      "Description": "需要密切配合他人，单打独斗行不通。",
+      "Requirements": [
+        {
+          "Target": 0,
+          "Dimension": 6,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 48,
+          "HardFail": false,
+          "RecognitionOnPass": 4,
+          "RecognitionOnFail": -6,
+          "StressOnPass": 0,
+          "StressOnFail": 5,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": []
+    },
+    {
+      "Id": "low_threshold",
+      "DisplayName": "低门槛",
+      "Description": "入行要求不高，几乎什么人都能试，但天花板也低。",
+      "Requirements": [
+        {
+          "Target": 0,
+          "Dimension": 5,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 35,
+          "HardFail": false,
+          "RecognitionOnPass": 2,
+          "RecognitionOnFail": -3,
+          "StressOnPass": 0,
+          "StressOnFail": 3,
+          "FailEventId": ""
+        }
+      ],
+      "Effects": [],
+      "EventWeights": []
+    }
+  ],
+  "Companies": [
+    {
+      "Id": "sunrise_build",
+      "DisplayName": "旭日建筑",
+      "Industry": "建筑施工",
+      "FoundedYear": 2018,
+      "FoundedMonth": 3,
+      "TagIds": [
+        "physical",
+        "high_pressure",
+        "outdoor"
+      ],
+      "Jobs": [
+        {
+          "Id": "site_worker",
+          "DisplayName": "工地普工",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "outdoor",
+            "high_pressure",
+            "low_threshold"
+          ],
+          "SalaryMin": 7000,
+          "SalaryMax": 10000,
+          "Difficulty": 30,
+          "OfferThreshold": 52,
+          "WorkIntensity": 75,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "safety_inspector",
+          "DisplayName": "安全巡查员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "outdoor",
+            "strict_rules"
+          ],
+          "SalaryMin": 8000,
+          "SalaryMax": 11000,
+          "Difficulty": 42,
+          "OfferThreshold": 62,
+          "WorkIntensity": 60,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "ability",
+              "MinValue": 28,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "height",
+              "MinValue": 165,
+              "Weight": 1,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "golden_harvest",
+      "DisplayName": "金秋食品",
+      "Industry": "食品加工",
+      "FoundedYear": 2015,
+      "FoundedMonth": 8,
+      "TagIds": [
+        "physical",
+        "local",
+        "strict_rules"
+      ],
+      "Jobs": [
+        {
+          "Id": "line_worker",
+          "DisplayName": "流水线操作工",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "strict_rules",
+            "low_threshold"
+          ],
+          "SalaryMin": 5000,
+          "SalaryMax": 7000,
+          "Difficulty": 25,
+          "OfferThreshold": 48,
+          "WorkIntensity": 68,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "quality_checker",
+          "DisplayName": "品检员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "strict_rules",
+            "physical"
+          ],
+          "SalaryMin": 6500,
+          "SalaryMax": 8500,
+          "Difficulty": 38,
+          "OfferThreshold": 58,
+          "WorkIntensity": 56,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "ability",
+              "MinValue": 25,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "green_path",
+      "DisplayName": "绿道快递",
+      "Industry": "同城配送",
+      "FoundedYear": 2021,
+      "FoundedMonth": 11,
+      "TagIds": [
+        "physical",
+        "high_pressure",
+        "customer_contact",
+        "outdoor"
+      ],
+      "Jobs": [
+        {
+          "Id": "courier",
+          "DisplayName": "快递员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "outdoor",
+            "high_pressure",
+            "customer_contact",
+            "performance_pay"
+          ],
+          "SalaryMin": 6000,
+          "SalaryMax": 11000,
+          "Difficulty": 32,
+          "OfferThreshold": 48,
+          "WorkIntensity": 78,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "ability",
+              "MinValue": 28,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "warm_hearth",
+      "DisplayName": "暖炉餐饮",
+      "Industry": "餐饮连锁",
+      "FoundedYear": 2020,
+      "FoundedMonth": 5,
+      "TagIds": [
+        "customer_contact",
+        "high_pressure",
+        "physical"
+      ],
+      "Jobs": [
+        {
+          "Id": "waiter",
+          "DisplayName": "服务员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "customer_contact",
+            "physical",
+            "appearance_sensitive",
+            "low_threshold"
+          ],
+          "SalaryMin": 4200,
+          "SalaryMax": 6000,
+          "Difficulty": 22,
+          "OfferThreshold": 42,
+          "WorkIntensity": 70,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "kitchen_hand",
+          "DisplayName": "后厨帮工",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "high_pressure"
+          ],
+          "SalaryMin": 4800,
+          "SalaryMax": 6500,
+          "Difficulty": 28,
+          "OfferThreshold": 46,
+          "WorkIntensity": 74,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "ability",
+              "MinValue": 18,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "cloud_inn",
+      "DisplayName": "云栖酒店",
+      "Industry": "酒店服务",
+      "FoundedYear": 2017,
+      "FoundedMonth": 12,
+      "TagIds": [
+        "customer_contact",
+        "appearance_sensitive",
+        "strict_rules"
+      ],
+      "Jobs": [
+        {
+          "Id": "front_desk",
+          "DisplayName": "前台接待",
+          "IntentTagIds": [],
+          "TagIds": [
+            "customer_contact",
+            "appearance_sensitive",
+            "high_communication",
+            "office"
+          ],
+          "SalaryMin": 5500,
+          "SalaryMax": 8000,
+          "Difficulty": 40,
+          "OfferThreshold": 60,
+          "WorkIntensity": 54,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "room_service",
+          "DisplayName": "客房服务",
+          "IntentTagIds": [],
+          "TagIds": [
+            "customer_contact",
+            "physical",
+            "strict_rules"
+          ],
+          "SalaryMin": 4200,
+          "SalaryMax": 5500,
+          "Difficulty": 28,
+          "OfferThreshold": 46,
+          "WorkIntensity": 62,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "appearance",
+              "MinValue": 48,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 28,
+              "Weight": 1,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "bright_smile",
+      "DisplayName": "亮齿口腔",
+      "Industry": "医疗服务",
+      "FoundedYear": 2019,
+      "FoundedMonth": 7,
+      "TagIds": [
+        "customer_contact",
+        "appearance_sensitive",
+        "strict_rules",
+        "office"
+      ],
+      "Jobs": [
+        {
+          "Id": "dental_assistant",
+          "DisplayName": "牙科助理",
+          "IntentTagIds": [],
+          "TagIds": [
+            "customer_contact",
+            "strict_rules",
+            "office",
+            "appearance_sensitive"
+          ],
+          "SalaryMin": 6000,
+          "SalaryMax": 9000,
+          "Difficulty": 48,
+          "OfferThreshold": 66,
+          "WorkIntensity": 50,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "education",
+              "MinValue": 50,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 40,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "iron_pulse",
+      "DisplayName": "铁脉制造",
+      "Industry": "工业制造",
+      "FoundedYear": 2012,
+      "FoundedMonth": 4,
+      "TagIds": [
+        "physical",
+        "strict_rules",
+        "team_collab"
+      ],
+      "Jobs": [
+        {
+          "Id": "cnc_operator",
+          "DisplayName": "CNC操作员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "strict_rules",
+            "team_collab",
+            "tooling"
+          ],
+          "SalaryMin": 7000,
+          "SalaryMax": 10000,
+          "Difficulty": 42,
+          "OfferThreshold": 58,
+          "WorkIntensity": 64,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "warehouse_keeper",
+          "DisplayName": "仓库管理员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "strict_rules",
+            "low_threshold"
+          ],
+          "SalaryMin": 5000,
+          "SalaryMax": 7000,
+          "Difficulty": 30,
+          "OfferThreshold": 50,
+          "WorkIntensity": 52,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "ability",
+              "MinValue": 36,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "major",
+              "MinValue": 32,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "steel_heart",
+      "DisplayName": "钢心重工",
+      "Industry": "重型机械",
+      "FoundedYear": 2008,
+      "FoundedMonth": 9,
+      "TagIds": [
+        "physical",
+        "high_pressure",
+        "outdoor",
+        "strict_rules"
+      ],
+      "Jobs": [
+        {
+          "Id": "welder",
+          "DisplayName": "焊工",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "high_pressure",
+            "outdoor",
+            "strict_rules",
+            "age_sensitive",
+            "height_sensitive"
+          ],
+          "SalaryMin": 8000,
+          "SalaryMax": 13000,
+          "Difficulty": 48,
+          "OfferThreshold": 63,
+          "WorkIntensity": 80,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "crane_operator",
+          "DisplayName": "吊车司机",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "outdoor",
+            "height_sensitive",
+            "strict_rules"
+          ],
+          "SalaryMin": 9000,
+          "SalaryMax": 14000,
+          "Difficulty": 52,
+          "OfferThreshold": 66,
+          "WorkIntensity": 66,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "height",
+              "MinValue": 170,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 40,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "star_grid",
+      "DisplayName": "星格数据",
+      "Industry": "数据标注",
+      "FoundedYear": 2022,
+      "FoundedMonth": 3,
+      "TagIds": [
+        "ai",
+        "remote",
+        "tooling",
+        "fast_change"
+      ],
+      "Jobs": [
+        {
+          "Id": "data_annotator",
+          "DisplayName": "数据标注员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "ai",
+            "tooling",
+            "remote",
+            "solo_work",
+            "low_threshold"
+          ],
+          "SalaryMin": 4800,
+          "SalaryMax": 7500,
+          "Difficulty": 35,
+          "OfferThreshold": 53,
+          "WorkIntensity": 46,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "qa_specialist",
+          "DisplayName": "质检专员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "ai",
+            "tooling",
+            "office",
+            "strict_rules"
+          ],
+          "SalaryMin": 7000,
+          "SalaryMax": 10000,
+          "Difficulty": 45,
+          "OfferThreshold": 60,
+          "WorkIntensity": 52,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "education",
+              "MinValue": 40,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "major",
+              "MinValue": 32,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "horizon_ai",
+      "DisplayName": "地平线智能",
+      "Industry": "AI研发",
+      "FoundedYear": 2021,
+      "FoundedMonth": 6,
+      "TagIds": [
+        "ai",
+        "office",
+        "fast_change",
+        "high_pressure",
+        "strict_rules"
+      ],
+      "Jobs": [
+        {
+          "Id": "prompt_engineer",
+          "DisplayName": "提示词工程师",
+          "IntentTagIds": [],
+          "TagIds": [
+            "ai",
+            "office",
+            "fast_change",
+            "high_communication",
+            "solo_work"
+          ],
+          "SalaryMin": 12000,
+          "SalaryMax": 20000,
+          "Difficulty": 58,
+          "OfferThreshold": 74,
+          "WorkIntensity": 56,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "ai_tester",
+          "DisplayName": "AI测试员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "ai",
+            "office",
+            "tooling",
+            "fast_change",
+            "team_collab"
+          ],
+          "SalaryMin": 10000,
+          "SalaryMax": 16000,
+          "Difficulty": 52,
+          "OfferThreshold": 70,
+          "WorkIntensity": 52,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "education",
+              "MinValue": 58,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "major",
+              "MinValue": 52,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 48,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "flash_delivery",
+      "DisplayName": "闪送",
+      "Industry": "即时配送",
+      "FoundedYear": 2023,
+      "FoundedMonth": 1,
+      "TagIds": [
+        "outdoor",
+        "physical",
+        "performance_pay",
+        "high_pressure"
+      ],
+      "Jobs": [
+        {
+          "Id": "rush_courier",
+          "DisplayName": "加急配送员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "outdoor",
+            "physical",
+            "performance_pay",
+            "high_pressure",
+            "customer_contact",
+            "age_sensitive"
+          ],
+          "SalaryMin": 7000,
+          "SalaryMax": 14000,
+          "Difficulty": 35,
+          "OfferThreshold": 46,
+          "WorkIntensity": 82,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "ability",
+              "MinValue": 25,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "live_stream_co",
+      "DisplayName": "红火直播",
+      "Industry": "直播电商",
+      "FoundedYear": 2022,
+      "FoundedMonth": 8,
+      "TagIds": [
+        "appearance_sensitive",
+        "customer_contact",
+        "high_communication",
+        "fast_change"
+      ],
+      "Jobs": [
+        {
+          "Id": "live_assistant",
+          "DisplayName": "直播助理",
+          "IntentTagIds": [],
+          "TagIds": [
+            "customer_contact",
+            "high_communication",
+            "fast_change",
+            "appearance_sensitive",
+            "high_pressure"
+          ],
+          "SalaryMin": 5500,
+          "SalaryMax": 9500,
+          "Difficulty": 42,
+          "OfferThreshold": 58,
+          "WorkIntensity": 70,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "stream_operator",
+          "DisplayName": "场控",
+          "IntentTagIds": [],
+          "TagIds": [
+            "high_communication",
+            "fast_change",
+            "team_collab"
+          ],
+          "SalaryMin": 6500,
+          "SalaryMax": 10000,
+          "Difficulty": 45,
+          "OfferThreshold": 60,
+          "WorkIntensity": 62,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "appearance",
+              "MinValue": 42,
+              "Weight": 1,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 32,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "ever_green_edu",
+      "DisplayName": "常青教育",
+      "Industry": "教育培训",
+      "FoundedYear": 2016,
+      "FoundedMonth": 10,
+      "TagIds": [
+        "office",
+        "high_communication",
+        "strict_rules",
+        "customer_contact"
+      ],
+      "Jobs": [
+        {
+          "Id": "course_advisor",
+          "DisplayName": "课程顾问",
+          "IntentTagIds": [],
+          "TagIds": [
+            "customer_contact",
+            "high_communication",
+            "office",
+            "performance_pay"
+          ],
+          "SalaryMin": 5500,
+          "SalaryMax": 11000,
+          "Difficulty": 40,
+          "OfferThreshold": 56,
+          "WorkIntensity": 62,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "teaching_assistant",
+          "DisplayName": "教务助理",
+          "IntentTagIds": [],
+          "TagIds": [
+            "office",
+            "strict_rules",
+            "high_communication",
+            "team_collab"
+          ],
+          "SalaryMin": 5000,
+          "SalaryMax": 7500,
+          "Difficulty": 38,
+          "OfferThreshold": 53,
+          "WorkIntensity": 50,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "education",
+              "MinValue": 48,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 32,
+              "Weight": 1,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "safe_harbor_insurance",
+      "DisplayName": "安泊保险",
+      "Industry": "保险销售",
+      "FoundedYear": 2014,
+      "FoundedMonth": 2,
+      "TagIds": [
+        "customer_contact",
+        "high_communication",
+        "performance_pay",
+        "office"
+      ],
+      "Jobs": [
+        {
+          "Id": "insurance_agent",
+          "DisplayName": "保险代理人",
+          "IntentTagIds": [],
+          "TagIds": [
+            "customer_contact",
+            "high_communication",
+            "performance_pay",
+            "appearance_sensitive"
+          ],
+          "SalaryMin": 4500,
+          "SalaryMax": 14000,
+          "Difficulty": 38,
+          "OfferThreshold": 53,
+          "WorkIntensity": 68,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "education",
+              "MinValue": 38,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "appearance",
+              "MinValue": 38,
+              "Weight": 1,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "clear_water_prop",
+      "DisplayName": "清水物业",
+      "Industry": "物业管理",
+      "FoundedYear": 2010,
+      "FoundedMonth": 6,
+      "TagIds": [
+        "local",
+        "customer_contact",
+        "low_threshold",
+        "physical"
+      ],
+      "Jobs": [
+        {
+          "Id": "property_staff",
+          "DisplayName": "物业管理员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "local",
+            "customer_contact",
+            "physical",
+            "low_threshold"
+          ],
+          "SalaryMin": 4000,
+          "SalaryMax": 6000,
+          "Difficulty": 25,
+          "OfferThreshold": 42,
+          "WorkIntensity": 52,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "security_guard",
+          "DisplayName": "保安",
+          "IntentTagIds": [],
+          "TagIds": [
+            "physical",
+            "outdoor",
+            "night_shift",
+            "low_threshold",
+            "height_sensitive",
+            "age_sensitive"
+          ],
+          "SalaryMin": 3800,
+          "SalaryMax": 5500,
+          "Difficulty": 20,
+          "OfferThreshold": 40,
+          "WorkIntensity": 56,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "ability",
+              "MinValue": 20,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "height",
+              "MinValue": 168,
+              "Weight": 1,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "peak_vision",
+      "DisplayName": "锐视设计",
+      "Industry": "视觉设计",
+      "FoundedYear": 2019,
+      "FoundedMonth": 5,
+      "TagIds": [
+        "office",
+        "appearance_sensitive",
+        "fast_change",
+        "tooling"
+      ],
+      "Jobs": [
+        {
+          "Id": "junior_designer",
+          "DisplayName": "初级设计师",
+          "IntentTagIds": [],
+          "TagIds": [
+            "office",
+            "tooling",
+            "fast_change",
+            "appearance_sensitive",
+            "solo_work"
+          ],
+          "SalaryMin": 8000,
+          "SalaryMax": 14000,
+          "Difficulty": 52,
+          "OfferThreshold": 67,
+          "WorkIntensity": 56,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "major",
+              "MinValue": 52,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "education",
+              "MinValue": 48,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "appearance",
+              "MinValue": 42,
+              "Weight": 1,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "deep_root_hr",
+      "DisplayName": "深根人力",
+      "Industry": "人力资源",
+      "FoundedYear": 2017,
+      "FoundedMonth": 3,
+      "TagIds": [
+        "office",
+        "high_communication",
+        "customer_contact",
+        "strict_rules"
+      ],
+      "Jobs": [
+        {
+          "Id": "hr_specialist",
+          "DisplayName": "招聘专员",
+          "IntentTagIds": [],
+          "TagIds": [
+            "office",
+            "high_communication",
+            "customer_contact",
+            "strict_rules",
+            "team_collab"
+          ],
+          "SalaryMin": 6500,
+          "SalaryMax": 10000,
+          "Difficulty": 45,
+          "OfferThreshold": 60,
+          "WorkIntensity": 54,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "education",
+              "MinValue": 46,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 36,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "cloud_pen",
+      "DisplayName": "云笔文化",
+      "Industry": "内容生产",
+      "FoundedYear": 2020,
+      "FoundedMonth": 9,
+      "TagIds": [
+        "remote",
+        "office",
+        "tooling",
+        "solo_work",
+        "fast_change"
+      ],
+      "Jobs": [
+        {
+          "Id": "content_writer",
+          "DisplayName": "内容编辑",
+          "IntentTagIds": [],
+          "TagIds": [
+            "remote",
+            "office",
+            "tooling",
+            "solo_work",
+            "fast_change"
+          ],
+          "SalaryMin": 5500,
+          "SalaryMax": 9500,
+          "Difficulty": 40,
+          "OfferThreshold": 56,
+          "WorkIntensity": 44,
+          "PromotionBase": 8,
+          "Requirements": []
+        },
+        {
+          "Id": "copywriter",
+          "DisplayName": "文案策划",
+          "IntentTagIds": [],
+          "TagIds": [
+            "office",
+            "remote",
+            "high_communication",
+            "fast_change"
+          ],
+          "SalaryMin": 7500,
+          "SalaryMax": 12000,
+          "Difficulty": 48,
+          "OfferThreshold": 63,
+          "WorkIntensity": 50,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "education",
+              "MinValue": 46,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "major",
+              "MinValue": 40,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "flex_code",
+      "DisplayName": "弹性码",
+      "Industry": "软件外包",
+      "FoundedYear": 2021,
+      "FoundedMonth": 12,
+      "TagIds": [
+        "ai",
+        "remote",
+        "tooling",
+        "fast_change",
+        "high_pressure"
+      ],
+      "Jobs": [
+        {
+          "Id": "junior_dev",
+          "DisplayName": "初级开发",
+          "IntentTagIds": [],
+          "TagIds": [
+            "ai",
+            "remote",
+            "tooling",
+            "fast_change",
+            "solo_work"
+          ],
+          "SalaryMin": 10000,
+          "SalaryMax": 17000,
+          "Difficulty": 56,
+          "OfferThreshold": 72,
+          "WorkIntensity": 60,
+          "PromotionBase": 8,
+          "Requirements": [
+            {
+              "StatId": "major",
+              "MinValue": 55,
+              "Weight": 3,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "education",
+              "MinValue": 52,
+              "Weight": 2,
+              "MissingTagId": ""
+            },
+            {
+              "StatId": "ability",
+              "MinValue": 48,
+              "Weight": 2,
+              "MissingTagId": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Events": [
+    {
+      "Id": "hidden_age_caught",
+      "DisplayName": "年龄对不上",
+      "Body": "面试官发现简历上的年龄信息和实际有出入，追问了细节。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 18,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 21,
+          "Key": "age",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "admit_age",
+          "Label": "承认隐瞒了年龄",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "隐瞒年龄让对方更在意诚信问题。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "deflect_age",
+          "Label": "找理由搪塞",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "搪塞过去了，但对方明显记了一笔。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 12,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "hidden_education_probed",
+      "DisplayName": "学历追问",
+      "Body": "面试官对简历上没写的教育经历很在意，反复追问。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 16,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 21,
+          "Key": "education",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "reveal",
+          "Label": "坦白学历实情",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "坦白后对方理解了，但印象分掉了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "stonewall",
+          "Label": "坚持不透露",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -10,
+              "FloatValue": 0,
+              "TextValue": "不说话比说错话更让人警觉。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "exaggerated_salary_check",
+      "DisplayName": "薪资核实",
+      "Body": "新公司要求提供前公司的薪资流水，和他简历上夸大的数字差距不小。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 16,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 22,
+          "Key": "salary",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "provide_real",
+          "Label": "提供真实流水",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -10,
+              "FloatValue": 0,
+              "TextValue": "真实数字比简历少了三成，人事脸色不太好看。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 12,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "refuse_provide",
+          "Label": "说前公司保密不方便提供",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "对方没再追问，但薪资谈判的底气也没了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "exaggerated_experience_grilled",
+      "DisplayName": "经历深挖",
+      "Body": "面试官对他夸大的工作经历特别感兴趣，追问了好几个细节。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 18,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 22,
+          "Key": "experience",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "bluff_through",
+          "Label": "硬着头皮编",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "他编了一段，面试官好像信了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 16,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "backpedal",
+          "Label": "主动降低说法",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "他承认了实际参与度没那么高，面试官表情复杂。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "any_hidden_field_suspicion",
+      "DisplayName": "简历疑点",
+      "Body": "人事觉得这份简历有些地方不太自然，开始逐项核对。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 14,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 23,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "come_clean",
+          "Label": "主动解释空白处",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "他解释了隐藏的原因，对方态度稍微缓和。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "stay_calm",
+          "Label": "装作没问题",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "对方没再追问，但心里的问号更大了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "any_exaggerated_field_audit",
+      "DisplayName": "背景审查",
+      "Body": "公司的合规部门要对他简历中夸大的部分做例行审查。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 15,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 24,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        },
+        {
+          "Kind": 11,
+          "Key": "strict_rules",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "cooperate",
+          "Label": "全力配合审查",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "配合审查反而暴露了更多夸大痕迹。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 7,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "prepare_story",
+          "Label": "提前整理说辞",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "他提前梳理了说辞，但心虚写在了脸上。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 9,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "hidden_tag_discovered",
+      "DisplayName": "标签暴露",
+      "Body": "同事从别的地方打听到他简历上没写的某个标签，开始议论。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 12,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 26,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "own_it",
+          "Label": "坦然承认",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "承认了，同事觉得还算坦诚。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "deny_tag",
+          "Label": "否认说那是误传",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "否认被戳穿了，信任降了一大截。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 12,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "appearance_question",
+      "DisplayName": "形象质疑",
+      "Body": "面试官上下打量了一下，表情微妙。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 14,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "appearance_sensitive",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "dress_up",
+          "Label": "刻意收拾一下",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "他特意整理了仪容，面试官稍微满意了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "ignore_looks",
+          "Label": "不在意形象",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -9,
+              "FloatValue": 0,
+              "TextValue": "他不修边幅的样子让面试官直接皱眉。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "age_question",
+      "DisplayName": "年龄追问",
+      "Body": "面试官开始追问为什么现在才来应聘这个岗位。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 18,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 7,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 35,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "explain",
+          "Label": "解释转行原因",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "解释让对方稍微理解了处境，但没加分。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "avoid",
+          "Label": "含糊带过",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 14,
+              "FloatValue": 0,
+              "TextValue": "回避让简历风险上升。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "height_doubt",
+      "DisplayName": "身高质疑",
+      "Body": "主管看着他的身高信息，面露犹豫。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 12,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "height_sensitive",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "prove_strength",
+          "Label": "证明体力够用",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "他展示了力量，主管稍微放心。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "accept_rejection",
+          "Label": "承认不太合适",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "他坦然承认了，对方反而觉得靠谱。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "experience_gap",
+      "DisplayName": "经历空白",
+      "Body": "简历上有两段空白期被问到了，面试官想知道那段时间在做什么。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 16,
+      "CooldownYears": 0,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "fill_gap",
+          "Label": "编一段经历",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 14,
+              "FloatValue": 0,
+              "TextValue": "他编了一段经历，但自己也不太确定能不能圆。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "be_honest",
+          "Label": "实话实说",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "他承认了那段低谷，面试官有些犹豫。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "direct_offer",
+      "DisplayName": "直接拿offer",
+      "Body": "面试出奇地顺利，对方当场发了offer。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 5,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 15,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 85,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "accept",
+          "Label": "直接接受",
+          "RunCheckpointAfterChoice": true,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 20,
+              "Key": "",
+              "IntValue": 0,
+              "FloatValue": 0,
+              "TextValue": "他当场拿到了offer，进入试用期。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "negotiate",
+          "Label": "试着谈条件",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "谈条件没成功，差点丢了机会。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "direct_reject",
+      "DisplayName": "直接被拒",
+      "Body": "面试官看了一眼简历就摇头了。",
+      "Phase": 1,
+      "NoticeType": 2,
+      "BaseWeight": 8,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 19,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 25,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "plead",
+          "Label": "争取机会",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "他争取了一下，对方勉强给了个机会。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "accept_fail",
+          "Label": "接受失败",
+          "RunCheckpointAfterChoice": true,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 21,
+              "Key": "",
+              "IntValue": 0,
+              "FloatValue": 0,
+              "TextValue": "他没有再争取，这次面试结束了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "kpi_review",
+      "DisplayName": "绩效考核",
+      "Body": "本月绩效打分出来了，他需要选择怎么应对。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 16,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "performance_pay",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "push_harder",
+          "Label": "加倍努力",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "他拼了一把，绩效确实上去了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 12,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "accept_score",
+          "Label": "接受当前分数",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "分数不高不低，但没什么亮点。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "meeting_mess",
+      "DisplayName": "会议翻车",
+      "Body": "他在一个重要会议上没准备好，被问住了。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 14,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "high_communication",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "wing_it",
+          "Label": "临场发挥",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -7,
+              "FloatValue": 0,
+              "TextValue": "临场发挥效果不好，漏洞百出。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 9,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "admit",
+          "Label": "承认没准备好",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "坦白承认反而让人觉得靠谱。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "overtime_fire",
+      "DisplayName": "周末救火",
+      "Body": "项目周末出了问题，主管希望他立刻上线处理。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 20,
+      "CooldownYears": 2,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "work",
+          "Label": "接下救火",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 7,
+              "FloatValue": 0,
+              "TextValue": "他扛住了周末救火，认可度上涨。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 14,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "refuse",
+          "Label": "拒绝加班",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "他保住了休息，但主管明显不满。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "colleague_conflict",
+      "DisplayName": "同事排挤",
+      "Body": "他感觉几个老员工在故意给他穿小鞋。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 12,
+      "CooldownYears": 0,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "endure",
+          "Label": "忍着不发作",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 1,
+              "FloatValue": 0,
+              "TextValue": "他忍住了，但心里很不好受。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "confront",
+          "Label": "找他们谈",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "谈了之后关系更僵了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "client_complaint",
+      "DisplayName": "客户投诉",
+      "Body": "一个客户对他很不满意，写了投诉。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 14,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "customer_contact",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "apologize_client",
+          "Label": "主动道歉补救",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "他道了歉，客户态度缓和了一点。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "explain",
+          "Label": "解释不是自己的问题",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -9,
+              "FloatValue": 0,
+              "TextValue": "推卸责任让领导更不满。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "first_day_mistake",
+      "DisplayName": "第一天就出错",
+      "Body": "试用第一天就犯了错，心里很慌。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 14,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "WorkProbation",
+          "Invert": false
+        },
+        {
+          "Kind": 29,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 1,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "own_up",
+          "Label": "主动承认",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "承认错误反而让人觉得靠谱，但扣分跑不掉。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "hide_mistake",
+          "Label": "试图掩盖",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "掩盖让事情更复杂了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "weekend_overtime",
+      "DisplayName": "周末加班",
+      "Body": "项目赶进度，主管希望他周末也能来。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 18,
+      "CooldownYears": 1,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "agree",
+          "Label": "同意加班",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "加班让主管满意了，但身体在抗议。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "decline",
+          "Label": "拒绝加班",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "他拒绝了，主管不太高兴。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "salary_dispute",
+      "DisplayName": "薪资不符",
+      "Body": "入职后发现实际薪资比面试说的低了不少。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 10,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "performance_pay",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "confront_salary",
+          "Label": "找人事谈",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "谈了之后稍有调整，但关系微妙了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "accept",
+          "Label": "先干着再说",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "他选择忍了，但心里憋着。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "team_lunch",
+      "DisplayName": "团建聚餐",
+      "Body": "部门聚餐，他需要融入团队。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 12,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "team_collab",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "join",
+          "Label": "积极参与",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "他在聚餐上表现活跃，关系拉近了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "skip",
+          "Label": "找借口不去了",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "他没去，同事觉得他不好相处。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "unfair_treatment",
+      "DisplayName": "不公平对待",
+      "Body": "他发现同岗位的其他人待遇比自己好。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 10,
+      "CooldownYears": 0,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "speak_up",
+          "Label": "提出来",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "提出来了但没什么用，反而被觉得不好管。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 7,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "swallow",
+          "Label": "忍了",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "他忍了，但心里越来越不平衡。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 1,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "peer_comparison",
+      "DisplayName": "同期对比",
+      "Body": "和他同期进来的另一个人表现很好，他感受到了压力。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 12,
+      "CooldownYears": 0,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "compete",
+          "Label": "暗中较劲",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "他拼命表现，认可度涨了一点。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "cooperate",
+          "Label": "主动合作",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 1,
+              "FloatValue": 0,
+              "TextValue": "他选择了合作，但对方抢了风头。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "nepotism_discovery",
+      "DisplayName": "关系户",
+      "Body": "他发现另一个新人是有关系进来的，干活少但待遇好。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 8,
+      "CooldownYears": 0,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "accept",
+          "Label": "看破不说破",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "他选择了沉默，但心态受影响。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 0,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "grumble",
+          "Label": "私下抱怨",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "抱怨传到了领导耳朵里。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "training_opportunity",
+      "DisplayName": "培训机会",
+      "Body": "公司有一个培训名额，主管问谁想参加。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 10,
+      "CooldownYears": 0,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "volunteer",
+          "Label": "主动报名",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "他参加了培训，学到了东西。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 16,
+              "Key": "professionalism",
+              "IntValue": 2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "pass",
+          "Label": "让给别人",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 1,
+              "FloatValue": 0,
+              "TextValue": "他让出了名额，没人特别在意。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "rule_audit",
+      "DisplayName": "规则审查",
+      "Body": "公司开始了一轮内部合规审查，他的简历又被人翻了。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 12,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "strict_rules",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        },
+        {
+          "Kind": 16,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 25,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "cooperate",
+          "Label": "全力配合",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "配合审查反而暴露了更多问题。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -7,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 7,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "prepare",
+          "Label": "提前整理说辞",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 13,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "他提前梳理了说辞，但心虚写在了脸上。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 9,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "new_tool",
+      "DisplayName": "新工具上线",
+      "Body": "公司引入了一套新系统，所有人要重新学。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 10,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "tooling",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "embrace",
+          "Label": "积极学习",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "他学得快，被表扬了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "resist",
+          "Label": "抵触变化",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "他不愿意学，进度落后。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "forced_rest",
+      "DisplayName": "强制休息",
+      "Body": "他最近状态很差，同事都劝他歇一歇。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 14,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 17,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 75,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "take_break",
+          "Label": "听劝休息",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -12,
+              "FloatValue": 0,
+              "TextValue": "他休息了两天，状态回来了一些。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "ignore",
+          "Label": "继续硬撑",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "硬撑让身体和情绪都更紧了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "quit_urge",
+      "DisplayName": "想跑",
+      "Body": "他突然想放弃这份工作，什么都不想管了。",
+      "Phase": 0,
+      "NoticeType": 2,
+      "BaseWeight": 10,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 17,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 80,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "walk_away",
+          "Label": "直接走人",
+          "RunCheckpointAfterChoice": true,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 22,
+              "Key": "",
+              "IntValue": 0,
+              "FloatValue": 0,
+              "TextValue": "他放弃了这个机会。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -15,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "hold_on",
+          "Label": "再撑一下",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "他强忍住了，但眼神里的光暗了一些。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "health_warning",
+      "DisplayName": "身体报警",
+      "Body": "他开始频繁头痛和失眠，工作状态明显下滑。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 12,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 17,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 70,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "see_doctor",
+          "Label": "去看医生",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "医生说需要休息，他请了半天假。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -7,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "ignore_health",
+          "Label": "扛着不查",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "身体越来越不对劲，但他没有停下来。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "emotional_outburst",
+      "DisplayName": "情绪失控",
+      "Body": "他在工作场合忍不住发了一次脾气。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 8,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 17,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 85,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "apologize",
+          "Label": "事后道歉",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -10,
+              "FloatValue": 0,
+              "TextValue": "他道了歉，但同事看他的眼神变了。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "blame_others",
+          "Label": "怪别人挑衅",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -16,
+              "FloatValue": 0,
+              "TextValue": "他把责任推给别人，没人买账。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "sleep_crisis",
+      "DisplayName": "睡眠危机",
+      "Body": "连续几天睡不好，白天完全撑不住。",
+      "Phase": 0,
+      "NoticeType": 2,
+      "BaseWeight": 10,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "night_shift",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        },
+        {
+          "Kind": 17,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 60,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "sleep_aids",
+          "Label": "靠药物入睡",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "药效让他勉强入睡，但醒来更累。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 5,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "adjust_rhythm",
+          "Label": "调整作息",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "他尝试调整，效果有限。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -5,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "probation_direct_pass",
+      "DisplayName": "提前转正",
+      "Body": "主管觉得他完全胜任，建议提前走转正流程。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 5,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 15,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 90,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        },
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "WorkProbation",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "accept_pass",
+          "Label": "接受转正",
+          "RunCheckpointAfterChoice": true,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 20,
+              "Key": "",
+              "IntValue": 0,
+              "FloatValue": 0,
+              "TextValue": "他提前通过了试用期！",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "stay_humble",
+          "Label": "继续低调努力",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "他选择继续努力，认可度微涨。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -2,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "probation_direct_fail",
+      "DisplayName": "试用失败",
+      "Body": "主管找他谈话，说觉得他不适合这个岗位。",
+      "Phase": 2,
+      "NoticeType": 2,
+      "BaseWeight": 8,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 19,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 20,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        },
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "WorkProbation",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "argue",
+          "Label": "据理力争",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "他争取了一下，对方勉强再给一点时间。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 12,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "accept",
+          "Label": "接受结果",
+          "RunCheckpointAfterChoice": true,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 21,
+              "Key": "",
+              "IntValue": 0,
+              "FloatValue": 0,
+              "TextValue": "他接受了结果，这次机会到此为止。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "lucky_break",
+      "DisplayName": "好运降临",
+      "Body": "一件意想不到的好事发生了，让他的处境稍微好了点。",
+      "Phase": 0,
+      "NoticeType": 2,
+      "BaseWeight": 3,
+      "CooldownYears": 0,
+      "Conditions": [],
+      "Options": [
+        {
+          "Id": "ride_luck",
+          "Label": "抓住机会",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 6,
+              "FloatValue": 0,
+              "TextValue": "好运帮了他一点忙。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "stay_cautious",
+          "Label": "保持谨慎",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 2,
+              "FloatValue": 0,
+              "TextValue": "他没有得意忘形，稳步前进。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": -1,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "unexpected_expense",
+      "DisplayName": "意外开支",
+      "Body": "家里突然需要一笔钱，他不得不分心处理。",
+      "Phase": 0,
+      "NoticeType": 2,
+      "BaseWeight": 10,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 2,
+          "Key": "family_burden",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "handle",
+          "Label": "先处理家里事",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -8,
+              "FloatValue": 0,
+              "TextValue": "他请了假处理家事，工作进度严重受影响。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 10,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "delay",
+          "Label": "先拖着",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 12,
+              "FloatValue": 0,
+              "TextValue": "事情拖大了，压力更大。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -3,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Id": "industry_shift",
+      "DisplayName": "行业变天",
+      "Body": "行业突然出现了大变化，岗位要求也在跟着变。",
+      "Phase": 0,
+      "NoticeType": 2,
+      "BaseWeight": 6,
+      "CooldownYears": 0,
+      "Conditions": [
+        {
+          "Kind": 11,
+          "Key": "fast_change",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Options": [
+        {
+          "Id": "adapt",
+          "Label": "快速适应",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": 3,
+              "FloatValue": 0,
+              "TextValue": "他跟上了变化，没被甩下。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 8,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        },
+        {
+          "Id": "wait_out",
+          "Label": "等风过去",
+          "RunCheckpointAfterChoice": false,
+          "Conditions": [],
+          "Effects": [
+            {
+              "Timing": 0,
+              "Kind": 11,
+              "Key": "",
+              "IntValue": -6,
+              "FloatValue": 0,
+              "TextValue": "他选择了观望，被觉得不够灵活。",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            },
+            {
+              "Timing": 0,
+              "Kind": 4,
+              "Key": "",
+              "IntValue": 4,
+              "FloatValue": 0,
+              "TextValue": "",
+              "SecondaryText": "",
+              "TagScope": 0,
+              "EndReason": 0,
+              "Temporary": false,
+              "DurationYears": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "FlowMoments": [
+    {
+      "Id": "prepare_company_notes",
+      "DisplayName": "梳理公司信息",
+      "Text": "他把公司和岗位信息重新梳理了一遍，回答时心里有了底。",
+      "Action": "PrepareInterview",
+      "BaseWeight": 12,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 1,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "prepare_overthinking",
+      "DisplayName": "准备过头",
+      "Text": "资料越查越多，他反而开始担心自己准备错了方向。",
+      "Action": "PrepareInterview",
+      "BaseWeight": 8,
+      "Conditions": [
+        {
+          "Kind": 17,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 45,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": -2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "prepare_mock_answer",
+      "DisplayName": "练顺说法",
+      "Text": "他提前把一段经历讲顺了，至少不再像背稿。",
+      "Action": "PrepareInterview",
+      "BaseWeight": 10,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": -1,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "interview_clear_case",
+      "DisplayName": "案例讲清楚",
+      "Text": "他把一个具体案例讲清楚了，面试官开始追问细节。",
+      "Action": "AttendInterview",
+      "BaseWeight": 12,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 6,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "interview_stumble",
+      "DisplayName": "回答卡壳",
+      "Text": "问到关键细节时他卡了一下，气氛短暂地冷了下来。",
+      "Action": "AttendInterview",
+      "BaseWeight": 10,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": -5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "interview_honest_limit",
+      "DisplayName": "承认短板",
+      "Text": "他承认自己有一块短板，但顺手讲了补救办法。",
+      "Action": "AttendInterview",
+      "BaseWeight": 8,
+      "Conditions": [
+        {
+          "Kind": 19,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 65,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "probation_clean_delivery",
+      "DisplayName": "交付干净",
+      "Text": "今天交出去的活很干净，主管没有多说，但明显少皱了几次眉。",
+      "Action": "WorkProbation",
+      "BaseWeight": 12,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "probation_small_miss",
+      "DisplayName": "小错误",
+      "Text": "一个小错误被指出来了，问题不大，但他得把坑补上。",
+      "Action": "WorkProbation",
+      "BaseWeight": 12,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": -4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 5,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "probation_helped_by_peer",
+      "DisplayName": "同事提醒",
+      "Text": "旁边的老员工顺手提醒了一句，他少走了一段弯路。",
+      "Action": "WorkProbation",
+      "BaseWeight": 7,
+      "Conditions": [
+        {
+          "Kind": 19,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 70,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": -2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "probation_expectation_rises",
+      "DisplayName": "期待升高",
+      "Text": "前几天表现不错后，主管开始把更麻烦的活也交给他。",
+      "Action": "WorkProbation",
+      "BaseWeight": 8,
+      "Conditions": [
+        {
+          "Kind": 15,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 75,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 7,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "regularization_materials_checked",
+      "DisplayName": "材料流转",
+      "Text": "申请递上去后，人事把材料转给主管确认。",
+      "Action": "ApplyRegularization",
+      "BaseWeight": 12,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 2,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "regularization_recent_work_speaks",
+      "DisplayName": "表现帮忙",
+      "Text": "最近几次稳定交付帮他说了话，主管的态度缓和了一些。",
+      "Action": "ApplyRegularization",
+      "BaseWeight": 8,
+      "Conditions": [
+        {
+          "Kind": 15,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 65,
+          "FloatValue": 0,
+          "TextValue": "",
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": 3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 1,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    },
+    {
+      "Id": "regularization_extra_question",
+      "DisplayName": "临门一问",
+      "Text": "临到转正前，主管又补问了一个之前没谈清楚的问题。",
+      "Action": "ApplyRegularization",
+      "BaseWeight": 8,
+      "Conditions": [],
+      "Effects": [
+        {
+          "Timing": 0,
+          "Kind": 11,
+          "Key": "",
+          "IntValue": -3,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        },
+        {
+          "Timing": 0,
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 4,
+          "FloatValue": 0,
+          "TextValue": "",
+          "SecondaryText": "",
+          "TagScope": 0,
+          "EndReason": 0,
+          "Temporary": false,
+          "DurationYears": 0
+        }
+      ]
+    }
+  ],
+  "LaterLifeRules": [
+    {
+      "Id": "physical_wear",
+      "DisplayName": "体力劳动的身体代价",
+      "Priority": 135,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "physical",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.45,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": "AddHealth",
+          "Key": "",
+          "IntValue": -12,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 12,
+          "Key": "",
+          "IntValue": 5,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "旧伤",
+          "SecondaryText": "体力透支"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "身体的账迟早要还，后来总是某个关节先出问题。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "outdoor_weather",
+      "DisplayName": "风里来雨里去",
+      "Priority": 140,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "outdoor",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.35,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": "AddHealth",
+          "Key": "",
+          "IntValue": -8,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 8,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "风吹日晒",
+          "SecondaryText": "身体磨耗"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "常年在户外，皮肤和骨头都记住了那些天气。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "night_shift_health",
+      "DisplayName": "夜班的身体账",
+      "Priority": 142,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "night_shift",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.4,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": "AddHealth",
+          "Key": "",
+          "IntValue": -10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 12,
+          "Key": "",
+          "IntValue": 7,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "失眠",
+          "SecondaryText": "昼夜紊乱"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "倒班的日子结束后，睡眠再也没有完全恢复正常。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "strict_rules_habit",
+      "DisplayName": "规则严格养成的习惯",
+      "Priority": 145,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "strict_rules",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 11,
+          "Key": "maturity",
+          "IntValue": 3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 5,
+          "Key": "",
+          "IntValue": 3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 12,
+          "Key": "",
+          "IntValue": 3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "守规矩",
+          "SecondaryText": "秩序感"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "在严格的环境待久了，连对孩子的要求也变多了。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "customer_contact_social",
+      "DisplayName": "客户接触带来的社交能力",
+      "Priority": 150,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "customer_contact",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.45,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 11,
+          "Key": "communication",
+          "IntValue": 2,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 6,
+          "Key": "",
+          "IntValue": 4,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 9,
+          "Key": "",
+          "IntValue": 3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "天天和人打交道，后来在孩子面前也能说会道。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "low_income_child_delay",
+      "DisplayName": "收入低推迟生育",
+      "Priority": 155,
+      "Conditions": [
+        {
+          "Kind": 2,
+          "Key": "income",
+          "IntValue": 40,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 3,
+          "Key": "",
+          "IntValue": 28,
+          "FloatValue": 0,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 9,
+          "Key": "",
+          "IntValue": -30,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "晚育",
+          "SecondaryText": "经济压力"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "不是不想要孩子，是真的觉得养不起。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "low_income_health_decay",
+      "DisplayName": "低收入加速身体衰退",
+      "Priority": 156,
+      "Conditions": [
+        {
+          "Kind": 2,
+          "Key": "income",
+          "IntValue": 38,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.5,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": "AddHealth",
+          "Key": "",
+          "IntValue": -10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 1,
+          "Key": "",
+          "IntValue": -10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 12,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "看不起病",
+          "SecondaryText": "健康滑坡"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "小病拖成大病，不是不想治，是治不起。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "performance_volatility",
+      "DisplayName": "绩效制的收入波动",
+      "Priority": 160,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "performance_pay",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.45,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 7,
+          "Key": "",
+          "IntValue": 12,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 8,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 1,
+          "Key": "",
+          "IntValue": -8,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "不稳定",
+          "SecondaryText": "收入起伏"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "好的时候还不错，差的时候全家都在等下个月。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "remote_isolation",
+      "DisplayName": "远程工作的社交孤岛",
+      "Priority": 165,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "remote",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.4,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 1,
+          "Key": "",
+          "IntValue": -6,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 5,
+          "Key": "",
+          "IntValue": -8,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 11,
+          "Key": "communication",
+          "IntValue": -4,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "长期一个人对着屏幕，和外界越来越远。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "appearance_job_trap",
+      "DisplayName": "靠脸吃饭的保质期",
+      "Priority": 170,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "appearance_sensitive",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 3,
+          "Key": "",
+          "IntValue": 35,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.5,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 17,
+          "Key": "",
+          "IntValue": -10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "过期",
+          "SecondaryText": "外貌焦虑"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "靠形象吃饭的岗位，年龄一上来就变得焦虑。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "ai_job_obsolescence",
+      "DisplayName": "AI岗位的替代风险",
+      "Priority": 175,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "ai",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 12,
+          "Key": "tooling",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.35,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 7,
+          "Key": "",
+          "IntValue": 14,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 17,
+          "Key": "",
+          "IntValue": -12,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 13,
+          "Key": "early_mature",
+          "IntValue": 0,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "替代",
+          "SecondaryText": "工具迭代"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "工具在进步，但人不一定能跟上，后来也经历过几次被替换的恐慌。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "resume_risk_shadow",
+      "DisplayName": "简历风险的长期阴影",
+      "Priority": 178,
+      "Conditions": [
+        {
+          "Kind": 7,
+          "Key": "",
+          "IntValue": 40,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.55,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 6,
+          "Key": "",
+          "IntValue": -12,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 7,
+          "Key": "",
+          "IntValue": 14,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 13,
+          "Key": "broken_home",
+          "IntValue": 0,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 12,
+          "Key": "",
+          "IntValue": 6,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "信用危机",
+          "SecondaryText": "诚信代价"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "那次包装简历的事后来被翻出来，整个家都蒙了一层阴影。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "resume_risk_caught",
+      "DisplayName": "简历造假被揭发",
+      "Priority": 179,
+      "Conditions": [
+        {
+          "Kind": 7,
+          "Key": "",
+          "IntValue": 60,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.35,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 6,
+          "Key": "",
+          "IntValue": -18,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 7,
+          "Key": "",
+          "IntValue": 20,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 1,
+          "Key": "",
+          "IntValue": -14,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 13,
+          "Key": "second_gen_migrant",
+          "IntValue": 0,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "穿帮",
+          "SecondaryText": "信任崩塌"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "造假被揭发后，他不得不频繁换工作，家人也跟着漂泊。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "outdoor_freedom",
+      "DisplayName": "外勤的自由感",
+      "Priority": 180,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "outdoor",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.25,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 11,
+          "Key": "resilience",
+          "IntValue": 3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": -3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "虽然辛苦，但在外面跑惯了，反而不适应被关在办公室里。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "team_work_family",
+      "DisplayName": "团队协作的归属感",
+      "Priority": 185,
+      "Conditions": [
+        {
+          "Kind": 12,
+          "Key": "team_collab",
+          "IntValue": 0,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.35,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 1,
+          "Key": "",
+          "IntValue": 4,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 9,
+          "Key": "",
+          "IntValue": 3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 5,
+          "Key": "",
+          "IntValue": 3,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "在团队里待久了，回家也学会了配合和让步。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "low_income_no_pension",
+      "DisplayName": "低薪没有积蓄",
+      "Priority": 190,
+      "Conditions": [
+        {
+          "Kind": 2,
+          "Key": "income",
+          "IntValue": 35,
+          "FloatValue": 0,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 14,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 1,
+          "Key": "",
+          "IntValue": -12,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 12,
+          "Key": "",
+          "IntValue": 8,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "月光",
+          "SecondaryText": "存不下钱"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "一年到头存不下什么，后来回头看全是空的。",
+          "SecondaryText": ""
+        }
+      ]
+    },
+    {
+      "Id": "high_income_expectation",
+      "DisplayName": "高收入家庭的期待代价",
+      "Priority": 192,
+      "Conditions": [
+        {
+          "Kind": 1,
+          "Key": "income",
+          "IntValue": 78,
+          "FloatValue": 0,
+          "Invert": false
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "FloatValue": 0.5,
+          "Invert": false
+        }
+      ],
+      "Effects": [
+        {
+          "Kind": 1,
+          "Key": "",
+          "IntValue": 6,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 4,
+          "Key": "",
+          "IntValue": 12,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 12,
+          "Key": "",
+          "IntValue": 10,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 13,
+          "Key": "parent_expectation",
+          "IntValue": 0,
+          "TextValue": "",
+          "SecondaryText": ""
+        },
+        {
+          "Kind": 14,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "补课",
+          "SecondaryText": "竞争加剧"
+        },
+        {
+          "Kind": 15,
+          "Key": "",
+          "IntValue": 0,
+          "TextValue": "条件变好了，但比较和期待也一起变多。",
+          "SecondaryText": ""
+        }
+      ]
+    }
+  ],
+  "LastNames": [
+    "李",
+    "王",
+    "林",
+    "赵",
+    "陈",
+    "周",
+    "顾",
+    "许",
+    "张",
+    "刘",
+    "杨",
+    "黄",
+    "吴",
+    "郑",
+    "孙",
+    "马",
+    "朱",
+    "胡",
+    "郭",
+    "何",
+    "罗",
+    "高",
+    "梁",
+    "宋",
+    "唐",
+    "许",
+    "韩",
+    "冯",
+    "邓",
+    "曹"
+  ],
+  "MaleFirstNames": [
+    "知行",
+    "安和",
+    "星远",
+    "景明",
+    "修远",
+    "承志",
+    "学文",
+    "建国",
+    "志远",
+    "明德",
+    "思源",
+    "立诚",
+    "天佑",
+    "晨光",
+    "浩然",
+    "启明",
+    "守正",
+    "润泽",
+    "恒毅",
+    "嘉言"
+  ],
+  "FemaleFirstNames": [
+    "小满",
+    "君语",
+    "安禾",
+    "清许",
+    "南星",
+    "若兰",
+    "思齐",
+    "静姝",
+    "嘉宁",
+    "沐晨",
+    "听雨",
+    "知微",
+    "念慈",
+    "映雪",
+    "书琴",
+    "怀瑾",
+    "锦书",
+    "悦心",
+    "乐言",
+    "雅望"
+  ]
+}

@@ -8,6 +8,7 @@ namespace PaperShift.Runtime
     {
         private readonly PaperShiftGameService service;
         private readonly PaperShiftDatabase database;
+        private readonly ConditionEvaluator conditions;
         private readonly FitProfileResolver fitProfiles;
         private readonly FlowRuleResolver flowRules;
         private readonly Func<Random> randomProvider;
@@ -15,12 +16,14 @@ namespace PaperShift.Runtime
         public FlowCheckpointResolver(
             PaperShiftGameService service,
             PaperShiftDatabase database,
+            ConditionEvaluator conditions,
             FitProfileResolver fitProfiles,
             FlowRuleResolver flowRules,
             Func<Random> randomProvider)
         {
             this.service = service;
             this.database = database;
+            this.conditions = conditions;
             this.fitProfiles = fitProfiles;
             this.flowRules = flowRules;
             this.randomProvider = randomProvider;
@@ -61,7 +64,7 @@ namespace PaperShift.Runtime
             }
 
             var profile = fitProfiles.Build(state);
-            var flow = flowRules.Evaluate(state, company, job, profile, phase, Random);
+            var flow = flowRules.Evaluate(state, company, job, profile, phase, Random, action);
             MergeFlowResult(flow, extraFlow, preferSourceDirective: true);
             ApplyActionEffect(action, state, job, profile, flow);
             ApplyFlowResult(state, flow, phase);
@@ -75,14 +78,25 @@ namespace PaperShift.Runtime
 
             if (ShouldTriggerCheckpointEvent(action))
             {
-                var triggered = service.ResolveTriggeredEventForCheckpoint(state, phase, company, job, flow);
+                var triggered = service.ResolveTriggeredEventForCheckpoint(state, phase, company, job, flow, action, CheckpointEventChance(action, state));
                 if (triggered != null)
                 {
                     return FlowCheckpointResult.Event(action, phase, WithCheckpointSource(triggered, action, phase), snapshot);
                 }
             }
 
-            return ResolveNaturalOutcome(state, action, phase, company, job, snapshot);
+            var momentText = ApplyFlowMoment(state, action, company, job, phase, flow);
+            if (momentText != null)
+            {
+                snapshot.CaptureAfter(state, phase);
+                directed = ResolveDirectedOutcome(state, action, phase, company, job, flow, snapshot);
+                if (directed != null)
+                {
+                    return directed;
+                }
+            }
+
+            return ResolveNaturalOutcome(state, action, phase, company, job, snapshot, momentText);
         }
 
         internal FlowCheckpointResult ResolveNaturalOnly(PaperShiftRunState state, FlowCheckpointAction action, GameEventPhase phase)
@@ -94,7 +108,7 @@ namespace PaperShift.Runtime
             }
 
             snapshot.CaptureAfter(state, phase);
-            return ResolveNaturalOutcome(state, action, phase, company, job, snapshot);
+            return ResolveNaturalOutcome(state, action, phase, company, job, snapshot, null);
         }
 
         private bool TryResolveCheckpointTarget(
@@ -181,6 +195,60 @@ namespace PaperShift.Runtime
             }
         }
 
+        private string ApplyFlowMoment(
+            PaperShiftRunState state,
+            FlowCheckpointAction action,
+            CompanyDefinition company,
+            JobDefinition job,
+            GameEventPhase phase,
+            FlowRuleResult flow)
+        {
+            var moment = PickFlowMoment(state, action, company, job);
+            if (moment == null)
+            {
+                return null;
+            }
+
+            var momentFlow = new FlowRuleResult();
+            FlowRuleResolver.ApplyEffects(momentFlow, moment.Effects);
+            var momentText = Fallback(moment.Text, moment.DisplayName);
+            if (momentFlow.Directive != FlowDirective.None && string.IsNullOrEmpty(momentFlow.DirectiveMessage))
+            {
+                momentFlow.DirectiveMessage = momentText;
+            }
+
+            MergeFlowResult(flow, momentFlow, preferSourceDirective: false);
+            ApplyFlowResult(state, momentFlow, phase);
+            return momentText;
+        }
+
+        private FlowMomentDefinition PickFlowMoment(PaperShiftRunState state, FlowCheckpointAction action, CompanyDefinition company, JobDefinition job)
+        {
+            if (database.FlowMoments == null || database.FlowMoments.Length == 0)
+            {
+                return null;
+            }
+
+            var picker = new WeightedPicker<FlowMomentDefinition>();
+            for (var i = 0; i < database.FlowMoments.Length; i++)
+            {
+                var moment = database.FlowMoments[i];
+                if (moment == null || !ActionMatches(moment.Action, action))
+                {
+                    continue;
+                }
+
+                if (!conditions.AreMet(moment.Conditions, state, company, job, Random, action))
+                {
+                    continue;
+                }
+
+                picker.Add(moment, moment.BaseWeight);
+            }
+
+            return picker.Pick(Random);
+        }
+
         private FlowCheckpointResult ResolveDirectedOutcome(
             PaperShiftRunState state,
             FlowCheckpointAction action,
@@ -217,12 +285,13 @@ namespace PaperShift.Runtime
             GameEventPhase phase,
             CompanyDefinition company,
             JobDefinition job,
-            FlowCheckpointSnapshot snapshot)
+            FlowCheckpointSnapshot snapshot,
+            string momentText)
         {
             switch (action)
             {
                 case FlowCheckpointAction.PrepareInterview:
-                    return ContinueCheckpoint(state, action, phase, snapshot);
+                    return ContinueCheckpoint(state, action, phase, snapshot, momentText);
                 case FlowCheckpointAction.AttendInterview:
                     if (state.Interview.Recognition >= state.Interview.OfferThreshold)
                     {
@@ -234,14 +303,14 @@ namespace PaperShift.Runtime
                         return FailCheckpoint(state, action, phase, snapshot, "面试失败。对方认为匹配度不够，你还在求职状态。");
                     }
 
-                    return ContinueCheckpoint(state, action, phase, snapshot);
+                    return ContinueCheckpoint(state, action, phase, snapshot, momentText);
                 case FlowCheckpointAction.WorkProbation:
                     if (state.CurrentJob.Recognition <= 0)
                     {
                         return FailCheckpoint(state, action, phase, snapshot, "试用表现没有得到认可，已自动继续寻找下一家公司。");
                     }
 
-                    return ContinueCheckpoint(state, action, phase, snapshot);
+                    return ContinueCheckpoint(state, action, phase, snapshot, momentText);
                 case FlowCheckpointAction.ApplyRegularization:
                     if (state.CurrentJob.Recognition <= 0)
                     {
@@ -255,9 +324,9 @@ namespace PaperShift.Runtime
 
                     return FailCheckpoint(state, action, phase, snapshot, "申请入职没有通过，已自动继续寻找下一家公司。");
                 case FlowCheckpointAction.EventChoice:
-                    return ResolveEventChoiceNaturalOutcome(state, phase, company, job, snapshot);
+                    return ResolveEventChoiceNaturalOutcome(state, phase, company, job, snapshot, momentText);
                 default:
-                    return ContinueCheckpoint(state, action, phase, snapshot);
+                    return ContinueCheckpoint(state, action, phase, snapshot, momentText);
             }
         }
 
@@ -266,7 +335,8 @@ namespace PaperShift.Runtime
             GameEventPhase phase,
             CompanyDefinition company,
             JobDefinition job,
-            FlowCheckpointSnapshot snapshot)
+            FlowCheckpointSnapshot snapshot,
+            string momentText)
         {
             if (phase == GameEventPhase.Interview)
             {
@@ -285,12 +355,12 @@ namespace PaperShift.Runtime
                 return FailCheckpoint(state, FlowCheckpointAction.EventChoice, phase, snapshot, "事件后，这份试用机会已经失败，已自动继续寻找下一家公司。");
             }
 
-            return ContinueCheckpoint(state, FlowCheckpointAction.EventChoice, phase, snapshot);
+            return ContinueCheckpoint(state, FlowCheckpointAction.EventChoice, phase, snapshot, momentText);
         }
 
-        private FlowCheckpointResult ContinueCheckpoint(PaperShiftRunState state, FlowCheckpointAction action, GameEventPhase phase, FlowCheckpointSnapshot snapshot)
+        private FlowCheckpointResult ContinueCheckpoint(PaperShiftRunState state, FlowCheckpointAction action, GameEventPhase phase, FlowCheckpointSnapshot snapshot, string momentText)
         {
-            var message = ContinueMessage(action, snapshot);
+            var message = Fallback(momentText, ContinueMessage(action));
             state.AddLog(message);
             return FlowCheckpointResult.Continue(action, phase, message, snapshot);
         }
@@ -365,6 +435,83 @@ namespace PaperShift.Runtime
                 : GameEventPhase.Probation;
         }
 
+        private static bool ActionMatches(string actionText, FlowCheckpointAction action)
+        {
+            if (string.IsNullOrEmpty(actionText))
+            {
+                return true;
+            }
+
+            var parts = actionText.Split(',');
+            for (var i = 0; i < parts.Length; i++)
+            {
+                var part = parts[i].Trim();
+                if (string.IsNullOrEmpty(part))
+                {
+                    continue;
+                }
+
+                if (Enum.TryParse(part, true, out FlowCheckpointAction parsed) && parsed == action)
+                {
+                    return true;
+                }
+
+                switch (part.ToLowerInvariant())
+                {
+                    case "prepare":
+                    case "prepare_interview":
+                    case "interview_prepare":
+                        if (action == FlowCheckpointAction.PrepareInterview)
+                        {
+                            return true;
+                        }
+
+                        break;
+                    case "attend":
+                    case "interview":
+                    case "attend_interview":
+                    case "interview_attend":
+                        if (action == FlowCheckpointAction.AttendInterview)
+                        {
+                            return true;
+                        }
+
+                        break;
+                    case "work":
+                    case "probation":
+                    case "work_probation":
+                    case "probation_work":
+                        if (action == FlowCheckpointAction.WorkProbation)
+                        {
+                            return true;
+                        }
+
+                        break;
+                    case "apply":
+                    case "regularization":
+                    case "apply_regularization":
+                    case "regularize":
+                        if (action == FlowCheckpointAction.ApplyRegularization)
+                        {
+                            return true;
+                        }
+
+                        break;
+                    case "event":
+                    case "event_choice":
+                    case "choice":
+                        if (action == FlowCheckpointAction.EventChoice)
+                        {
+                            return true;
+                        }
+
+                        break;
+                }
+            }
+
+            return false;
+        }
+
         private static TriggeredEvent WithCheckpointSource(TriggeredEvent triggered, FlowCheckpointAction action, GameEventPhase phase)
         {
             return triggered == null ? null : new TriggeredEvent(triggered.Event, triggered.Options, action, phase);
@@ -375,21 +522,62 @@ namespace PaperShift.Runtime
             return action != FlowCheckpointAction.PrepareInterview;
         }
 
-        private static string ContinueMessage(FlowCheckpointAction action, FlowCheckpointSnapshot snapshot)
+        private static int CheckpointEventChance(FlowCheckpointAction action, PaperShiftRunState state)
         {
-            var deltaText = SignedPercent(snapshot.RecognitionDelta);
+            if (state == null)
+            {
+                return 0;
+            }
+
+            var stress = state.Worker == null ? 0 : state.Worker.Stress;
+            var resumeRisk = state.Resume == null ? 0 : state.Resume.DeceptionRisk;
+            var recognition = state.CurrentJob == null ? 0 : state.CurrentJob.Recognition;
+            switch (action)
+            {
+                case FlowCheckpointAction.AttendInterview:
+                    return Clamp(35 + resumeRisk / 3 + stress / 8, 15, 85);
+                case FlowCheckpointAction.WorkProbation:
+                    return Clamp(35 + stress / 5 + Math.Max(0, 55 - recognition) / 3, 15, 80);
+                case FlowCheckpointAction.ApplyRegularization:
+                    return RegularizationEventChance(state);
+                case FlowCheckpointAction.EventChoice:
+                    return 25;
+                default:
+                    return 0;
+            }
+        }
+
+        private static int RegularizationEventChance(PaperShiftRunState state)
+        {
+            var recognition = state == null || state.CurrentJob == null ? 0 : state.CurrentJob.Recognition;
+            var stress = state == null || state.Worker == null ? 0 : state.Worker.Stress;
+            var resumeRisk = state == null || state.Resume == null ? 0 : state.Resume.DeceptionRisk;
+            var chance = 65 - recognition * 3 / 5;
+            chance += stress / 8;
+            chance += resumeRisk / 8;
+
+            if (stress >= 90)
+            {
+                chance += 20;
+            }
+
+            return Clamp(chance, 3, 80);
+        }
+
+        private static string ContinueMessage(FlowCheckpointAction action)
+        {
             switch (action)
             {
                 case FlowCheckpointAction.PrepareInterview:
-                    return "准备面试后，认可度 " + deltaText + "，当前 " + snapshot.RecognitionAfter + "%。";
+                    return "他又把这次机会往前推了一点。";
                 case FlowCheckpointAction.AttendInterview:
-                    return InterviewProgressMessage(deltaText, snapshot.RecognitionAfter);
+                    return "这次沟通没有立刻定结果，但对方留下了新的印象。";
                 case FlowCheckpointAction.WorkProbation:
-                    return "努力工作后，转正概率 " + deltaText + "，当前 " + snapshot.RecognitionAfter + "%。";
+                    return "这一天的表现被看在眼里，试用期还在继续。";
                 case FlowCheckpointAction.ApplyRegularization:
-                    return "申请入职暂未拍板，转正概率 " + deltaText + "，当前 " + snapshot.RecognitionAfter + "%。";
+                    return "申请递上去后，对方还没有立刻拍板。";
                 case FlowCheckpointAction.EventChoice:
-                    return "事件选择已结算，认可度 " + deltaText + "，当前 " + snapshot.RecognitionAfter + "%。";
+                    return "这个选择的影响开始慢慢显现。";
                 default:
                     return "流程继续推进。";
             }
@@ -424,26 +612,6 @@ namespace PaperShift.Runtime
                 default:
                     return "这次机会失败，已回到求职状态。";
             }
-        }
-
-        private static string InterviewProgressMessage(string deltaText, int recognition)
-        {
-            if (recognition >= 82)
-            {
-                return "终面反馈不错，认可度 " + deltaText + "，当前 " + recognition + "%。";
-            }
-
-            if (recognition >= 64)
-            {
-                return "进入下一轮沟通，认可度 " + deltaText + "，当前 " + recognition + "%。";
-            }
-
-            if (recognition >= 38)
-            {
-                return "面试继续推进，认可度 " + deltaText + "，当前 " + recognition + "%。";
-            }
-
-            return "面试官仍在观望，认可度 " + deltaText + "，当前 " + recognition + "%。";
         }
 
         private void ApplyFlowResult(PaperShiftRunState state, FlowRuleResult flow, GameEventPhase phase)
@@ -602,11 +770,6 @@ namespace PaperShift.Runtime
                 default:
                     return ProbationStepResult.Continue(result.Message, result.RecognitionBefore, result.RecognitionAfter, result.StressBefore, result.StressAfter);
             }
-        }
-
-        private static string SignedPercent(int delta)
-        {
-            return (delta >= 0 ? "+" : string.Empty) + delta + "%";
         }
 
         private static string Fallback(string value, string fallback)

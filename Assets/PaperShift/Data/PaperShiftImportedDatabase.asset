@@ -1,0 +1,7737 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2cae5a861f8444b856c9ac61d06afd8, type: 3}
+  m_Name: PaperShiftImportedDatabase
+  m_EditorClassIdentifier: 
+  Eras:
+  - Id: timeline
+    DisplayName: "\u5E74\u4EFD\u63A8\u8FDB"
+    StartYear: 2026
+    EndYear: 9999
+    Description: "\u65B0\u5F00\u6E38\u620F\u7B2C\u4E00\u4EE3\u4ECE 2026 \u5E74\u5F00\u59CB\uFF0C\u540E\u4EE3\u6309\u6D41\u7A0B\u81EA\u7136\u5411\u540E\u63A8\u8FDB\u3002"
+    StartingTagPool: []
+  Rarities:
+  - Id: normal
+    DisplayName: "\u666E\u901A"
+    Weight: 72
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - Id: rare
+    DisplayName: "\u7A00\u6709"
+    Weight: 23
+    Color: {r: 0.16, g: 0.62, b: 0.92, a: 1}
+  - Id: super_rare
+    DisplayName: "\u8D85\u7A00\u6709"
+    Weight: 5
+    Color: {r: 1, g: 0.82, b: 0.24, a: 1}
+  Stats:
+  - Id: height
+    DisplayName: "\u8EAB\u9AD8"
+    MinValue: 0
+    MaxValue: 100
+    StartMin: 155
+    StartMax: 188
+    HigherIsBetter: 1
+    Description: "\u52B3\u52A8\u8005\u7684\u8EAB\u9AD8\u4FE1\u606F\uFF0C\u53EF\u5728\u7B80\u5386\u4E2D\u9690\u85CF\u6216\u5938\u5927\u3002"
+  - Id: appearance
+    DisplayName: "\u5F62\u8C61"
+    MinValue: 0
+    MaxValue: 100
+    StartMin: 25
+    StartMax: 88
+    HigherIsBetter: 1
+    Description: "\u5F71\u54CD\u7B80\u5386\u5438\u5F15\u529B\u548C\u9762\u8BD5\u7B2C\u4E00\u5370\u8C61\u3002"
+  - Id: education
+    DisplayName: "\u6559\u80B2"
+    MinValue: 0
+    MaxValue: 100
+    StartMin: 20
+    StartMax: 88
+    HigherIsBetter: 1
+    Description: "\u5F71\u54CD\u5B66\u5386\u5448\u73B0\u3001\u5B66\u4E60\u76F8\u5173\u5C97\u4F4D\u548C\u9762\u8BD5\u57FA\u7840\u5206\u3002"
+  - Id: family
+    DisplayName: "\u5BB6\u5883"
+    MinValue: 0
+    MaxValue: 100
+    StartMin: 10
+    StartMax: 82
+    HigherIsBetter: 1
+    Description: "\u8868\u8FBE\u51FA\u8EAB\u3001\u5E95\u6C14\u3001\u4EBA\u8109\u548C\u793E\u4F1A\u5316\u7A0B\u5EA6\u3002"
+  - Id: major
+    DisplayName: "\u4E13\u4E1A"
+    MinValue: 0
+    MaxValue: 100
+    StartMin: 20
+    StartMax: 88
+    HigherIsBetter: 1
+    Description: "\u5F71\u54CD\u4E13\u4E1A\u65B9\u5411\u3001\u5C97\u4F4D\u5339\u914D\u548C\u7B80\u5386\u542B\u91D1\u91CF\u3002"
+  - Id: ability
+    DisplayName: "\u80FD\u529B"
+    MinValue: 0
+    MaxValue: 100
+    StartMin: 20
+    StartMax: 88
+    HigherIsBetter: 1
+    Description: "\u5F71\u54CD\u5DE5\u4F5C\u8868\u73B0\u3001\u8BD5\u7528\u8BA4\u53EF\u5EA6\u548C\u5C97\u4F4D\u9002\u914D\u3002"
+  Tags:
+  - Id: good_accounting
+    DisplayName: "\u4F1A\u7B97\u8D26"
+    Description: "\u505A\u4E8B\u7EC6\uFF0C\u61C2\u6210\u672C\uFF0C\u4E5F\u66F4\u5BB9\u6613\u770B\u51FA\u98CE\u9669\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: hard_worker
+    DisplayName: "\u80FD\u5403\u82E6"
+    Description: "\u6297\u538B\u548C\u6267\u884C\u66F4\u7A33\uFF0C\u9047\u5230\u7D2F\u6D3B\u4E5F\u4E0D\u5BB9\u6613\u5D29\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 8
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - physical
+      - high_pressure
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 17
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: intro_by_neighbor
+    DisplayName: "\u540C\u4E61\u4ECB\u7ECD"
+    Description: "\u6709\u4E00\u70B9\u719F\u4EBA\u5173\u7CFB\uFF0C\u673A\u4F1A\u6765\u5F97\u66F4\u5FEB\uFF0C\u4F46\u4E5F\u4F1A\u6709\u4EBA\u60C5\u538B\u529B\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - local
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 17
+        Key: 
+        IntValue: 18
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Phase: 1
+      WorkTagIds:
+      - local
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: family_craft
+    DisplayName: "\u7956\u4F20\u624B\u827A"
+    Description: "\u6709\u53EF\u4F20\u627F\u7684\u624B\u827A\u5E95\u5B50\uFF0C\u4E13\u4E1A\u6027\u548C\u6267\u884C\u529B\u66F4\u7A33\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: super_rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 8
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: ai_pioneer
+    DisplayName: "AI\u5148\u884C\u8005"
+    Description: "\u9002\u5E94\u5DE5\u5177\u5316\u548C\u53D8\u5316\u9891\u7E41\u7684\u5DE5\u4F5C\u66F4\u5FEB\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - tooling
+      - fast_change
+      - ai
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 17
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 18
+        Key: ai_shortcut
+        IntValue: 18
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: social_anxiety
+    DisplayName: "\u793E\u6050"
+    Description: "\u6C9F\u901A\u573A\u666F\u5403\u4E8F\uFF0C\u4F46\u72EC\u7ACB\u4F5C\u4E1A\u65F6\u538B\u529B\u66F4\u4F4E\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: -8
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - customer_contact
+      - high_communication
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Phase: 0
+      WorkTagIds:
+      - remote
+      - solo_work
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: dishonest_resume
+    DisplayName: "\u4E0D\u8BDA\u5B9E"
+    Description: "\u5C65\u5386\u53EF\u4FE1\u5EA6\u53D7\u635F\uFF0C\u66F4\u5BB9\u6613\u88AB\u6838\u67E5\u3002"
+    Scope: 0
+    Polarity: 2
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: -4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 24
+      Key: resume_audit
+      IntValue: 20
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - strict_rules
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 18
+        Key: resume_audit
+        IntValue: 25
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: remote_first
+    DisplayName: "\u8FDC\u7A0B\u4F18\u5148"
+    Description: "\u66F4\u9002\u5408\u8FDC\u7A0B\u548C\u72EC\u7ACB\u4F5C\u4E1A\u73AF\u5883\u3002"
+    Scope: 0
+    Polarity: 0
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - remote
+      - solo_work
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 17
+        Key: 
+        IntValue: 16
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: ai_intent
+    DisplayName: "AI/\u6280\u672F\u5C97"
+    Description: "\u6280\u672F\u548C\u5DE5\u5177\u76F8\u5173\u5DE5\u4F5C\u4E0A\u624B\u66F4\u5FEB\u3002"
+    Scope: 0
+    Polarity: 0
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - ai
+      - tooling
+      - fast_change
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 17
+        Key: 
+        IntValue: 18
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 18
+        Key: ai_shortcut
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: ai_influence
+    DisplayName: "AI\u8033\u6FE1\u76EE\u67D3"
+    Description: "\u4ECE\u5C0F\u63A5\u89E6\u5DE5\u5177\u5316\u5DE5\u4F5C\uFF0C\u5BF9\u65B0\u5DE5\u5177\u66F4\u654F\u611F\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions:
+    - Kind: 13
+      Key: __inheritance_only__
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - ai
+      - tooling
+      - fast_change
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 17
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 18
+        Key: ai_shortcut
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: city_life
+    DisplayName: "\u57CE\u5E02\u751F\u6D3B"
+    Description: "\u6210\u957F\u8D44\u6E90\u66F4\u7A33\u5B9A\uFF0C\u4F46\u751F\u6D3B\u6210\u672C\u548C\u6BD4\u8F83\u538B\u529B\u4E5F\u66F4\u660E\u663E\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions:
+    - Kind: 13
+      Key: __inheritance_only__
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -1
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: stable_family
+    DisplayName: "\u7A33\u5B9A\u5BB6\u5EAD"
+    Description: "\u5BB6\u5EAD\u8282\u594F\u8F83\u7A33\uFF0C\u6297\u538B\u548C\u6C9F\u901A\u66F4\u81EA\u7136\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions:
+    - Kind: 13
+      Key: __inheritance_only__
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: parent_expectation
+    DisplayName: "\u7236\u6BCD\u671F\u671B"
+    Description: "\u4ECE\u5C0F\u88AB\u8981\u6C42\u4E0D\u80FD\u6389\u961F\uFF0C\u6267\u884C\u529B\u9AD8\uFF0C\u4F46\u538B\u529B\u98CE\u9669\u4E5F\u9AD8\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions:
+    - Kind: 13
+      Key: __inheritance_only__
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 24
+      Key: stress_breakdown
+      IntValue: 10
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: upward_seed
+    DisplayName: "\u9006\u88AD\u82D7\u5B50"
+    Description: "\u8D44\u6E90\u4E0D\u591A\uFF0C\u4F46\u6709\u7F55\u89C1\u7684\u4E0A\u51B2\u52BF\u5934\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: super_rare
+    Unique: 1
+    EraIds: []
+    Conditions:
+    - Kind: 13
+      Key: __inheritance_only__
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 8
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 6
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: early_mature
+    DisplayName: "\u65E9\u719F"
+    Description: "\u5F88\u65E9\u5C31\u7406\u89E3\u751F\u6D3B\u7684\u538B\u529B\uFF0C\u505A\u4E8B\u7A33\u4F46\u4E0D\u592A\u677E\u5F1B\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions:
+    - Kind: 13
+      Key: __inheritance_only__
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: maturity
+      IntValue: 6
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: -2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: quick_learner
+    DisplayName: "\u5B66\u5F97\u5FEB"
+    Description: "\u65B0\u4E1C\u897F\u4E0A\u624B\u5F88\u5FEB\uFF0C\u4F46\u5BB9\u6613\u4E09\u5206\u949F\u70ED\u5EA6\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 25
+      Key:
+      IntValue: 1
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - fast_change
+      - tooling
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 17
+        Key: fast_change
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: night_owl
+    DisplayName: "\u591C\u732B\u5B50"
+    Description: "\u4E60\u60EF\u4E86\u665A\u7761\u665A\u8D77\uFF0C\u591C\u73ED\u53CD\u800C\u66F4\u9002\u5E94\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: maturity
+      IntValue: -2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - night_shift
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Phase: 0
+      WorkTagIds:
+      - office
+      - customer_contact
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: smooth_talker
+    DisplayName: "\u5634\u751C"
+    Description: "\u8BF4\u8BDD\u8BA8\u559C\uFF0C\u9762\u8BD5\u5BB9\u6613\u8FC7\uFF0C\u4F46\u5BB9\u6613\u8BF4\u591A\u9732\u9985\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: 5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: presence
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 24
+      Key: resume_audit
+      IntValue: 6
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 1
+      WorkTagIds:
+      - customer_contact
+      - high_communication
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: perfectionist
+    DisplayName: "\u5B8C\u7F8E\u4E3B\u4E49"
+    Description: "\u505A\u4E8B\u8FFD\u6C42\u4E0D\u51FA\u9519\uFF0C\u4F46\u66F4\u5BB9\u6613\u7D2F\u548C\u5D29\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 25
+      Key:
+      IntValue: 4
+      FloatValue: 0
+      TextValue:
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - strict_rules
+      - high_pressure
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: lazy_bone
+    DisplayName: "\u80FD\u62D6\u5C31\u62D6"
+    Description: "\u4E0D\u5230\u6700\u540E\u4E0D\u52A8\u624B\uFF0C\u6267\u884C\u529B\u6253\u6298\u3002"
+    Scope: 0
+    Polarity: 2
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: -5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - strict_rules
+      - performance_pay
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: frugal
+    DisplayName: "\u7CBE\u6253\u7EC6\u7B97"
+    Description: "\u82B1\u94B1\u5F88\u8C28\u614E\uFF0C\u5BF9\u6210\u672C\u548C\u6536\u76CA\u654F\u611F\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: professionalism
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - performance_pay
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: good_look
+    DisplayName: "\u957F\u5F97\u597D\u770B"
+    Description: "\u5F62\u8C61\u5206\u5929\u7136\u52A0\u6210\uFF0C\u4F46\u4E5F\u5BB9\u6613\u88AB\u770B\u8F7B\u80FD\u529B\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: presence
+      IntValue: 7
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: 1
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: credentials
+      IntValue: -2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - appearance_sensitive
+      - customer_contact
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 18
+        Key: appearance_question
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Phase: 1
+      WorkTagIds:
+      - office
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: tough_body
+    DisplayName: "\u8EAB\u4F53\u786C"
+    Description: "\u4F53\u529B\u597D\uFF0C\u625B\u5F97\u4F4F\u7D2F\u6D3B\u3002"
+    Scope: 0
+    Polarity: 1
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: physique
+      IntValue: 5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - physical
+      - outdoor
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 17
+        Key: physical
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: thin_skin
+    DisplayName: "\u8138\u76AE\u8584"
+    Description: "\u7ECF\u4E0D\u8D77\u8BF4\uFF0C\u88AB\u6279\u8BC4\u5BB9\u6613\u5185\u8017\u3002"
+    Scope: 0
+    Polarity: 2
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: -2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - high_pressure
+      - customer_contact
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 9
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: street_smart
+    DisplayName: "\u8DEF\u5B50\u91CE"
+    Description: "\u6CA1\u5B66\u5386\u4F46\u6709\u529E\u6CD5\uFF0C\u672C\u5730\u548C\u4EBA\u60C5\u573A\u666F\u7279\u522B\u6709\u7528\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: maturity
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: credentials
+      IntValue: -5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - local
+      - customer_contact
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 17
+        Key: local
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: overconfident
+    DisplayName: "\u81EA\u89C6\u751A\u9AD8"
+    Description: "\u89C9\u5F97\u81EA\u5DF1\u6BD4\u5B9E\u9645\u5F3A\uFF0C\u9762\u8BD5\u5BB9\u6613\u7FFB\u8F66\u3002"
+    Scope: 0
+    Polarity: 2
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: -3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 24
+      Key: resume_audit
+      IntValue: 10
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 1
+      WorkTagIds: []
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: family_burden
+    DisplayName: "\u5BB6\u91CC\u6709\u8D1F\u62C5"
+    Description: "\u8D5A\u94B1\u538B\u529B\u6BD4\u522B\u4EBA\u5927\uFF0C\u4E5F\u66F4\u62FC\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 25
+      Key:
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects: []
+  - Id: small_town
+    DisplayName: "\u5C0F\u9547\u6765\u7684\u4EBA"
+    Description: "\u6CA1\u4EC0\u4E48\u4EBA\u8109\u548C\u8D44\u6E90\uFF0C\u4F46\u66F4\u820D\u5F97\u4E0B\u529F\u592B\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: normal
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: -4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: credentials
+      IntValue: -3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - local
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: lying_flat
+    DisplayName: "\u8EBA\u5E73"
+    Description: "\u5DF2\u7ECF\u4E0D\u592A\u60F3\u5377\u4E86\uFF0C\u538B\u529B\u4E8B\u4EF6\u540E\u5BB9\u6613\u83B7\u5F97\u3002"
+    Scope: 0
+    Polarity: 2
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: -5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 24
+      Key: stress_breakdown
+      IntValue: -12
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - performance_pay
+      - high_pressure
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: broken_home
+    DisplayName: "\u5BB6\u5EAD\u88C2\u75D5"
+    Description: "\u7236\u6BCD\u5173\u7CFB\u4E0D\u597D\uFF0C\u5BF9\u4EB2\u5BC6\u548C\u7A33\u5B9A\u66F4\u6E34\u671B\u4E5F\u66F4\u7126\u8651\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: maturity
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: -5
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: -3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 25
+      Key:
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - customer_contact
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: second_gen_migrant
+    DisplayName: "\u6D41\u52A8\u4E8C\u4EE3"
+    Description: "\u8DDF\u7740\u6253\u5DE5\u7236\u6BCD\u5728\u57CE\u5E02\u957F\u5927\uFF0C\u54EA\u91CC\u90FD\u4E0D\u7B97\u81EA\u5DF1\u4EBA\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: maturity
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: 2
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: credentials
+      IntValue: -4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - local
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 17
+        Key: ai
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: survivor_instinct
+    DisplayName: "\u9006\u5883\u6C42\u751F"
+    Description: "\u7ECF\u5386\u8FC7\u771F\u6B63\u7684\u56F0\u96BE\uFF0C\u4E0D\u5BB9\u6613\u88AB\u6253\u5012\u4F46\u4E5F\u4E0D\u592A\u5FEB\u4E50\u3002"
+    Scope: 0
+    Polarity: 3
+    RarityId: super_rare
+    Unique: 1
+    EraIds: []
+    Conditions: []
+    Effects:
+    - Timing: 1
+      Kind: 16
+      Key: resilience
+      IntValue: 7
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: execution
+      IntValue: 3
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 16
+      Key: communication
+      IntValue: -4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    - Timing: 1
+      Kind: 25
+      Key: 
+      IntValue: 4
+      FloatValue: 0
+      TextValue: 
+      SecondaryText: 
+      TagScope: 0
+      EndReason: 0
+      Temporary: 0
+      DurationYears: 0
+    ConditionalEffects:
+    - Phase: 0
+      WorkTagIds:
+      - high_pressure
+      - physical
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  WorkTags:
+  - Id: ai
+    DisplayName: "AI\u76F8\u5173"
+    Description: "\u9700\u8981\u9002\u5E94\u65B0\u5DE5\u5177\u548C\u6280\u672F\u53D8\u5316\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 4
+      Key: 
+      Operator: 2
+      IntValue: 56
+      HardFail: 0
+      RecognitionOnPass: 7
+      RecognitionOnFail: -6
+      StressOnPass: 0
+      StressOnFail: 2
+      FailEventId: 
+    - Target: 0
+      Dimension: 5
+      Key: 
+      Operator: 2
+      IntValue: 50
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -4
+      StressOnPass: 0
+      StressOnFail: 1
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: physical
+    DisplayName: "\u4F53\u529B\u52B3\u52A8"
+    Description: "\u8EAB\u4F53\u6D88\u8017\u66F4\u9AD8\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 1
+      Key: 
+      Operator: 2
+      IntValue: 52
+      HardFail: 0
+      RecognitionOnPass: 5
+      RecognitionOnFail: -8
+      StressOnPass: -2
+      StressOnFail: 6
+      FailEventId: 
+    - Target: 0
+      Dimension: 7
+      Key: 
+      Operator: 2
+      IntValue: 48
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -5
+      StressOnPass: -2
+      StressOnFail: 5
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: local
+    DisplayName: "\u672C\u5730\u5173\u7CFB"
+    Description: "\u719F\u4EBA\u3001\u672C\u5730\u7ECF\u9A8C\u548C\u793E\u4F1A\u5316\u7A0B\u5EA6\u66F4\u6709\u5E2E\u52A9\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 0
+      Key: 
+      Operator: 2
+      IntValue: 45
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -2
+      StressOnPass: 0
+      StressOnFail: 0
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: remote
+    DisplayName: "\u8FDC\u7A0B"
+    Description: "\u66F4\u4F9D\u8D56\u81EA\u9A71\u548C\u72EC\u7ACB\u6267\u884C\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 5
+      Key: 
+      Operator: 2
+      IntValue: 52
+      HardFail: 0
+      RecognitionOnPass: 6
+      RecognitionOnFail: -5
+      StressOnPass: -2
+      StressOnFail: 2
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: office
+    DisplayName: "\u529E\u516C\u5BA4"
+    Description: "\u770B\u91CD\u5B66\u5386\u3001\u4E13\u4E1A\u6027\u548C\u8868\u8FBE\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 3
+      Key: 
+      Operator: 2
+      IntValue: 45
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -4
+      StressOnPass: 0
+      StressOnFail: 1
+      FailEventId: 
+    - Target: 0
+      Dimension: 6
+      Key: 
+      Operator: 2
+      IntValue: 42
+      HardFail: 0
+      RecognitionOnPass: 3
+      RecognitionOnFail: -3
+      StressOnPass: 0
+      StressOnFail: 2
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: customer_contact
+    DisplayName: "\u5BA2\u6237\u63A5\u89E6"
+    Description: "\u9700\u8981\u6C9F\u901A\u3001\u5916\u5728\u548C\u60C5\u7EEA\u7A33\u5B9A\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 6
+      Key: 
+      Operator: 2
+      IntValue: 55
+      HardFail: 0
+      RecognitionOnPass: 7
+      RecognitionOnFail: -8
+      StressOnPass: 0
+      StressOnFail: 7
+      FailEventId: 
+    - Target: 0
+      Dimension: 2
+      Key: 
+      Operator: 2
+      IntValue: 45
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -4
+      StressOnPass: 0
+      StressOnFail: 3
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: strict_rules
+    DisplayName: "\u89C4\u5219\u4E25\u683C"
+    Description: "\u7B80\u5386\u5305\u88C5\u548C\u4E0D\u8BDA\u5B9E\u66F4\u5BB9\u6613\u88AB\u67E5\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 5
+      Key: 
+      Operator: 2
+      IntValue: 55
+      HardFail: 0
+      RecognitionOnPass: 5
+      RecognitionOnFail: -6
+      StressOnPass: 0
+      StressOnFail: 3
+      FailEventId: 
+    Effects: []
+    EventWeights:
+    - EventId: resume_audit
+      WeightDelta: 20
+      Conditions:
+      - Kind: 16
+        Key: 
+        Operator: 2
+        IntValue: 15
+        FloatValue: 0
+        TextValue: 
+        Invert: 0
+  - Id: high_pressure
+    DisplayName: "\u9AD8\u538B"
+    Description: "\u538B\u529B\u589E\u957F\u66F4\u5FEB\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 7
+      Key: 
+      Operator: 2
+      IntValue: 58
+      HardFail: 0
+      RecognitionOnPass: 6
+      RecognitionOnFail: -8
+      StressOnPass: -3
+      StressOnFail: 10
+      FailEventId: 
+    Effects: []
+    EventWeights:
+    - EventId: stress_breakdown
+      WeightDelta: 20
+      Conditions:
+      - Kind: 17
+        Key: 
+        Operator: 2
+        IntValue: 70
+        FloatValue: 0
+        TextValue: 
+        Invert: 0
+  - Id: tooling
+    DisplayName: "\u5DE5\u5177\u5316"
+    Description: "\u9700\u8981\u5B66\u4E60\u5DE5\u5177\u548C\u6D41\u7A0B\u81EA\u52A8\u5316\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 4
+      Key: 
+      Operator: 2
+      IntValue: 50
+      HardFail: 0
+      RecognitionOnPass: 5
+      RecognitionOnFail: -4
+      StressOnPass: 0
+      StressOnFail: 1
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: fast_change
+    DisplayName: "\u53D8\u5316\u9891\u7E41"
+    Description: "\u9700\u8981\u5FEB\u901F\u9002\u5E94\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 5
+      Key: 
+      Operator: 2
+      IntValue: 55
+      HardFail: 0
+      RecognitionOnPass: 5
+      RecognitionOnFail: -5
+      StressOnPass: 0
+      StressOnFail: 4
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: solo_work
+    DisplayName: "\u72EC\u7ACB\u4F5C\u4E1A"
+    Description: "\u6C9F\u901A\u538B\u529B\u4F4E\uFF0C\u4F46\u81EA\u9A71\u8981\u6C42\u9AD8\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 5
+      Key: 
+      Operator: 2
+      IntValue: 50
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -5
+      StressOnPass: -1
+      StressOnFail: 1
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: appearance_sensitive
+    DisplayName: "\u5F62\u8C61\u8981\u6C42"
+    Description: "\u4F1A\u660E\u663E\u770B\u91CD\u5916\u5728\u3001\u8868\u8FBE\u548C\u7B2C\u4E00\u5370\u8C61\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 2
+      Key: 
+      Operator: 2
+      IntValue: 58
+      HardFail: 0
+      RecognitionOnPass: 6
+      RecognitionOnFail: -10
+      StressOnPass: 0
+      StressOnFail: 5
+      FailEventId: 
+    Effects: []
+    EventWeights:
+    - EventId: appearance_question
+      WeightDelta: 16
+      Conditions:
+      - Kind: 19
+        Key: 
+        Operator: 2
+        IntValue: 55
+        FloatValue: 0
+        TextValue: 
+        Invert: 0
+  - Id: age_sensitive
+    DisplayName: "\u5E74\u9F84\u654F\u611F"
+    Description: "\u504F\u597D\u5E74\u8F7B\u52B3\u52A8\u8005\uFF0C\u5E74\u9F84\u5927\u5BB9\u6613\u5403\u4E8F\u3002"
+    Requirements:
+    - Target: 1
+      Dimension: 5
+      Key: age
+      Operator: 4
+      IntValue: 35
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -10
+      StressOnPass: 0
+      StressOnFail: 6
+      FailEventId: 
+    Effects: []
+    EventWeights:
+    - EventId: age_question
+      WeightDelta: 20
+      Conditions:
+      - Kind: 7
+        Key: 
+        Operator: 2
+        IntValue: 33
+        FloatValue: 0
+        TextValue: 
+        Invert: 0
+  - Id: height_sensitive
+    DisplayName: "\u8EAB\u9AD8\u654F\u611F"
+    Description: "\u5BF9\u8EAB\u9AD8\u6709\u786C\u6027\u6216\u8F6F\u6027\u8981\u6C42\uFF0C\u5E38\u89C1\u4E8E\u4F53\u529B\u3001\u5916\u52E4\u3001\u5B89\u4FDD\u7C7B\u3002"
+    Requirements:
+    - Target: 1
+      Dimension: 5
+      Key: height
+      Operator: 2
+      IntValue: 168
+      HardFail: 0
+      RecognitionOnPass: 3
+      RecognitionOnFail: -7
+      StressOnPass: 0
+      StressOnFail: 4
+      FailEventId: 
+    Effects: []
+    EventWeights:
+    - EventId: height_doubt
+      WeightDelta: 14
+      Conditions:
+      - Kind: 1
+        Key: height
+        Operator: 4
+        IntValue: 165
+        FloatValue: 0
+        TextValue: 
+        Invert: 0
+  - Id: performance_pay
+    DisplayName: "\u7EE9\u6548\u5236"
+    Description: "\u6536\u5165\u548C\u8868\u73B0\u76F4\u63A5\u6302\u94A9\uFF0C\u505A\u5F97\u597D\u591A\u62FF\uFF0C\u505A\u4E0D\u597D\u767D\u5E72\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 5
+      Key: 
+      Operator: 2
+      IntValue: 55
+      HardFail: 0
+      RecognitionOnPass: 5
+      RecognitionOnFail: -7
+      StressOnPass: 0
+      StressOnFail: 7
+      FailEventId: 
+    Effects: []
+    EventWeights:
+    - EventId: kpi_review
+      WeightDelta: 18
+      Conditions:
+      - Kind: 19
+        Key: 
+        Operator: 2
+        IntValue: 50
+        FloatValue: 0
+        TextValue: 
+        Invert: 0
+  - Id: high_communication
+    DisplayName: "\u9AD8\u9891\u6C9F\u901A"
+    Description: "\u5927\u91CF\u4F1A\u8BAE\u3001\u534F\u8C03\u3001\u6C47\u62A5\uFF0C\u793E\u6050\u4F1A\u5F88\u75DB\u82E6\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 6
+      Key: 
+      Operator: 2
+      IntValue: 58
+      HardFail: 0
+      RecognitionOnPass: 7
+      RecognitionOnFail: -9
+      StressOnPass: 0
+      StressOnFail: 9
+      FailEventId: 
+    Effects: []
+    EventWeights:
+    - EventId: meeting_mess
+      WeightDelta: 14
+      Conditions: []
+  - Id: outdoor
+    DisplayName: "\u5916\u52E4"
+    Description: "\u9700\u8981\u6237\u5916\u8DD1\u52A8\uFF0C\u65E5\u6652\u96E8\u6DCB\uFF0C\u4F53\u529B\u6D88\u8017\u5927\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 1
+      Key: 
+      Operator: 2
+      IntValue: 54
+      HardFail: 0
+      RecognitionOnPass: 3
+      RecognitionOnFail: -6
+      StressOnPass: 0
+      StressOnFail: 6
+      FailEventId: 
+    - Target: 0
+      Dimension: 7
+      Key: 
+      Operator: 2
+      IntValue: 50
+      HardFail: 0
+      RecognitionOnPass: 2
+      RecognitionOnFail: -5
+      StressOnPass: 0
+      StressOnFail: 5
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: team_collab
+    DisplayName: "\u56E2\u961F\u534F\u4F5C"
+    Description: "\u9700\u8981\u5BC6\u5207\u914D\u5408\u4ED6\u4EBA\uFF0C\u5355\u6253\u72EC\u6597\u884C\u4E0D\u901A\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 6
+      Key: 
+      Operator: 2
+      IntValue: 48
+      HardFail: 0
+      RecognitionOnPass: 4
+      RecognitionOnFail: -6
+      StressOnPass: 0
+      StressOnFail: 5
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  - Id: low_threshold
+    DisplayName: "\u4F4E\u95E8\u69DB"
+    Description: "\u5165\u884C\u8981\u6C42\u4E0D\u9AD8\uFF0C\u51E0\u4E4E\u4EC0\u4E48\u4EBA\u90FD\u80FD\u8BD5\uFF0C\u4F46\u5929\u82B1\u677F\u4E5F\u4F4E\u3002"
+    Requirements:
+    - Target: 0
+      Dimension: 5
+      Key: 
+      Operator: 2
+      IntValue: 35
+      HardFail: 0
+      RecognitionOnPass: 2
+      RecognitionOnFail: -3
+      StressOnPass: 0
+      StressOnFail: 3
+      FailEventId: 
+    Effects: []
+    EventWeights: []
+  Companies:
+  - Id: cloud_farm
+    DisplayName: "\u4E91\u7AEF\u519C\u573A"
+    Industry: "\u667A\u6167\u519C\u4E1A"
+    FoundedYear: 2019
+    FoundedMonth: 4
+    EraIds: []
+    TagIds:
+    - local
+    - ai
+    Jobs:
+    - Id: smart_tractor_operator
+      DisplayName: "\u519C\u673A\u64CD\u4F5C\u5458"
+      IntentTagIds: []
+      TagIds:
+      - ai
+      - physical
+      - local
+      - tooling
+      SalaryMin: 9000
+      SalaryMax: 13000
+      Difficulty: 36
+      OfferThreshold: 70
+      WorkIntensity: 48
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 40
+        Weight: 2
+        MissingTagId: 
+      - StatId: major
+        MinValue: 35
+        Weight: 2
+        MissingTagId: 
+  - Id: white_tower_tech
+    DisplayName: "\u767D\u5854\u79D1\u6280"
+    Industry: "AI \u670D\u52A1"
+    FoundedYear: 2023
+    FoundedMonth: 9
+    EraIds: []
+    TagIds:
+    - ai
+    - remote
+    - strict_rules
+    Jobs:
+    - Id: ai_trainer
+      DisplayName: "AI\u8BAD\u7EC3\u5E08"
+      IntentTagIds: []
+      TagIds:
+      - ai
+      - remote
+      - office
+      - tooling
+      - fast_change
+      - solo_work
+      SalaryMin: 14000
+      SalaryMax: 22000
+      Difficulty: 58
+      OfferThreshold: 70
+      WorkIntensity: 45
+      PromotionBase: 12
+      Requirements:
+      - StatId: major
+        MinValue: 55
+        Weight: 3
+        MissingTagId: 
+      - StatId: education
+        MinValue: 50
+        Weight: 2
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 45
+        Weight: 1
+        MissingTagId: 
+  - Id: sunrise_build
+    DisplayName: "\u65ED\u65E5\u5EFA\u7B51"
+    Industry: "\u5EFA\u7B51\u65BD\u5DE5"
+    FoundedYear: 2018
+    FoundedMonth: 3
+    EraIds: []
+    TagIds:
+    - physical
+    - high_pressure
+    - outdoor
+    Jobs:
+    - Id: site_worker
+      DisplayName: "\u5DE5\u5730\u666E\u5DE5"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - outdoor
+      - high_pressure
+      - low_threshold
+      SalaryMin: 7000
+      SalaryMax: 10000
+      Difficulty: 30
+      OfferThreshold: 52
+      WorkIntensity: 75
+      PromotionBase: 8
+      Requirements: []
+    - Id: safety_inspector
+      DisplayName: "\u5B89\u5168\u5DE1\u67E5\u5458"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - outdoor
+      - strict_rules
+      SalaryMin: 8000
+      SalaryMax: 11000
+      Difficulty: 42
+      OfferThreshold: 62
+      WorkIntensity: 60
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 28
+        Weight: 2
+        MissingTagId: 
+      - StatId: height
+        MinValue: 165
+        Weight: 1
+        MissingTagId: 
+  - Id: golden_harvest
+    DisplayName: "\u91D1\u79CB\u98DF\u54C1"
+    Industry: "\u98DF\u54C1\u52A0\u5DE5"
+    FoundedYear: 2015
+    FoundedMonth: 8
+    EraIds: []
+    TagIds:
+    - physical
+    - local
+    - strict_rules
+    Jobs:
+    - Id: line_worker
+      DisplayName: "\u6D41\u6C34\u7EBF\u64CD\u4F5C\u5DE5"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - strict_rules
+      - low_threshold
+      SalaryMin: 5000
+      SalaryMax: 7000
+      Difficulty: 25
+      OfferThreshold: 48
+      WorkIntensity: 68
+      PromotionBase: 8
+      Requirements: []
+    - Id: quality_checker
+      DisplayName: "\u54C1\u68C0\u5458"
+      IntentTagIds: []
+      TagIds:
+      - strict_rules
+      - physical
+      SalaryMin: 6500
+      SalaryMax: 8500
+      Difficulty: 38
+      OfferThreshold: 58
+      WorkIntensity: 56
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 25
+        Weight: 2
+        MissingTagId: 
+  - Id: green_path
+    DisplayName: "\u7EFF\u9053\u5FEB\u9012"
+    Industry: "\u540C\u57CE\u914D\u9001"
+    FoundedYear: 2021
+    FoundedMonth: 11
+    EraIds: []
+    TagIds:
+    - physical
+    - high_pressure
+    - customer_contact
+    - outdoor
+    Jobs:
+    - Id: courier
+      DisplayName: "\u5FEB\u9012\u5458"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - outdoor
+      - high_pressure
+      - customer_contact
+      - performance_pay
+      SalaryMin: 6000
+      SalaryMax: 11000
+      Difficulty: 32
+      OfferThreshold: 48
+      WorkIntensity: 78
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 28
+        Weight: 2
+        MissingTagId: 
+  - Id: warm_hearth
+    DisplayName: "\u6696\u7089\u9910\u996E"
+    Industry: "\u9910\u996E\u8FDE\u9501"
+    FoundedYear: 2020
+    FoundedMonth: 5
+    EraIds: []
+    TagIds:
+    - customer_contact
+    - high_pressure
+    - physical
+    Jobs:
+    - Id: waiter
+      DisplayName: "\u670D\u52A1\u5458"
+      IntentTagIds: []
+      TagIds:
+      - customer_contact
+      - physical
+      - appearance_sensitive
+      - low_threshold
+      SalaryMin: 4200
+      SalaryMax: 6000
+      Difficulty: 22
+      OfferThreshold: 42
+      WorkIntensity: 70
+      PromotionBase: 8
+      Requirements: []
+    - Id: kitchen_hand
+      DisplayName: "\u540E\u53A8\u5E2E\u5DE5"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - high_pressure
+      SalaryMin: 4800
+      SalaryMax: 6500
+      Difficulty: 28
+      OfferThreshold: 46
+      WorkIntensity: 74
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 18
+        Weight: 2
+        MissingTagId: 
+  - Id: cloud_inn
+    DisplayName: "\u4E91\u6816\u9152\u5E97"
+    Industry: "\u9152\u5E97\u670D\u52A1"
+    FoundedYear: 2017
+    FoundedMonth: 12
+    EraIds: []
+    TagIds:
+    - customer_contact
+    - appearance_sensitive
+    - strict_rules
+    Jobs:
+    - Id: front_desk
+      DisplayName: "\u524D\u53F0\u63A5\u5F85"
+      IntentTagIds: []
+      TagIds:
+      - customer_contact
+      - appearance_sensitive
+      - high_communication
+      - office
+      SalaryMin: 5500
+      SalaryMax: 8000
+      Difficulty: 40
+      OfferThreshold: 60
+      WorkIntensity: 54
+      PromotionBase: 8
+      Requirements: []
+    - Id: room_service
+      DisplayName: "\u5BA2\u623F\u670D\u52A1"
+      IntentTagIds: []
+      TagIds:
+      - customer_contact
+      - physical
+      - strict_rules
+      SalaryMin: 4200
+      SalaryMax: 5500
+      Difficulty: 28
+      OfferThreshold: 46
+      WorkIntensity: 62
+      PromotionBase: 8
+      Requirements:
+      - StatId: appearance
+        MinValue: 48
+        Weight: 2
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 28
+        Weight: 1
+        MissingTagId: 
+  - Id: bright_smile
+    DisplayName: "\u4EAE\u9F7F\u53E3\u8154"
+    Industry: "\u533B\u7597\u670D\u52A1"
+    FoundedYear: 2019
+    FoundedMonth: 7
+    EraIds: []
+    TagIds:
+    - customer_contact
+    - appearance_sensitive
+    - strict_rules
+    - office
+    Jobs:
+    - Id: dental_assistant
+      DisplayName: "\u7259\u79D1\u52A9\u7406"
+      IntentTagIds: []
+      TagIds:
+      - customer_contact
+      - strict_rules
+      - office
+      - appearance_sensitive
+      SalaryMin: 6000
+      SalaryMax: 9000
+      Difficulty: 48
+      OfferThreshold: 66
+      WorkIntensity: 50
+      PromotionBase: 8
+      Requirements:
+      - StatId: education
+        MinValue: 50
+        Weight: 3
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 40
+        Weight: 2
+        MissingTagId: 
+  - Id: iron_pulse
+    DisplayName: "\u94C1\u8109\u5236\u9020"
+    Industry: "\u5DE5\u4E1A\u5236\u9020"
+    FoundedYear: 2012
+    FoundedMonth: 4
+    EraIds: []
+    TagIds:
+    - physical
+    - strict_rules
+    - team_collab
+    Jobs:
+    - Id: cnc_operator
+      DisplayName: "CNC\u64CD\u4F5C\u5458"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - strict_rules
+      - team_collab
+      - tooling
+      SalaryMin: 7000
+      SalaryMax: 10000
+      Difficulty: 42
+      OfferThreshold: 58
+      WorkIntensity: 64
+      PromotionBase: 8
+      Requirements: []
+    - Id: warehouse_keeper
+      DisplayName: "\u4ED3\u5E93\u7BA1\u7406\u5458"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - strict_rules
+      - low_threshold
+      SalaryMin: 5000
+      SalaryMax: 7000
+      Difficulty: 30
+      OfferThreshold: 50
+      WorkIntensity: 52
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 36
+        Weight: 2
+        MissingTagId: 
+      - StatId: major
+        MinValue: 32
+        Weight: 2
+        MissingTagId: 
+  - Id: steel_heart
+    DisplayName: "\u94A2\u5FC3\u91CD\u5DE5"
+    Industry: "\u91CD\u578B\u673A\u68B0"
+    FoundedYear: 2008
+    FoundedMonth: 9
+    EraIds: []
+    TagIds:
+    - physical
+    - high_pressure
+    - outdoor
+    - strict_rules
+    Jobs:
+    - Id: welder
+      DisplayName: "\u710A\u5DE5"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - high_pressure
+      - outdoor
+      - strict_rules
+      - age_sensitive
+      - height_sensitive
+      SalaryMin: 8000
+      SalaryMax: 13000
+      Difficulty: 48
+      OfferThreshold: 63
+      WorkIntensity: 80
+      PromotionBase: 8
+      Requirements: []
+    - Id: crane_operator
+      DisplayName: "\u540A\u8F66\u53F8\u673A"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - outdoor
+      - height_sensitive
+      - strict_rules
+      SalaryMin: 9000
+      SalaryMax: 14000
+      Difficulty: 52
+      OfferThreshold: 66
+      WorkIntensity: 66
+      PromotionBase: 8
+      Requirements:
+      - StatId: height
+        MinValue: 170
+        Weight: 2
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 40
+        Weight: 2
+        MissingTagId: 
+  - Id: star_grid
+    DisplayName: "\u661F\u683C\u6570\u636E"
+    Industry: "\u6570\u636E\u6807\u6CE8"
+    FoundedYear: 2022
+    FoundedMonth: 3
+    EraIds: []
+    TagIds:
+    - ai
+    - remote
+    - tooling
+    - fast_change
+    Jobs:
+    - Id: data_annotator
+      DisplayName: "\u6570\u636E\u6807\u6CE8\u5458"
+      IntentTagIds: []
+      TagIds:
+      - ai
+      - tooling
+      - remote
+      - solo_work
+      - low_threshold
+      SalaryMin: 4800
+      SalaryMax: 7500
+      Difficulty: 35
+      OfferThreshold: 53
+      WorkIntensity: 46
+      PromotionBase: 8
+      Requirements: []
+    - Id: qa_specialist
+      DisplayName: "\u8D28\u68C0\u4E13\u5458"
+      IntentTagIds: []
+      TagIds:
+      - ai
+      - tooling
+      - office
+      - strict_rules
+      SalaryMin: 7000
+      SalaryMax: 10000
+      Difficulty: 45
+      OfferThreshold: 60
+      WorkIntensity: 52
+      PromotionBase: 8
+      Requirements:
+      - StatId: education
+        MinValue: 40
+        Weight: 2
+        MissingTagId: 
+      - StatId: major
+        MinValue: 32
+        Weight: 2
+        MissingTagId: 
+  - Id: horizon_ai
+    DisplayName: "\u5730\u5E73\u7EBF\u667A\u80FD"
+    Industry: "AI\u7814\u53D1"
+    FoundedYear: 2021
+    FoundedMonth: 6
+    EraIds: []
+    TagIds:
+    - ai
+    - office
+    - fast_change
+    - high_pressure
+    - strict_rules
+    Jobs:
+    - Id: prompt_engineer
+      DisplayName: "\u63D0\u793A\u8BCD\u5DE5\u7A0B\u5E08"
+      IntentTagIds: []
+      TagIds:
+      - ai
+      - office
+      - fast_change
+      - high_communication
+      - solo_work
+      SalaryMin: 12000
+      SalaryMax: 20000
+      Difficulty: 58
+      OfferThreshold: 74
+      WorkIntensity: 56
+      PromotionBase: 8
+      Requirements: []
+    - Id: ai_tester
+      DisplayName: "AI\u6D4B\u8BD5\u5458"
+      IntentTagIds: []
+      TagIds:
+      - ai
+      - office
+      - tooling
+      - fast_change
+      - team_collab
+      SalaryMin: 10000
+      SalaryMax: 16000
+      Difficulty: 52
+      OfferThreshold: 70
+      WorkIntensity: 52
+      PromotionBase: 8
+      Requirements:
+      - StatId: education
+        MinValue: 58
+        Weight: 3
+        MissingTagId: 
+      - StatId: major
+        MinValue: 52
+        Weight: 3
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 48
+        Weight: 2
+        MissingTagId: 
+  - Id: flash_delivery
+    DisplayName: "\u95EA\u9001"
+    Industry: "\u5373\u65F6\u914D\u9001"
+    FoundedYear: 2023
+    FoundedMonth: 1
+    EraIds: []
+    TagIds:
+    - outdoor
+    - physical
+    - performance_pay
+    - high_pressure
+    Jobs:
+    - Id: rush_courier
+      DisplayName: "\u52A0\u6025\u914D\u9001\u5458"
+      IntentTagIds: []
+      TagIds:
+      - outdoor
+      - physical
+      - performance_pay
+      - high_pressure
+      - customer_contact
+      - age_sensitive
+      SalaryMin: 7000
+      SalaryMax: 14000
+      Difficulty: 35
+      OfferThreshold: 46
+      WorkIntensity: 82
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 25
+        Weight: 2
+        MissingTagId: 
+  - Id: live_stream_co
+    DisplayName: "\u7EA2\u706B\u76F4\u64AD"
+    Industry: "\u76F4\u64AD\u7535\u5546"
+    FoundedYear: 2022
+    FoundedMonth: 8
+    EraIds: []
+    TagIds:
+    - appearance_sensitive
+    - customer_contact
+    - high_communication
+    - fast_change
+    Jobs:
+    - Id: live_assistant
+      DisplayName: "\u76F4\u64AD\u52A9\u7406"
+      IntentTagIds: []
+      TagIds:
+      - customer_contact
+      - high_communication
+      - fast_change
+      - appearance_sensitive
+      - high_pressure
+      SalaryMin: 5500
+      SalaryMax: 9500
+      Difficulty: 42
+      OfferThreshold: 58
+      WorkIntensity: 70
+      PromotionBase: 8
+      Requirements: []
+    - Id: stream_operator
+      DisplayName: "\u573A\u63A7"
+      IntentTagIds: []
+      TagIds:
+      - high_communication
+      - fast_change
+      - team_collab
+      SalaryMin: 6500
+      SalaryMax: 10000
+      Difficulty: 45
+      OfferThreshold: 60
+      WorkIntensity: 62
+      PromotionBase: 8
+      Requirements:
+      - StatId: appearance
+        MinValue: 42
+        Weight: 1
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 32
+        Weight: 2
+        MissingTagId: 
+  - Id: ever_green_edu
+    DisplayName: "\u5E38\u9752\u6559\u80B2"
+    Industry: "\u6559\u80B2\u57F9\u8BAD"
+    FoundedYear: 2016
+    FoundedMonth: 10
+    EraIds: []
+    TagIds:
+    - office
+    - high_communication
+    - strict_rules
+    - customer_contact
+    Jobs:
+    - Id: course_advisor
+      DisplayName: "\u8BFE\u7A0B\u987E\u95EE"
+      IntentTagIds: []
+      TagIds:
+      - customer_contact
+      - high_communication
+      - office
+      - performance_pay
+      SalaryMin: 5500
+      SalaryMax: 11000
+      Difficulty: 40
+      OfferThreshold: 56
+      WorkIntensity: 62
+      PromotionBase: 8
+      Requirements: []
+    - Id: teaching_assistant
+      DisplayName: "\u6559\u52A1\u52A9\u7406"
+      IntentTagIds: []
+      TagIds:
+      - office
+      - strict_rules
+      - high_communication
+      - team_collab
+      SalaryMin: 5000
+      SalaryMax: 7500
+      Difficulty: 38
+      OfferThreshold: 53
+      WorkIntensity: 50
+      PromotionBase: 8
+      Requirements:
+      - StatId: education
+        MinValue: 48
+        Weight: 3
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 32
+        Weight: 1
+        MissingTagId: 
+  - Id: safe_harbor_insurance
+    DisplayName: "\u5B89\u6CCA\u4FDD\u9669"
+    Industry: "\u4FDD\u9669\u9500\u552E"
+    FoundedYear: 2014
+    FoundedMonth: 2
+    EraIds: []
+    TagIds:
+    - customer_contact
+    - high_communication
+    - performance_pay
+    - office
+    Jobs:
+    - Id: insurance_agent
+      DisplayName: "\u4FDD\u9669\u4EE3\u7406\u4EBA"
+      IntentTagIds: []
+      TagIds:
+      - customer_contact
+      - high_communication
+      - performance_pay
+      - appearance_sensitive
+      SalaryMin: 4500
+      SalaryMax: 14000
+      Difficulty: 38
+      OfferThreshold: 53
+      WorkIntensity: 68
+      PromotionBase: 8
+      Requirements:
+      - StatId: education
+        MinValue: 38
+        Weight: 2
+        MissingTagId: 
+      - StatId: appearance
+        MinValue: 38
+        Weight: 1
+        MissingTagId: 
+  - Id: clear_water_prop
+    DisplayName: "\u6E05\u6C34\u7269\u4E1A"
+    Industry: "\u7269\u4E1A\u7BA1\u7406"
+    FoundedYear: 2010
+    FoundedMonth: 6
+    EraIds: []
+    TagIds:
+    - local
+    - customer_contact
+    - low_threshold
+    - physical
+    Jobs:
+    - Id: property_staff
+      DisplayName: "\u7269\u4E1A\u7BA1\u7406\u5458"
+      IntentTagIds: []
+      TagIds:
+      - local
+      - customer_contact
+      - physical
+      - low_threshold
+      SalaryMin: 4000
+      SalaryMax: 6000
+      Difficulty: 25
+      OfferThreshold: 42
+      WorkIntensity: 52
+      PromotionBase: 8
+      Requirements: []
+    - Id: security_guard
+      DisplayName: "\u4FDD\u5B89"
+      IntentTagIds: []
+      TagIds:
+      - physical
+      - outdoor
+      - night_shift
+      - low_threshold
+      - height_sensitive
+      - age_sensitive
+      SalaryMin: 3800
+      SalaryMax: 5500
+      Difficulty: 20
+      OfferThreshold: 40
+      WorkIntensity: 56
+      PromotionBase: 8
+      Requirements:
+      - StatId: ability
+        MinValue: 20
+        Weight: 2
+        MissingTagId: 
+      - StatId: height
+        MinValue: 168
+        Weight: 1
+        MissingTagId: 
+  - Id: peak_vision
+    DisplayName: "\u9510\u89C6\u8BBE\u8BA1"
+    Industry: "\u89C6\u89C9\u8BBE\u8BA1"
+    FoundedYear: 2019
+    FoundedMonth: 5
+    EraIds: []
+    TagIds:
+    - office
+    - appearance_sensitive
+    - fast_change
+    - tooling
+    Jobs:
+    - Id: junior_designer
+      DisplayName: "\u521D\u7EA7\u8BBE\u8BA1\u5E08"
+      IntentTagIds: []
+      TagIds:
+      - office
+      - tooling
+      - fast_change
+      - appearance_sensitive
+      - solo_work
+      SalaryMin: 8000
+      SalaryMax: 14000
+      Difficulty: 52
+      OfferThreshold: 67
+      WorkIntensity: 56
+      PromotionBase: 8
+      Requirements:
+      - StatId: major
+        MinValue: 52
+        Weight: 3
+        MissingTagId: 
+      - StatId: education
+        MinValue: 48
+        Weight: 2
+        MissingTagId: 
+      - StatId: appearance
+        MinValue: 42
+        Weight: 1
+        MissingTagId: 
+  - Id: deep_root_hr
+    DisplayName: "\u6DF1\u6839\u4EBA\u529B"
+    Industry: "\u4EBA\u529B\u8D44\u6E90"
+    FoundedYear: 2017
+    FoundedMonth: 3
+    EraIds: []
+    TagIds:
+    - office
+    - high_communication
+    - customer_contact
+    - strict_rules
+    Jobs:
+    - Id: hr_specialist
+      DisplayName: "\u62DB\u8058\u4E13\u5458"
+      IntentTagIds: []
+      TagIds:
+      - office
+      - high_communication
+      - customer_contact
+      - strict_rules
+      - team_collab
+      SalaryMin: 6500
+      SalaryMax: 10000
+      Difficulty: 45
+      OfferThreshold: 60
+      WorkIntensity: 54
+      PromotionBase: 8
+      Requirements:
+      - StatId: education
+        MinValue: 46
+        Weight: 3
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 36
+        Weight: 2
+        MissingTagId: 
+  - Id: cloud_pen
+    DisplayName: "\u4E91\u7B14\u6587\u5316"
+    Industry: "\u5185\u5BB9\u751F\u4EA7"
+    FoundedYear: 2020
+    FoundedMonth: 9
+    EraIds: []
+    TagIds:
+    - remote
+    - office
+    - tooling
+    - solo_work
+    - fast_change
+    Jobs:
+    - Id: content_writer
+      DisplayName: "\u5185\u5BB9\u7F16\u8F91"
+      IntentTagIds: []
+      TagIds:
+      - remote
+      - office
+      - tooling
+      - solo_work
+      - fast_change
+      SalaryMin: 5500
+      SalaryMax: 9500
+      Difficulty: 40
+      OfferThreshold: 56
+      WorkIntensity: 44
+      PromotionBase: 8
+      Requirements: []
+    - Id: copywriter
+      DisplayName: "\u6587\u6848\u7B56\u5212"
+      IntentTagIds: []
+      TagIds:
+      - office
+      - remote
+      - high_communication
+      - fast_change
+      SalaryMin: 7500
+      SalaryMax: 12000
+      Difficulty: 48
+      OfferThreshold: 63
+      WorkIntensity: 50
+      PromotionBase: 8
+      Requirements:
+      - StatId: education
+        MinValue: 46
+        Weight: 3
+        MissingTagId: 
+      - StatId: major
+        MinValue: 40
+        Weight: 2
+        MissingTagId: 
+  - Id: flex_code
+    DisplayName: "\u5F39\u6027\u7801"
+    Industry: "\u8F6F\u4EF6\u5916\u5305"
+    FoundedYear: 2021
+    FoundedMonth: 12
+    EraIds: []
+    TagIds:
+    - ai
+    - remote
+    - tooling
+    - fast_change
+    - high_pressure
+    Jobs:
+    - Id: junior_dev
+      DisplayName: "\u521D\u7EA7\u5F00\u53D1"
+      IntentTagIds: []
+      TagIds:
+      - ai
+      - remote
+      - tooling
+      - fast_change
+      - solo_work
+      SalaryMin: 10000
+      SalaryMax: 17000
+      Difficulty: 56
+      OfferThreshold: 72
+      WorkIntensity: 60
+      PromotionBase: 8
+      Requirements:
+      - StatId: major
+        MinValue: 55
+        Weight: 3
+        MissingTagId: 
+      - StatId: education
+        MinValue: 52
+        Weight: 2
+        MissingTagId: 
+      - StatId: ability
+        MinValue: 48
+        Weight: 2
+        MissingTagId: 
+  Events:
+  - Id: resume_audit
+    DisplayName: "\u7B80\u5386\u8FFD\u95EE"
+    Body: "\u9762\u8BD5\u5B98\u8FFD\u95EE\u4E86\u7B80\u5386\u91CC\u6700\u5938\u5F20\u7684\u4E00\u6BB5\u7ECF\u5386\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 25
+    CooldownYears: 0
+    Conditions:
+    - Kind: 16
+      Key: 
+      Operator: 2
+      IntValue: 20
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: confess
+      Label: "\u5766\u767D\u89E3\u91CA"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 9
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u89E3\u91CA\u4E86\u5305\u88C5\u75D5\u8FF9\uFF0C\u9762\u8BD5\u5B98\u6709\u70B9\u5931\u671B\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: double_down
+      Label: "\u7EE7\u7EED\u5706\u8C0E"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 15
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 9
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u6682\u65F6\u5706\u8FC7\u53BB\u4E86\uFF0C\u4F46\u88AB\u8BC6\u7834\u7684\u98CE\u9669\u66F4\u9AD8\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: caught
+      Label: "\u88AB\u5F53\u573A\u8BC6\u7834"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -25
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 6
+        Key: dishonest_resume
+        IntValue: 0
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 10
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u83B7\u5F97\u4E86\u8D1F\u9762\u6807\u7B7E\uFF1A\u4E0D\u8BDA\u5B9E"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: ai_shortcut
+    DisplayName: "\u5DE5\u5177\u6377\u5F84"
+    Body: "\u4F60\u53D1\u73B0\u4E00\u4E2A\u81EA\u52A8\u5316\u5DE5\u5177\uFF0C\u80FD\u8BA9\u4ECA\u5929\u7684\u6D3B\u5FEB\u5F88\u591A\u3002"
+    Phase: 2
+    NoticeType: 0
+    BaseWeight: 18
+    CooldownYears: 1
+    Conditions:
+    - Kind: 2
+      Key: ai_pioneer
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: use
+      Label: "\u8C28\u614E\u4F7F\u7528"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 9
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "AI\u5148\u884C\u8005\u6807\u7B7E\u53D1\u6325\u4E86\u4F5C\u7528\uFF0C\u4E3B\u7BA1\u6CE8\u610F\u5230\u4E86\u6548\u7387\u63D0\u5347\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: teach
+      Label: "\u6559\u7ED9\u540C\u4E8B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 1
+        Key: ability
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 9
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u6559\u4F1A\u4E86\u540C\u4E8B\uFF0C\u56E2\u961F\u5173\u7CFB\u66F4\u597D\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: overtime_fire
+    DisplayName: "\u5468\u672B\u6551\u706B"
+    Body: "\u9879\u76EE\u5468\u672B\u51FA\u4E86\u95EE\u9898\uFF0C\u4E3B\u7BA1\u5E0C\u671B\u4ED6\u7ACB\u523B\u4E0A\u7EBF\u5904\u7406\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 20
+    CooldownYears: 2
+    Conditions: []
+    Options:
+    - Id: work
+      Label: "\u63A5\u4E0B\u6551\u706B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 7
+        FloatValue: 0
+        TextValue: "\u4ED6\u625B\u4F4F\u4E86\u5468\u672B\u6551\u706B\uFF0C\u8BA4\u53EF\u5EA6\u4E0A\u6DA8\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 14
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: refuse
+      Label: "\u62D2\u7EDD\u52A0\u73ED"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: "\u4ED6\u4FDD\u4F4F\u4E86\u4F11\u606F\uFF0C\u4F46\u4E3B\u7BA1\u660E\u663E\u4E0D\u6EE1\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: stress_breakdown
+    DisplayName: "\u538B\u529B\u8FC7\u8F7D"
+    Body: "\u4F60\u5DF2\u7ECF\u6491\u5230\u4E86\u6781\u9650\uFF0C\u8EAB\u4F53\u548C\u60C5\u7EEA\u90FD\u5728\u53D1\u51FA\u8B66\u544A\u3002"
+    Phase: 0
+    NoticeType: 2
+    BaseWeight: 8
+    CooldownYears: 0
+    Conditions:
+    - Kind: 17
+      Key: 
+      Operator: 2
+      IntValue: 90
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: rest
+      Label: "\u5F3A\u5236\u4F11\u606F"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -35
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 21
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u4E0D\u5F97\u4E0D\u6682\u505C\u8FD9\u4EFD\u673A\u4F1A\uFF0C\u5148\u628A\u81EA\u5DF1\u62C9\u56DE\u6765\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: lie_flat
+      Label: "\u76F4\u63A5\u8EBA\u5E73"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -55
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 6
+        Key: lying_flat
+        IntValue: 0
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 22
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 9
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u9009\u62E9\u6682\u65F6\u8EBA\u5E73\uFF0C\u91CD\u65B0\u5BFB\u627E\u66F4\u80FD\u627F\u53D7\u7684\u5DE5\u4F5C\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: collapse
+      Label: "\u786C\u625B\u5230\u5E95"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 14
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u538B\u529B\u5F7B\u5E95\u538B\u57AE\u4E86\u8FD9\u4E00\u4EE3\u6253\u5DE5\u4EBA\u751F\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: romance_intro
+    DisplayName: "\u670B\u53CB\u4ECB\u7ECD"
+    Body: "\u670B\u53CB\u60F3\u7ED9\u4F60\u4ECB\u7ECD\u4E00\u4E2A\u5F88\u804A\u5F97\u6765\u7684\u4EBA\u3002"
+    Phase: 4
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions:
+    - Kind: 4
+      Key: romance
+      Operator: 2
+      IntValue: 20
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: date
+      Label: "\u53BB\u89C1\u4E00\u9762"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 8
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u672A\u6765\u540E\u4EE3"
+        SecondaryText: "\u672A\u77E5"
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 9
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u8BA4\u771F\u7ECF\u8425\u5173\u7CFB\uFF0C\u672A\u6765\u591A\u4E86\u4E00\u79CD\u53EF\u80FD\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: save
+      Label: "\u5148\u4E13\u6CE8\u6512\u94B1"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 3
+        Key: 
+        IntValue: 1000
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 9
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4F60\u628A\u65F6\u95F4\u6362\u6210\u4E86\u5B58\u6B3E\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: hidden_age_caught
+    DisplayName: "\u5E74\u9F84\u5BF9\u4E0D\u4E0A"
+    Body: "\u9762\u8BD5\u5B98\u53D1\u73B0\u7B80\u5386\u4E0A\u7684\u5E74\u9F84\u4FE1\u606F\u548C\u5B9E\u9645\u6709\u51FA\u5165\uFF0C\u8FFD\u95EE\u4E86\u7EC6\u8282\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 18
+    CooldownYears: 0
+    Conditions:
+    - Kind: 21
+      Key: age
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: admit_age
+      Label: "\u627F\u8BA4\u9690\u7792\u4E86\u5E74\u9F84"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: "\u9690\u7792\u5E74\u9F84\u8BA9\u5BF9\u65B9\u66F4\u5728\u610F\u8BDA\u4FE1\u95EE\u9898\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: deflect_age
+      Label: "\u627E\u7406\u7531\u642A\u585E"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: "\u642A\u585E\u8FC7\u53BB\u4E86\uFF0C\u4F46\u5BF9\u65B9\u660E\u663E\u8BB0\u4E86\u4E00\u7B14\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: hidden_education_probed
+    DisplayName: "\u5B66\u5386\u8FFD\u95EE"
+    Body: "\u9762\u8BD5\u5B98\u5BF9\u7B80\u5386\u4E0A\u6CA1\u5199\u7684\u6559\u80B2\u7ECF\u5386\u5F88\u5728\u610F\uFF0C\u53CD\u590D\u8FFD\u95EE\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 16
+    CooldownYears: 0
+    Conditions:
+    - Kind: 21
+      Key: education
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: reveal
+      Label: "\u5766\u767D\u5B66\u5386\u5B9E\u60C5"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: "\u5766\u767D\u540E\u5BF9\u65B9\u7406\u89E3\u4E86\uFF0C\u4F46\u5370\u8C61\u5206\u6389\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: stonewall
+      Label: "\u575A\u6301\u4E0D\u900F\u9732"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -10
+        FloatValue: 0
+        TextValue: "\u4E0D\u8BF4\u8BDD\u6BD4\u8BF4\u9519\u8BDD\u66F4\u8BA9\u4EBA\u8B66\u89C9\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: exaggerated_salary_check
+    DisplayName: "\u85AA\u8D44\u6838\u5B9E"
+    Body: "\u65B0\u516C\u53F8\u8981\u6C42\u63D0\u4F9B\u524D\u516C\u53F8\u7684\u85AA\u8D44\u6D41\u6C34\uFF0C\u548C\u4ED6\u7B80\u5386\u4E0A\u5938\u5927\u7684\u6570\u5B57\u5DEE\u8DDD\u4E0D\u5C0F\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 16
+    CooldownYears: 0
+    Conditions:
+    - Kind: 22
+      Key: salary
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: provide_real
+      Label: "\u63D0\u4F9B\u771F\u5B9E\u6D41\u6C34"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -10
+        FloatValue: 0
+        TextValue: "\u771F\u5B9E\u6570\u5B57\u6BD4\u7B80\u5386\u5C11\u4E86\u4E09\u6210\uFF0C\u4EBA\u4E8B\u8138\u8272\u4E0D\u592A\u597D\u770B\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: refuse_provide
+      Label: "\u8BF4\u524D\u516C\u53F8\u4FDD\u5BC6\u4E0D\u65B9\u4FBF\u63D0\u4F9B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: "\u5BF9\u65B9\u6CA1\u518D\u8FFD\u95EE\uFF0C\u4F46\u85AA\u8D44\u8C08\u5224\u7684\u5E95\u6C14\u4E5F\u6CA1\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: exaggerated_experience_grilled
+    DisplayName: "\u7ECF\u5386\u6DF1\u6316"
+    Body: "\u9762\u8BD5\u5B98\u5BF9\u4ED6\u5938\u5927\u7684\u5DE5\u4F5C\u7ECF\u5386\u7279\u522B\u611F\u5174\u8DA3\uFF0C\u8FFD\u95EE\u4E86\u597D\u51E0\u4E2A\u7EC6\u8282\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 18
+    CooldownYears: 0
+    Conditions:
+    - Kind: 22
+      Key: experience
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: bluff_through
+      Label: "\u786C\u7740\u5934\u76AE\u7F16"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u4ED6\u7F16\u4E86\u4E00\u6BB5\uFF0C\u9762\u8BD5\u5B98\u597D\u50CF\u4FE1\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 16
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: backpedal
+      Label: "\u4E3B\u52A8\u964D\u4F4E\u8BF4\u6CD5"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: "\u4ED6\u627F\u8BA4\u4E86\u5B9E\u9645\u53C2\u4E0E\u5EA6\u6CA1\u90A3\u4E48\u9AD8\uFF0C\u9762\u8BD5\u5B98\u8868\u60C5\u590D\u6742\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: any_hidden_field_suspicion
+    DisplayName: "\u7B80\u5386\u7591\u70B9"
+    Body: "\u4EBA\u4E8B\u89C9\u5F97\u8FD9\u4EFD\u7B80\u5386\u6709\u4E9B\u5730\u65B9\u4E0D\u592A\u81EA\u7136\uFF0C\u5F00\u59CB\u9010\u9879\u6838\u5BF9\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 14
+    CooldownYears: 0
+    Conditions:
+    - Kind: 23
+      Key: 
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: come_clean
+      Label: "\u4E3B\u52A8\u89E3\u91CA\u7A7A\u767D\u5904"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: "\u4ED6\u89E3\u91CA\u4E86\u9690\u85CF\u7684\u539F\u56E0\uFF0C\u5BF9\u65B9\u6001\u5EA6\u7A0D\u5FAE\u7F13\u548C\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: stay_calm
+      Label: "\u88C5\u4F5C\u6CA1\u95EE\u9898"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: "\u5BF9\u65B9\u6CA1\u518D\u8FFD\u95EE\uFF0C\u4F46\u5FC3\u91CC\u7684\u95EE\u53F7\u66F4\u5927\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: any_exaggerated_field_audit
+    DisplayName: "\u80CC\u666F\u5BA1\u67E5"
+    Body: "\u516C\u53F8\u7684\u5408\u89C4\u90E8\u95E8\u8981\u5BF9\u4ED6\u7B80\u5386\u4E2D\u5938\u5927\u7684\u90E8\u5206\u505A\u4F8B\u884C\u5BA1\u67E5\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 15
+    CooldownYears: 0
+    Conditions:
+    - Kind: 24
+      Key: 
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    - Kind: 11
+      Key: strict_rules
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: cooperate
+      Label: "\u5168\u529B\u914D\u5408\u5BA1\u67E5"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: "\u914D\u5408\u5BA1\u67E5\u53CD\u800C\u66B4\u9732\u4E86\u66F4\u591A\u5938\u5927\u75D5\u8FF9\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: prepare_story
+      Label: "\u63D0\u524D\u6574\u7406\u8BF4\u8F9E"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: "\u4ED6\u63D0\u524D\u68B3\u7406\u4E86\u8BF4\u8F9E\uFF0C\u4F46\u5FC3\u865A\u5199\u5728\u4E86\u8138\u4E0A\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 9
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: hidden_tag_discovered
+    DisplayName: "\u6807\u7B7E\u66B4\u9732"
+    Body: "\u540C\u4E8B\u4ECE\u522B\u7684\u5730\u65B9\u6253\u542C\u5230\u4ED6\u7B80\u5386\u4E0A\u6CA1\u5199\u7684\u67D0\u4E2A\u6807\u7B7E\uFF0C\u5F00\u59CB\u8BAE\u8BBA\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions:
+    - Kind: 26
+      Key: 
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: own_it
+      Label: "\u5766\u7136\u627F\u8BA4"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: "\u627F\u8BA4\u4E86\uFF0C\u540C\u4E8B\u89C9\u5F97\u8FD8\u7B97\u5766\u8BDA\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: deny_tag
+      Label: "\u5426\u8BA4\u8BF4\u90A3\u662F\u8BEF\u4F20"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: "\u5426\u8BA4\u88AB\u6233\u7A7F\u4E86\uFF0C\u4FE1\u4EFB\u964D\u4E86\u4E00\u5927\u622A\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: appearance_question
+    DisplayName: "\u5F62\u8C61\u8D28\u7591"
+    Body: "\u9762\u8BD5\u5B98\u4E0A\u4E0B\u6253\u91CF\u4E86\u4E00\u4E0B\uFF0C\u8868\u60C5\u5FAE\u5999\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 14
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: appearance_sensitive
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: dress_up
+      Label: "\u523B\u610F\u6536\u62FE\u4E00\u4E0B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u4ED6\u7279\u610F\u6574\u7406\u4E86\u4EEA\u5BB9\uFF0C\u9762\u8BD5\u5B98\u7A0D\u5FAE\u6EE1\u610F\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: ignore_looks
+      Label: "\u4E0D\u5728\u610F\u5F62\u8C61"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -9
+        FloatValue: 0
+        TextValue: "\u4ED6\u4E0D\u4FEE\u8FB9\u5E45\u7684\u6837\u5B50\u8BA9\u9762\u8BD5\u5B98\u76F4\u63A5\u76B1\u7709\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: age_question
+    DisplayName: "\u5E74\u9F84\u8FFD\u95EE"
+    Body: "\u9762\u8BD5\u5B98\u5F00\u59CB\u8FFD\u95EE\u4E3A\u4EC0\u4E48\u73B0\u5728\u624D\u6765\u5E94\u8058\u8FD9\u4E2A\u5C97\u4F4D\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 18
+    CooldownYears: 0
+    Conditions:
+    - Kind: 7
+      Key: 
+      Operator: 2
+      IntValue: 35
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: explain
+      Label: "\u89E3\u91CA\u8F6C\u884C\u539F\u56E0"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u89E3\u91CA\u8BA9\u5BF9\u65B9\u7A0D\u5FAE\u7406\u89E3\u4E86\u5904\u5883\uFF0C\u4F46\u6CA1\u52A0\u5206\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: avoid
+      Label: "\u542B\u7CCA\u5E26\u8FC7"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 14
+        FloatValue: 0
+        TextValue: "\u56DE\u907F\u8BA9\u7B80\u5386\u98CE\u9669\u4E0A\u5347\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: height_doubt
+    DisplayName: "\u8EAB\u9AD8\u8D28\u7591"
+    Body: "\u4E3B\u7BA1\u770B\u7740\u4ED6\u7684\u8EAB\u9AD8\u4FE1\u606F\uFF0C\u9762\u9732\u72B9\u8C6B\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: height_sensitive
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: prove_strength
+      Label: "\u8BC1\u660E\u4F53\u529B\u591F\u7528"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: "\u4ED6\u5C55\u793A\u4E86\u529B\u91CF\uFF0C\u4E3B\u7BA1\u7A0D\u5FAE\u653E\u5FC3\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: accept_rejection
+      Label: "\u627F\u8BA4\u4E0D\u592A\u5408\u9002"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: "\u4ED6\u5766\u7136\u627F\u8BA4\u4E86\uFF0C\u5BF9\u65B9\u53CD\u800C\u89C9\u5F97\u9760\u8C31\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: experience_gap
+    DisplayName: "\u7ECF\u5386\u7A7A\u767D"
+    Body: "\u7B80\u5386\u4E0A\u6709\u4E24\u6BB5\u7A7A\u767D\u671F\u88AB\u95EE\u5230\u4E86\uFF0C\u9762\u8BD5\u5B98\u60F3\u77E5\u9053\u90A3\u6BB5\u65F6\u95F4\u5728\u505A\u4EC0\u4E48\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 16
+    CooldownYears: 0
+    Conditions: []
+    Options:
+    - Id: fill_gap
+      Label: "\u7F16\u4E00\u6BB5\u7ECF\u5386"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 14
+        FloatValue: 0
+        TextValue: "\u4ED6\u7F16\u4E86\u4E00\u6BB5\u7ECF\u5386\uFF0C\u4F46\u81EA\u5DF1\u4E5F\u4E0D\u592A\u786E\u5B9A\u80FD\u4E0D\u80FD\u5706\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: be_honest
+      Label: "\u5B9E\u8BDD\u5B9E\u8BF4"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: "\u4ED6\u627F\u8BA4\u4E86\u90A3\u6BB5\u4F4E\u8C37\uFF0C\u9762\u8BD5\u5B98\u6709\u4E9B\u72B9\u8C6B\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: direct_offer
+    DisplayName: "\u76F4\u63A5\u62FFoffer"
+    Body: "\u9762\u8BD5\u51FA\u5947\u5730\u987A\u5229\uFF0C\u5BF9\u65B9\u5F53\u573A\u53D1\u4E86offer\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 5
+    CooldownYears: 0
+    Conditions:
+    - Kind: 15
+      Key: 
+      Operator: 2
+      IntValue: 85
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: accept
+      Label: "\u76F4\u63A5\u63A5\u53D7"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 20
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4ED6\u5F53\u573A\u62FF\u5230\u4E86offer\uFF0C\u8FDB\u5165\u8BD5\u7528\u671F\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: negotiate
+      Label: "\u8BD5\u7740\u8C08\u6761\u4EF6"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: "\u8C08\u6761\u4EF6\u6CA1\u6210\u529F\uFF0C\u5DEE\u70B9\u4E22\u4E86\u673A\u4F1A\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: direct_reject
+    DisplayName: "\u76F4\u63A5\u88AB\u62D2"
+    Body: "\u9762\u8BD5\u5B98\u770B\u4E86\u4E00\u773C\u7B80\u5386\u5C31\u6447\u5934\u4E86\u3002"
+    Phase: 1
+    NoticeType: 2
+    BaseWeight: 8
+    CooldownYears: 0
+    Conditions:
+    - Kind: 19
+      Key: 
+      Operator: 2
+      IntValue: 25
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: plead
+      Label: "\u4E89\u53D6\u673A\u4F1A"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: "\u4ED6\u4E89\u53D6\u4E86\u4E00\u4E0B\uFF0C\u5BF9\u65B9\u52C9\u5F3A\u7ED9\u4E86\u4E2A\u673A\u4F1A\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: accept_fail
+      Label: "\u63A5\u53D7\u5931\u8D25"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 21
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4ED6\u6CA1\u6709\u518D\u4E89\u53D6\uFF0C\u8FD9\u6B21\u9762\u8BD5\u7ED3\u675F\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: kpi_review
+    DisplayName: "\u7EE9\u6548\u8003\u6838"
+    Body: "\u672C\u6708\u7EE9\u6548\u6253\u5206\u51FA\u6765\u4E86\uFF0C\u4ED6\u9700\u8981\u9009\u62E9\u600E\u4E48\u5E94\u5BF9\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 16
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: performance_pay
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: push_harder
+      Label: "\u52A0\u500D\u52AA\u529B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: "\u4ED6\u62FC\u4E86\u4E00\u628A\uFF0C\u7EE9\u6548\u786E\u5B9E\u4E0A\u53BB\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: accept_score
+      Label: "\u63A5\u53D7\u5F53\u524D\u5206\u6570"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: "\u5206\u6570\u4E0D\u9AD8\u4E0D\u4F4E\uFF0C\u4F46\u6CA1\u4EC0\u4E48\u4EAE\u70B9\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: meeting_mess
+    DisplayName: "\u4F1A\u8BAE\u7FFB\u8F66"
+    Body: "\u4ED6\u5728\u4E00\u4E2A\u91CD\u8981\u4F1A\u8BAE\u4E0A\u6CA1\u51C6\u5907\u597D\uFF0C\u88AB\u95EE\u4F4F\u4E86\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 14
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: high_communication
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: wing_it
+      Label: "\u4E34\u573A\u53D1\u6325"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -7
+        FloatValue: 0
+        TextValue: "\u4E34\u573A\u53D1\u6325\u6548\u679C\u4E0D\u597D\uFF0C\u6F0F\u6D1E\u767E\u51FA\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 9
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: admit
+      Label: "\u627F\u8BA4\u6CA1\u51C6\u5907\u597D"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: "\u5766\u767D\u627F\u8BA4\u53CD\u800C\u8BA9\u4EBA\u89C9\u5F97\u9760\u8C31\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: colleague_conflict
+    DisplayName: "\u540C\u4E8B\u6392\u6324"
+    Body: "\u4ED6\u611F\u89C9\u51E0\u4E2A\u8001\u5458\u5DE5\u5728\u6545\u610F\u7ED9\u4ED6\u7A7F\u5C0F\u978B\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions: []
+    Options:
+    - Id: endure
+      Label: "\u5FCD\u7740\u4E0D\u53D1\u4F5C"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 1
+        FloatValue: 0
+        TextValue: "\u4ED6\u5FCD\u4F4F\u4E86\uFF0C\u4F46\u5FC3\u91CC\u5F88\u4E0D\u597D\u53D7\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: confront
+      Label: "\u627E\u4ED6\u4EEC\u8C08"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: "\u8C08\u4E86\u4E4B\u540E\u5173\u7CFB\u66F4\u50F5\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: client_complaint
+    DisplayName: "\u5BA2\u6237\u6295\u8BC9"
+    Body: "\u4E00\u4E2A\u5BA2\u6237\u5BF9\u4ED6\u5F88\u4E0D\u6EE1\u610F\uFF0C\u5199\u4E86\u6295\u8BC9\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 14
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: customer_contact
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: apologize_client
+      Label: "\u4E3B\u52A8\u9053\u6B49\u8865\u6551"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: "\u4ED6\u9053\u4E86\u6B49\uFF0C\u5BA2\u6237\u6001\u5EA6\u7F13\u548C\u4E86\u4E00\u70B9\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: explain
+      Label: "\u89E3\u91CA\u4E0D\u662F\u81EA\u5DF1\u7684\u95EE\u9898"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -9
+        FloatValue: 0
+        TextValue: "\u63A8\u5378\u8D23\u4EFB\u8BA9\u9886\u5BFC\u66F4\u4E0D\u6EE1\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: first_day_mistake
+    DisplayName: "\u7B2C\u4E00\u5929\u5C31\u51FA\u9519"
+    Body: "\u8BD5\u7528\u7B2C\u4E00\u5929\u5C31\u72AF\u4E86\u9519\uFF0C\u5FC3\u91CC\u5F88\u614C\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 14
+    CooldownYears: 0
+    Conditions:
+    - Kind: 27
+      Key:
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: WorkProbation
+      Invert: 0
+    - Kind: 29
+      Key:
+      Operator: 2
+      IntValue: 1
+      FloatValue: 0
+      TextValue:
+      Invert: 0
+    Options:
+    - Id: own_up
+      Label: "\u4E3B\u52A8\u627F\u8BA4"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: "\u627F\u8BA4\u9519\u8BEF\u53CD\u800C\u8BA9\u4EBA\u89C9\u5F97\u9760\u8C31\uFF0C\u4F46\u6263\u5206\u8DD1\u4E0D\u6389\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: hide_mistake
+      Label: "\u8BD5\u56FE\u63A9\u76D6"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: "\u63A9\u76D6\u8BA9\u4E8B\u60C5\u66F4\u590D\u6742\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: weekend_overtime
+    DisplayName: "\u5468\u672B\u52A0\u73ED"
+    Body: "\u9879\u76EE\u8D76\u8FDB\u5EA6\uFF0C\u4E3B\u7BA1\u5E0C\u671B\u4ED6\u5468\u672B\u4E5F\u80FD\u6765\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 18
+    CooldownYears: 1
+    Conditions: []
+    Options:
+    - Id: agree
+      Label: "\u540C\u610F\u52A0\u73ED"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: "\u52A0\u73ED\u8BA9\u4E3B\u7BA1\u6EE1\u610F\u4E86\uFF0C\u4F46\u8EAB\u4F53\u5728\u6297\u8BAE\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: decline
+      Label: "\u62D2\u7EDD\u52A0\u73ED"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: "\u4ED6\u62D2\u7EDD\u4E86\uFF0C\u4E3B\u7BA1\u4E0D\u592A\u9AD8\u5174\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: salary_dispute
+    DisplayName: "\u85AA\u8D44\u4E0D\u7B26"
+    Body: "\u5165\u804C\u540E\u53D1\u73B0\u5B9E\u9645\u85AA\u8D44\u6BD4\u9762\u8BD5\u8BF4\u7684\u4F4E\u4E86\u4E0D\u5C11\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 10
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: performance_pay
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: confront_salary
+      Label: "\u627E\u4EBA\u4E8B\u8C08"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: "\u8C08\u4E86\u4E4B\u540E\u7A0D\u6709\u8C03\u6574\uFF0C\u4F46\u5173\u7CFB\u5FAE\u5999\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: accept
+      Label: "\u5148\u5E72\u7740\u518D\u8BF4"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: "\u4ED6\u9009\u62E9\u5FCD\u4E86\uFF0C\u4F46\u5FC3\u91CC\u618B\u7740\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: team_lunch
+    DisplayName: "\u56E2\u5EFA\u805A\u9910"
+    Body: "\u90E8\u95E8\u805A\u9910\uFF0C\u4ED6\u9700\u8981\u878D\u5165\u56E2\u961F\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: team_collab
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: join
+      Label: "\u79EF\u6781\u53C2\u4E0E"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u4ED6\u5728\u805A\u9910\u4E0A\u8868\u73B0\u6D3B\u8DC3\uFF0C\u5173\u7CFB\u62C9\u8FD1\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: skip
+      Label: "\u627E\u501F\u53E3\u4E0D\u53BB\u4E86"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: "\u4ED6\u6CA1\u53BB\uFF0C\u540C\u4E8B\u89C9\u5F97\u4ED6\u4E0D\u597D\u76F8\u5904\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: unfair_treatment
+    DisplayName: "\u4E0D\u516C\u5E73\u5BF9\u5F85"
+    Body: "\u4ED6\u53D1\u73B0\u540C\u5C97\u4F4D\u7684\u5176\u4ED6\u4EBA\u5F85\u9047\u6BD4\u81EA\u5DF1\u597D\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 10
+    CooldownYears: 0
+    Conditions: []
+    Options:
+    - Id: speak_up
+      Label: "\u63D0\u51FA\u6765"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: "\u63D0\u51FA\u6765\u4E86\u4F46\u6CA1\u4EC0\u4E48\u7528\uFF0C\u53CD\u800C\u88AB\u89C9\u5F97\u4E0D\u597D\u7BA1\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: swallow
+      Label: "\u5FCD\u4E86"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: "\u4ED6\u5FCD\u4E86\uFF0C\u4F46\u5FC3\u91CC\u8D8A\u6765\u8D8A\u4E0D\u5E73\u8861\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 1
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: peer_comparison
+    DisplayName: "\u540C\u671F\u5BF9\u6BD4"
+    Body: "\u548C\u4ED6\u540C\u671F\u8FDB\u6765\u7684\u53E6\u4E00\u4E2A\u4EBA\u8868\u73B0\u5F88\u597D\uFF0C\u4ED6\u611F\u53D7\u5230\u4E86\u538B\u529B\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions: []
+    Options:
+    - Id: compete
+      Label: "\u6697\u4E2D\u8F83\u52B2"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: "\u4ED6\u62FC\u547D\u8868\u73B0\uFF0C\u8BA4\u53EF\u5EA6\u6DA8\u4E86\u4E00\u70B9\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: cooperate
+      Label: "\u4E3B\u52A8\u5408\u4F5C"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 1
+        FloatValue: 0
+        TextValue: "\u4ED6\u9009\u62E9\u4E86\u5408\u4F5C\uFF0C\u4F46\u5BF9\u65B9\u62A2\u4E86\u98CE\u5934\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: nepotism_discovery
+    DisplayName: "\u5173\u7CFB\u6237"
+    Body: "\u4ED6\u53D1\u73B0\u53E6\u4E00\u4E2A\u65B0\u4EBA\u662F\u6709\u5173\u7CFB\u8FDB\u6765\u7684\uFF0C\u5E72\u6D3B\u5C11\u4F46\u5F85\u9047\u597D\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 8
+    CooldownYears: 0
+    Conditions: []
+    Options:
+    - Id: accept
+      Label: "\u770B\u7834\u4E0D\u8BF4\u7834"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: "\u4ED6\u9009\u62E9\u4E86\u6C89\u9ED8\uFF0C\u4F46\u5FC3\u6001\u53D7\u5F71\u54CD\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: grumble
+      Label: "\u79C1\u4E0B\u62B1\u6028"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u62B1\u6028\u4F20\u5230\u4E86\u9886\u5BFC\u8033\u6735\u91CC\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: training_opportunity
+    DisplayName: "\u57F9\u8BAD\u673A\u4F1A"
+    Body: "\u516C\u53F8\u6709\u4E00\u4E2A\u57F9\u8BAD\u540D\u989D\uFF0C\u4E3B\u7BA1\u95EE\u8C01\u60F3\u53C2\u52A0\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 10
+    CooldownYears: 0
+    Conditions: []
+    Options:
+    - Id: volunteer
+      Label: "\u4E3B\u52A8\u62A5\u540D"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u4ED6\u53C2\u52A0\u4E86\u57F9\u8BAD\uFF0C\u5B66\u5230\u4E86\u4E1C\u897F\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 16
+        Key: professionalism
+        IntValue: 2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: pass
+      Label: "\u8BA9\u7ED9\u522B\u4EBA"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 1
+        FloatValue: 0
+        TextValue: "\u4ED6\u8BA9\u51FA\u4E86\u540D\u989D\uFF0C\u6CA1\u4EBA\u7279\u522B\u5728\u610F\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: rule_audit
+    DisplayName: "\u89C4\u5219\u5BA1\u67E5"
+    Body: "\u516C\u53F8\u5F00\u59CB\u4E86\u4E00\u8F6E\u5185\u90E8\u5408\u89C4\u5BA1\u67E5\uFF0C\u4ED6\u7684\u7B80\u5386\u53C8\u88AB\u4EBA\u7FFB\u4E86\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: strict_rules
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    - Kind: 16
+      Key: 
+      Operator: 2
+      IntValue: 25
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: cooperate
+      Label: "\u5168\u529B\u914D\u5408"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: "\u914D\u5408\u5BA1\u67E5\u53CD\u800C\u66B4\u9732\u4E86\u66F4\u591A\u95EE\u9898\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: prepare
+      Label: "\u63D0\u524D\u6574\u7406\u8BF4\u8F9E"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 13
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: "\u4ED6\u63D0\u524D\u68B3\u7406\u4E86\u8BF4\u8F9E\uFF0C\u4F46\u5FC3\u865A\u5199\u5728\u4E86\u8138\u4E0A\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 9
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: new_tool
+    DisplayName: "\u65B0\u5DE5\u5177\u4E0A\u7EBF"
+    Body: "\u516C\u53F8\u5F15\u5165\u4E86\u4E00\u5957\u65B0\u7CFB\u7EDF\uFF0C\u6240\u6709\u4EBA\u8981\u91CD\u65B0\u5B66\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 10
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: tooling
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: embrace
+      Label: "\u79EF\u6781\u5B66\u4E60"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u4ED6\u5B66\u5F97\u5FEB\uFF0C\u88AB\u8868\u626C\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: resist
+      Label: "\u62B5\u89E6\u53D8\u5316"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: "\u4ED6\u4E0D\u613F\u610F\u5B66\uFF0C\u8FDB\u5EA6\u843D\u540E\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: forced_rest
+    DisplayName: "\u5F3A\u5236\u4F11\u606F"
+    Body: "\u4ED6\u6700\u8FD1\u72B6\u6001\u5F88\u5DEE\uFF0C\u540C\u4E8B\u90FD\u529D\u4ED6\u6B47\u4E00\u6B47\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 14
+    CooldownYears: 0
+    Conditions:
+    - Kind: 17
+      Key: 
+      Operator: 2
+      IntValue: 75
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: take_break
+      Label: "\u542C\u529D\u4F11\u606F"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -12
+        FloatValue: 0
+        TextValue: "\u4ED6\u4F11\u606F\u4E86\u4E24\u5929\uFF0C\u72B6\u6001\u56DE\u6765\u4E86\u4E00\u4E9B\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: ignore
+      Label: "\u7EE7\u7EED\u786C\u6491"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: "\u786C\u6491\u8BA9\u8EAB\u4F53\u548C\u60C5\u7EEA\u90FD\u66F4\u7D27\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: quit_urge
+    DisplayName: "\u60F3\u8DD1"
+    Body: "\u4ED6\u7A81\u7136\u60F3\u653E\u5F03\u8FD9\u4EFD\u5DE5\u4F5C\uFF0C\u4EC0\u4E48\u90FD\u4E0D\u60F3\u7BA1\u4E86\u3002"
+    Phase: 0
+    NoticeType: 2
+    BaseWeight: 10
+    CooldownYears: 0
+    Conditions:
+    - Kind: 17
+      Key: 
+      Operator: 2
+      IntValue: 80
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: walk_away
+      Label: "\u76F4\u63A5\u8D70\u4EBA"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 22
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4ED6\u653E\u5F03\u4E86\u8FD9\u4E2A\u673A\u4F1A\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -15
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: hold_on
+      Label: "\u518D\u6491\u4E00\u4E0B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: "\u4ED6\u5F3A\u5FCD\u4F4F\u4E86\uFF0C\u4F46\u773C\u795E\u91CC\u7684\u5149\u6697\u4E86\u4E00\u4E9B\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: health_warning
+    DisplayName: "\u8EAB\u4F53\u62A5\u8B66"
+    Body: "\u4ED6\u5F00\u59CB\u9891\u7E41\u5934\u75DB\u548C\u5931\u7720\uFF0C\u5DE5\u4F5C\u72B6\u6001\u660E\u663E\u4E0B\u6ED1\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 12
+    CooldownYears: 0
+    Conditions:
+    - Kind: 17
+      Key: 
+      Operator: 2
+      IntValue: 70
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: see_doctor
+      Label: "\u53BB\u770B\u533B\u751F"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: "\u533B\u751F\u8BF4\u9700\u8981\u4F11\u606F\uFF0C\u4ED6\u8BF7\u4E86\u534A\u5929\u5047\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -7
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: ignore_health
+      Label: "\u625B\u7740\u4E0D\u67E5"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: "\u8EAB\u4F53\u8D8A\u6765\u8D8A\u4E0D\u5BF9\u52B2\uFF0C\u4F46\u4ED6\u6CA1\u6709\u505C\u4E0B\u6765\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: emotional_outburst
+    DisplayName: "\u60C5\u7EEA\u5931\u63A7"
+    Body: "\u4ED6\u5728\u5DE5\u4F5C\u573A\u5408\u5FCD\u4E0D\u4F4F\u53D1\u4E86\u4E00\u6B21\u813E\u6C14\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 8
+    CooldownYears: 0
+    Conditions:
+    - Kind: 17
+      Key: 
+      Operator: 2
+      IntValue: 85
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: apologize
+      Label: "\u4E8B\u540E\u9053\u6B49"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -10
+        FloatValue: 0
+        TextValue: "\u4ED6\u9053\u4E86\u6B49\uFF0C\u4F46\u540C\u4E8B\u770B\u4ED6\u7684\u773C\u795E\u53D8\u4E86\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: blame_others
+      Label: "\u602A\u522B\u4EBA\u6311\u8845"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -16
+        FloatValue: 0
+        TextValue: "\u4ED6\u628A\u8D23\u4EFB\u63A8\u7ED9\u522B\u4EBA\uFF0C\u6CA1\u4EBA\u4E70\u8D26\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: sleep_crisis
+    DisplayName: "\u7761\u7720\u5371\u673A"
+    Body: "\u8FDE\u7EED\u51E0\u5929\u7761\u4E0D\u597D\uFF0C\u767D\u5929\u5B8C\u5168\u6491\u4E0D\u4F4F\u3002"
+    Phase: 0
+    NoticeType: 2
+    BaseWeight: 10
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: night_shift
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    - Kind: 17
+      Key: 
+      Operator: 2
+      IntValue: 60
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: sleep_aids
+      Label: "\u9760\u836F\u7269\u5165\u7761"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: "\u836F\u6548\u8BA9\u4ED6\u52C9\u5F3A\u5165\u7761\uFF0C\u4F46\u9192\u6765\u66F4\u7D2F\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 5
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: adjust_rhythm
+      Label: "\u8C03\u6574\u4F5C\u606F"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: "\u4ED6\u5C1D\u8BD5\u8C03\u6574\uFF0C\u6548\u679C\u6709\u9650\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -5
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: probation_direct_pass
+    DisplayName: "\u63D0\u524D\u8F6C\u6B63"
+    Body: "\u4E3B\u7BA1\u89C9\u5F97\u4ED6\u5B8C\u5168\u80DC\u4EFB\uFF0C\u5EFA\u8BAE\u63D0\u524D\u8D70\u8F6C\u6B63\u6D41\u7A0B\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 5
+    CooldownYears: 0
+    Conditions:
+    - Kind: 15
+      Key: 
+      Operator: 2
+      IntValue: 90
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    - Kind: 27
+      Key:
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: WorkProbation
+      Invert: 0
+    Options:
+    - Id: accept_pass
+      Label: "\u63A5\u53D7\u8F6C\u6B63"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 20
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4ED6\u63D0\u524D\u901A\u8FC7\u4E86\u8BD5\u7528\u671F\uFF01"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: stay_humble
+      Label: "\u7EE7\u7EED\u4F4E\u8C03\u52AA\u529B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: "\u4ED6\u9009\u62E9\u7EE7\u7EED\u52AA\u529B\uFF0C\u8BA4\u53EF\u5EA6\u5FAE\u6DA8\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -2
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: probation_direct_fail
+    DisplayName: "\u8BD5\u7528\u5931\u8D25"
+    Body: "\u4E3B\u7BA1\u627E\u4ED6\u8C08\u8BDD\uFF0C\u8BF4\u89C9\u5F97\u4ED6\u4E0D\u9002\u5408\u8FD9\u4E2A\u5C97\u4F4D\u3002"
+    Phase: 2
+    NoticeType: 2
+    BaseWeight: 8
+    CooldownYears: 0
+    Conditions:
+    - Kind: 19
+      Key: 
+      Operator: 2
+      IntValue: 20
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    - Kind: 27
+      Key:
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: WorkProbation
+      Invert: 0
+    Options:
+    - Id: argue
+      Label: "\u636E\u7406\u529B\u4E89"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: "\u4ED6\u4E89\u53D6\u4E86\u4E00\u4E0B\uFF0C\u5BF9\u65B9\u52C9\u5F3A\u518D\u7ED9\u4E00\u70B9\u65F6\u95F4\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: accept
+      Label: "\u63A5\u53D7\u7ED3\u679C"
+      RunCheckpointAfterChoice: 1
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 21
+        Key: 
+        IntValue: 0
+        FloatValue: 0
+        TextValue: "\u4ED6\u63A5\u53D7\u4E86\u7ED3\u679C\uFF0C\u8FD9\u6B21\u673A\u4F1A\u5230\u6B64\u4E3A\u6B62\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: lucky_break
+    DisplayName: "\u597D\u8FD0\u964D\u4E34"
+    Body: "\u4E00\u4EF6\u610F\u60F3\u4E0D\u5230\u7684\u597D\u4E8B\u53D1\u751F\u4E86\uFF0C\u8BA9\u4ED6\u7684\u5904\u5883\u7A0D\u5FAE\u597D\u4E86\u70B9\u3002"
+    Phase: 0
+    NoticeType: 2
+    BaseWeight: 3
+    CooldownYears: 0
+    Conditions: []
+    Options:
+    - Id: ride_luck
+      Label: "\u6293\u4F4F\u673A\u4F1A"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 6
+        FloatValue: 0
+        TextValue: "\u597D\u8FD0\u5E2E\u4E86\u4ED6\u4E00\u70B9\u5FD9\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: stay_cautious
+      Label: "\u4FDD\u6301\u8C28\u614E"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 2
+        FloatValue: 0
+        TextValue: "\u4ED6\u6CA1\u6709\u5F97\u610F\u5FD8\u5F62\uFF0C\u7A33\u6B65\u524D\u8FDB\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: -1
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: unexpected_expense
+    DisplayName: "\u610F\u5916\u5F00\u652F"
+    Body: "\u5BB6\u91CC\u7A81\u7136\u9700\u8981\u4E00\u7B14\u94B1\uFF0C\u4ED6\u4E0D\u5F97\u4E0D\u5206\u5FC3\u5904\u7406\u3002"
+    Phase: 0
+    NoticeType: 2
+    BaseWeight: 10
+    CooldownYears: 0
+    Conditions:
+    - Kind: 2
+      Key: family_burden
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: handle
+      Label: "\u5148\u5904\u7406\u5BB6\u91CC\u4E8B"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -8
+        FloatValue: 0
+        TextValue: "\u4ED6\u8BF7\u4E86\u5047\u5904\u7406\u5BB6\u4E8B\uFF0C\u5DE5\u4F5C\u8FDB\u5EA6\u4E25\u91CD\u53D7\u5F71\u54CD\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 10
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: delay
+      Label: "\u5148\u62D6\u7740"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 12
+        FloatValue: 0
+        TextValue: "\u4E8B\u60C5\u62D6\u5927\u4E86\uFF0C\u538B\u529B\u66F4\u5927\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -3
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  - Id: industry_shift
+    DisplayName: "\u884C\u4E1A\u53D8\u5929"
+    Body: "\u884C\u4E1A\u7A81\u7136\u51FA\u73B0\u4E86\u5927\u53D8\u5316\uFF0C\u5C97\u4F4D\u8981\u6C42\u4E5F\u5728\u8DDF\u7740\u53D8\u3002"
+    Phase: 0
+    NoticeType: 2
+    BaseWeight: 6
+    CooldownYears: 0
+    Conditions:
+    - Kind: 11
+      Key: fast_change
+      Operator: 2
+      IntValue: 0
+      FloatValue: 0
+      TextValue: 
+      Invert: 0
+    Options:
+    - Id: adapt
+      Label: "\u5FEB\u901F\u9002\u5E94"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: 3
+        FloatValue: 0
+        TextValue: "\u4ED6\u8DDF\u4E0A\u4E86\u53D8\u5316\uFF0C\u6CA1\u88AB\u7529\u4E0B\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 8
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+    - Id: wait_out
+      Label: "\u7B49\u98CE\u8FC7\u53BB"
+      RunCheckpointAfterChoice: 0
+      Conditions: []
+      Effects:
+      - Timing: 0
+        Kind: 11
+        Key: 
+        IntValue: -6
+        FloatValue: 0
+        TextValue: "\u4ED6\u9009\u62E9\u4E86\u89C2\u671B\uFF0C\u88AB\u89C9\u5F97\u4E0D\u591F\u7075\u6D3B\u3002"
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+      - Timing: 0
+        Kind: 4
+        Key: 
+        IntValue: 4
+        FloatValue: 0
+        TextValue: 
+        SecondaryText: 
+        TagScope: 0
+        EndReason: 0
+        Temporary: 0
+        DurationYears: 0
+  LaterLifeRules:
+  - Id: high_income_home
+    DisplayName: "\u6536\u5165\u8F6C\u5316\u4E3A\u7A33\u5B9A\u751F\u6D3B"
+    Priority: 10
+    Conditions:
+    - Kind: 1
+      Key: income
+      IntValue: 70
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 1
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 2
+      Key: 
+      IntValue: 6
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 4
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u4E70\u623F"
+      SecondaryText: "\u5BB6\u5883\u7A33\u5B9A"
+  - Id: excellent_fit_family
+    DisplayName: "\u9002\u914D\u9AD8\u5E26\u6765\u66F4\u7A33\u7684\u5BB6\u5EAD\u8282\u594F"
+    Priority: 20
+    Conditions:
+    - Kind: 1
+      Key: fit
+      IntValue: 75
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 5
+      Key: 
+      IntValue: 8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: -8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 9
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: stable_family
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+  - Id: high_score_parent_expectation
+    DisplayName: "\u6210\u529F\u5BB6\u5EAD\u7684\u7ADE\u4E89\u538B\u529B"
+    Priority: 30
+    Conditions:
+    - Kind: 1
+      Key: total
+      IntValue: 3800
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.55
+      Invert: 0
+    Effects:
+    - Kind: 4
+      Key: 
+      IntValue: 12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 5
+      Key: 
+      IntValue: -8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: parent_expectation
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u8865\u8BFE"
+      SecondaryText: "\u7ADE\u4E89\u52A0\u5267"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5BB6\u91CC\u6761\u4EF6\u53D8\u597D\u4E86\uFF0C\u4F46\u6BD4\u8F83\u548C\u671F\u5F85\u4E5F\u4E00\u8D77\u53D8\u591A\u3002"
+      SecondaryText: 
+  - Id: city_success_cost
+    DisplayName: "\u9AD8\u6536\u5165\u57CE\u5E02\u751F\u6D3B\u7684\u4EE3\u4EF7"
+    Priority: 40
+    Conditions:
+    - Kind: 1
+      Key: income
+      IntValue: 80
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.35
+      Invert: 0
+    Effects:
+    - Kind: 1
+      Key: 
+      IntValue: -6
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: city_life
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u623F\u8D37"
+      SecondaryText: "\u57CE\u5E02\u53D8\u8D35"
+  - Id: good_prospect_industry_insight
+    DisplayName: "\u9AD8\u524D\u666F\u5C97\u4F4D\u5E26\u6765\u884C\u4E1A\u89C1\u8BC6"
+    Priority: 50
+    Conditions:
+    - Kind: 1
+      Key: prospect
+      IntValue: 72
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 3
+      Key: 
+      IntValue: 12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 6
+      Key: 
+      IntValue: 6
+      TextValue: 
+      SecondaryText: 
+    - Kind: 9
+      Key: 
+      IntValue: 5
+      TextValue: 
+      SecondaryText: 
+  - Id: good_prospect_turbulence
+    DisplayName: "\u98CE\u53E3\u884C\u4E1A\u7684\u6CE2\u52A8"
+    Priority: 60
+    Conditions:
+    - Kind: 1
+      Key: prospect
+      IntValue: 78
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.35
+      Invert: 0
+    Effects:
+    - Kind: 7
+      Key: 
+      IntValue: 12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 17
+      Key: 
+      IntValue: -8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: early_mature
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u8F6C\u5411"
+      SecondaryText: "\u98CE\u53E3\u53D8\u8138"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u884C\u4E1A\u4E0D\u662F\u4E00\u76F4\u5F80\u4E0A\uFF0C\u540E\u6765\u4E5F\u7ECF\u5386\u8FC7\u51E0\u6B21\u98CE\u53E3\u53D8\u8138\u3002"
+      SecondaryText: 
+  - Id: ai_work_lineage
+    DisplayName: "AI\u5C97\u4F4D\u5F71\u54CD\u4E0B\u4E00\u4EE3"
+    Priority: 70
+    Conditions:
+    - Kind: 12
+      Key: ai
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 3
+      Key: 
+      IntValue: 12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: ai_influence
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 11
+      Key: major
+      IntValue: 5
+      TextValue: 
+      SecondaryText: 
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5B69\u5B50\u5F88\u65E9\u5C31\u542C\u8FC7\u5DE5\u5177\u3001\u6A21\u578B\u548C\u81EA\u52A8\u5316\u8FD9\u4E9B\u8BCD\u3002"
+      SecondaryText: 
+  - Id: late_settle_down
+    DisplayName: "\u592A\u665A\u7A33\u5B9A\u4E0B\u6765"
+    Priority: 80
+    Conditions:
+    - Kind: 3
+      Key: 
+      IntValue: 35
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 9
+      Key: 
+      IntValue: -32
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u665A\u5B9A"
+      SecondaryText: "\u7A33\u5B9A\u6765\u8FDF"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u7A33\u5B9A\u6765\u5F97\u6709\u70B9\u665A\uFF0C\u5F88\u591A\u4EBA\u751F\u9009\u62E9\u90FD\u88AB\u538B\u7F29\u4E86\u3002"
+      SecondaryText: 
+  - Id: high_pressure_home
+    DisplayName: "\u9AD8\u538B\u5DE5\u4F5C\u5F71\u54CD\u5BB6\u5EAD\u6C1B\u56F4"
+    Priority: 90
+    Conditions:
+    - Kind: 5
+      Key: 
+      IntValue: 65
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 4
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 5
+      Key: 
+      IntValue: -10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: parent_expectation
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u5FD9\u788C"
+      SecondaryText: "\u5F88\u5C11\u95F2\u4E0B"
+  - Id: low_income_hard_start
+    DisplayName: "\u6536\u5165\u4F4E\u5BFC\u81F4\u5BB6\u5EAD\u8D77\u6B65\u8270\u96BE"
+    Priority: 100
+    Conditions:
+    - Kind: 2
+      Key: income
+      IntValue: 45
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 1
+      Key: 
+      IntValue: -14
+      TextValue: 
+      SecondaryText: 
+    - Kind: 2
+      Key: 
+      IntValue: -6
+      TextValue: 
+      SecondaryText: 
+    - Kind: 9
+      Key: 
+      IntValue: -18
+      TextValue: 
+      SecondaryText: 
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u94B1\u4E00\u76F4\u4E0D\u5BBD\u88D5\uFF0C\u5F88\u591A\u8BA1\u5212\u53EA\u80FD\u5F80\u540E\u62D6\u3002"
+      SecondaryText: 
+  - Id: poor_miracle_child
+    DisplayName: "\u4F4E\u8D44\u6E90\u5BB6\u5EAD\u7684\u5C0F\u6982\u7387\u7FFB\u76D8\u540E\u4EE3"
+    Priority: 110
+    Conditions:
+    - Kind: 2
+      Key: income
+      IntValue: 45
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.28
+      Invert: 0
+    Effects:
+    - Kind: 8
+      Key: 
+      IntValue: 35
+      TextValue: 
+      SecondaryText: 
+    - Kind: 10
+      Key: 
+      IntValue: 1
+      TextValue: 
+      SecondaryText: 
+    - Kind: 11
+      Key: ability
+      IntValue: 16
+      TextValue: 
+      SecondaryText: 
+    - Kind: 11
+      Key: education
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: upward_seed
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u8D35\u4EBA"
+      SecondaryText: "\u6539\u5199\u8DEF\u5F84"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u4F46\u4F4E\u5904\u4E5F\u4F1A\u5192\u51FA\u610F\u5916\u7684\u706B\u661F\uFF0C\u4E00\u4E2A\u5B69\u5B50\u6293\u4F4F\u4E86\u7F55\u89C1\u7684\u673A\u4F1A\u3002"
+      SecondaryText: 
+  - Id: resume_risk_shadow
+    DisplayName: "\u7B80\u5386\u98CE\u9669\u7684\u957F\u671F\u9634\u5F71"
+    Priority: 178
+    Conditions:
+    - Kind: 7
+      Key: 
+      IntValue: 40
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.55
+      Invert: 0
+    Effects:
+    - Kind: 6
+      Key: 
+      IntValue: -12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 7
+      Key: 
+      IntValue: 14
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: broken_home
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 6
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u4FE1\u7528\u5371\u673A"
+      SecondaryText: "\u8BDA\u4FE1\u4EE3\u4EF7"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u90A3\u6B21\u5305\u88C5\u7B80\u5386\u7684\u4E8B\u540E\u6765\u88AB\u7FFB\u51FA\u6765\uFF0C\u6574\u4E2A\u5BB6\u90FD\u8499\u4E86\u4E00\u5C42\u9634\u5F71\u3002"
+      SecondaryText: 
+  - Id: physical_wear
+    DisplayName: "\u4F53\u529B\u52B3\u52A8\u7684\u8EAB\u4F53\u4EE3\u4EF7"
+    Priority: 135
+    Conditions:
+    - Kind: 12
+      Key: physical
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.45
+      Invert: 0
+    Effects:
+    - Kind: 0
+      Key: 
+      IntValue: -12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 5
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u65E7\u4F24"
+      SecondaryText: "\u4F53\u529B\u900F\u652F"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u8EAB\u4F53\u7684\u8D26\u8FDF\u65E9\u8981\u8FD8\uFF0C\u540E\u6765\u603B\u662F\u67D0\u4E2A\u5173\u8282\u5148\u51FA\u95EE\u9898\u3002"
+      SecondaryText: 
+  - Id: outdoor_weather
+    DisplayName: "\u98CE\u91CC\u6765\u96E8\u91CC\u53BB"
+    Priority: 140
+    Conditions:
+    - Kind: 12
+      Key: outdoor
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.35
+      Invert: 0
+    Effects:
+    - Kind: 0
+      Key: 
+      IntValue: -8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u98CE\u5439\u65E5\u6652"
+      SecondaryText: "\u8EAB\u4F53\u78E8\u8017"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5E38\u5E74\u5728\u6237\u5916\uFF0C\u76AE\u80A4\u548C\u9AA8\u5934\u90FD\u8BB0\u4F4F\u4E86\u90A3\u4E9B\u5929\u6C14\u3002"
+      SecondaryText: 
+  - Id: night_shift_health
+    DisplayName: "\u591C\u73ED\u7684\u8EAB\u4F53\u8D26"
+    Priority: 142
+    Conditions:
+    - Kind: 12
+      Key: night_shift
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.4
+      Invert: 0
+    Effects:
+    - Kind: 0
+      Key: 
+      IntValue: -10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 7
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u5931\u7720"
+      SecondaryText: "\u663C\u591C\u7D0A\u4E71"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5012\u73ED\u7684\u65E5\u5B50\u7ED3\u675F\u540E\uFF0C\u7761\u7720\u518D\u4E5F\u6CA1\u6709\u5B8C\u5168\u6062\u590D\u6B63\u5E38\u3002"
+      SecondaryText: 
+  - Id: strict_rules_habit
+    DisplayName: "\u89C4\u5219\u4E25\u683C\u517B\u6210\u7684\u4E60\u60EF"
+    Priority: 145
+    Conditions:
+    - Kind: 12
+      Key: strict_rules
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 11
+      Key: maturity
+      IntValue: 3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 5
+      Key: 
+      IntValue: 3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u5B88\u89C4\u77E9"
+      SecondaryText: "\u79E9\u5E8F\u611F"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5728\u4E25\u683C\u7684\u73AF\u5883\u5F85\u4E45\u4E86\uFF0C\u8FDE\u5BF9\u5B69\u5B50\u7684\u8981\u6C42\u4E5F\u53D8\u591A\u4E86\u3002"
+      SecondaryText: 
+  - Id: customer_contact_social
+    DisplayName: "\u5BA2\u6237\u63A5\u89E6\u5E26\u6765\u7684\u793E\u4EA4\u80FD\u529B"
+    Priority: 150
+    Conditions:
+    - Kind: 12
+      Key: customer_contact
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.45
+      Invert: 0
+    Effects:
+    - Kind: 11
+      Key: communication
+      IntValue: 2
+      TextValue: 
+      SecondaryText: 
+    - Kind: 6
+      Key: 
+      IntValue: 4
+      TextValue: 
+      SecondaryText: 
+    - Kind: 9
+      Key: 
+      IntValue: 3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5929\u5929\u548C\u4EBA\u6253\u4EA4\u9053\uFF0C\u540E\u6765\u5728\u5B69\u5B50\u9762\u524D\u4E5F\u80FD\u8BF4\u4F1A\u9053\u3002"
+      SecondaryText: 
+  - Id: low_income_child_delay
+    DisplayName: "\u6536\u5165\u4F4E\u63A8\u8FDF\u751F\u80B2"
+    Priority: 155
+    Conditions:
+    - Kind: 2
+      Key: income
+      IntValue: 40
+      FloatValue: 0
+      Invert: 0
+    - Kind: 3
+      Key: 
+      IntValue: 28
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 9
+      Key: 
+      IntValue: -30
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u665A\u80B2"
+      SecondaryText: "\u7ECF\u6D4E\u538B\u529B"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u4E0D\u662F\u4E0D\u60F3\u8981\u5B69\u5B50\uFF0C\u662F\u771F\u7684\u89C9\u5F97\u517B\u4E0D\u8D77\u3002"
+      SecondaryText: 
+  - Id: low_income_health_decay
+    DisplayName: "\u4F4E\u6536\u5165\u52A0\u901F\u8EAB\u4F53\u8870\u9000"
+    Priority: 156
+    Conditions:
+    - Kind: 2
+      Key: income
+      IntValue: 38
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.5
+      Invert: 0
+    Effects:
+    - Kind: 0
+      Key: 
+      IntValue: -10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 1
+      Key: 
+      IntValue: -10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u770B\u4E0D\u8D77\u75C5"
+      SecondaryText: "\u5065\u5EB7\u6ED1\u5761"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5C0F\u75C5\u62D6\u6210\u5927\u75C5\uFF0C\u4E0D\u662F\u4E0D\u60F3\u6CBB\uFF0C\u662F\u6CBB\u4E0D\u8D77\u3002"
+      SecondaryText: 
+  - Id: performance_volatility
+    DisplayName: "\u7EE9\u6548\u5236\u7684\u6536\u5165\u6CE2\u52A8"
+    Priority: 160
+    Conditions:
+    - Kind: 12
+      Key: performance_pay
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.45
+      Invert: 0
+    Effects:
+    - Kind: 7
+      Key: 
+      IntValue: 12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 1
+      Key: 
+      IntValue: -8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u4E0D\u7A33\u5B9A"
+      SecondaryText: "\u6536\u5165\u8D77\u4F0F"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u597D\u7684\u65F6\u5019\u8FD8\u4E0D\u9519\uFF0C\u5DEE\u7684\u65F6\u5019\u5168\u5BB6\u90FD\u5728\u7B49\u4E0B\u4E2A\u6708\u3002"
+      SecondaryText: 
+  - Id: remote_isolation
+    DisplayName: "\u8FDC\u7A0B\u5DE5\u4F5C\u7684\u793E\u4EA4\u5B64\u5C9B"
+    Priority: 165
+    Conditions:
+    - Kind: 12
+      Key: remote
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.4
+      Invert: 0
+    Effects:
+    - Kind: 1
+      Key: 
+      IntValue: -6
+      TextValue: 
+      SecondaryText: 
+    - Kind: 5
+      Key: 
+      IntValue: -8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 11
+      Key: communication
+      IntValue: -4
+      TextValue: 
+      SecondaryText: 
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u957F\u671F\u4E00\u4E2A\u4EBA\u5BF9\u7740\u5C4F\u5E55\uFF0C\u548C\u5916\u754C\u8D8A\u6765\u8D8A\u8FDC\u3002"
+      SecondaryText: 
+  - Id: appearance_job_trap
+    DisplayName: "\u9760\u8138\u5403\u996D\u7684\u4FDD\u8D28\u671F"
+    Priority: 170
+    Conditions:
+    - Kind: 12
+      Key: appearance_sensitive
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 3
+      Key: 
+      IntValue: 35
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.5
+      Invert: 0
+    Effects:
+    - Kind: 4
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 17
+      Key: 
+      IntValue: -10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u8FC7\u671F"
+      SecondaryText: "\u5916\u8C8C\u7126\u8651"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u9760\u5F62\u8C61\u5403\u996D\u7684\u5C97\u4F4D\uFF0C\u5E74\u9F84\u4E00\u4E0A\u6765\u5C31\u53D8\u5F97\u7126\u8651\u3002"
+      SecondaryText: 
+  - Id: ai_job_obsolescence
+    DisplayName: "AI\u5C97\u4F4D\u7684\u66FF\u4EE3\u98CE\u9669"
+    Priority: 175
+    Conditions:
+    - Kind: 12
+      Key: ai
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 12
+      Key: tooling
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.35
+      Invert: 0
+    Effects:
+    - Kind: 7
+      Key: 
+      IntValue: 14
+      TextValue: 
+      SecondaryText: 
+    - Kind: 17
+      Key: 
+      IntValue: -12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: early_mature
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u66FF\u4EE3"
+      SecondaryText: "\u5DE5\u5177\u8FED\u4EE3"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5DE5\u5177\u5728\u8FDB\u6B65\uFF0C\u4F46\u4EBA\u4E0D\u4E00\u5B9A\u80FD\u8DDF\u4E0A\uFF0C\u540E\u6765\u4E5F\u7ECF\u5386\u8FC7\u51E0\u6B21\u88AB\u66FF\u6362\u7684\u6050\u614C\u3002"
+      SecondaryText: 
+  - Id: resume_risk_caught
+    DisplayName: "\u7B80\u5386\u9020\u5047\u88AB\u63ED\u53D1"
+    Priority: 179
+    Conditions:
+    - Kind: 7
+      Key: 
+      IntValue: 60
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.35
+      Invert: 0
+    Effects:
+    - Kind: 6
+      Key: 
+      IntValue: -18
+      TextValue: 
+      SecondaryText: 
+    - Kind: 7
+      Key: 
+      IntValue: 20
+      TextValue: 
+      SecondaryText: 
+    - Kind: 1
+      Key: 
+      IntValue: -14
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: second_gen_migrant
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u7A7F\u5E2E"
+      SecondaryText: "\u4FE1\u4EFB\u5D29\u584C"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u9020\u5047\u88AB\u63ED\u53D1\u540E\uFF0C\u4ED6\u4E0D\u5F97\u4E0D\u9891\u7E41\u6362\u5DE5\u4F5C\uFF0C\u5BB6\u4EBA\u4E5F\u8DDF\u7740\u6F02\u6CCA\u3002"
+      SecondaryText: 
+  - Id: outdoor_freedom
+    DisplayName: "\u5916\u52E4\u7684\u81EA\u7531\u611F"
+    Priority: 180
+    Conditions:
+    - Kind: 12
+      Key: outdoor
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.25
+      Invert: 0
+    Effects:
+    - Kind: 11
+      Key: resilience
+      IntValue: 3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: -3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u867D\u7136\u8F9B\u82E6\uFF0C\u4F46\u5728\u5916\u9762\u8DD1\u60EF\u4E86\uFF0C\u53CD\u800C\u4E0D\u9002\u5E94\u88AB\u5173\u5728\u529E\u516C\u5BA4\u91CC\u3002"
+      SecondaryText: 
+  - Id: team_work_family
+    DisplayName: "\u56E2\u961F\u534F\u4F5C\u7684\u5F52\u5C5E\u611F"
+    Priority: 185
+    Conditions:
+    - Kind: 12
+      Key: team_collab
+      IntValue: 0
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.35
+      Invert: 0
+    Effects:
+    - Kind: 1
+      Key: 
+      IntValue: 4
+      TextValue: 
+      SecondaryText: 
+    - Kind: 9
+      Key: 
+      IntValue: 3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 5
+      Key: 
+      IntValue: 3
+      TextValue: 
+      SecondaryText: 
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u5728\u56E2\u961F\u91CC\u5F85\u4E45\u4E86\uFF0C\u56DE\u5BB6\u4E5F\u5B66\u4F1A\u4E86\u914D\u5408\u548C\u8BA9\u6B65\u3002"
+      SecondaryText: 
+  - Id: low_income_no_pension
+    DisplayName: "\u4F4E\u85AA\u6CA1\u6709\u79EF\u84C4"
+    Priority: 190
+    Conditions:
+    - Kind: 2
+      Key: income
+      IntValue: 35
+      FloatValue: 0
+      Invert: 0
+    Effects:
+    - Kind: 4
+      Key: 
+      IntValue: 14
+      TextValue: 
+      SecondaryText: 
+    - Kind: 1
+      Key: 
+      IntValue: -12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 8
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u6708\u5149"
+      SecondaryText: "\u5B58\u4E0D\u4E0B\u94B1"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u4E00\u5E74\u5230\u5934\u5B58\u4E0D\u4E0B\u4EC0\u4E48\uFF0C\u540E\u6765\u56DE\u5934\u770B\u5168\u662F\u7A7A\u7684\u3002"
+      SecondaryText: 
+  - Id: high_income_expectation
+    DisplayName: "\u9AD8\u6536\u5165\u5BB6\u5EAD\u7684\u671F\u5F85\u4EE3\u4EF7"
+    Priority: 192
+    Conditions:
+    - Kind: 1
+      Key: income
+      IntValue: 78
+      FloatValue: 0
+      Invert: 0
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      FloatValue: 0.5
+      Invert: 0
+    Effects:
+    - Kind: 1
+      Key: 
+      IntValue: 6
+      TextValue: 
+      SecondaryText: 
+    - Kind: 4
+      Key: 
+      IntValue: 12
+      TextValue: 
+      SecondaryText: 
+    - Kind: 12
+      Key: 
+      IntValue: 10
+      TextValue: 
+      SecondaryText: 
+    - Kind: 13
+      Key: parent_expectation
+      IntValue: 0
+      TextValue: 
+      SecondaryText: 
+    - Kind: 14
+      Key: 
+      IntValue: 0
+      TextValue: "\u8865\u8BFE"
+      SecondaryText: "\u7ADE\u4E89\u52A0\u5267"
+    - Kind: 15
+      Key: 
+      IntValue: 0
+      TextValue: "\u6761\u4EF6\u53D8\u597D\u4E86\uFF0C\u4F46\u6BD4\u8F83\u548C\u671F\u5F85\u4E5F\u4E00\u8D77\u53D8\u591A\u3002"
+      SecondaryText: 
+  LastNames:
+  - "\u674E"
+  - "\u738B"
+  - "\u6797"
+  - "\u8D75"
+  - "\u9648"
+  - "\u5468"
+  - "\u987E"
+  - "\u8BB8"
+  - "\u5F20"
+  - "\u5218"
+  - "\u6768"
+  - "\u9EC4"
+  - "\u5434"
+  - "\u90D1"
+  - "\u5B59"
+  - "\u9A6C"
+  - "\u6731"
+  - "\u80E1"
+  - "\u90ED"
+  - "\u4F55"
+  - "\u7F57"
+  - "\u9AD8"
+  - "\u6881"
+  - "\u5B8B"
+  - "\u5510"
+  - "\u97E9"
+  - "\u51AF"
+  - "\u9093"
+  - "\u66F9"
+  MaleFirstNames:
+  - "\u77E5\u884C"
+  - "\u5B89\u548C"
+  - "\u661F\u8FDC"
+  - "\u666F\u660E"
+  - "\u4FEE\u8FDC"
+  - "\u627F\u5FD7"
+  - "\u5B66\u6587"
+  - "\u5EFA\u56FD"
+  - "\u5FD7\u8FDC"
+  - "\u660E\u5FB7"
+  - "\u601D\u6E90"
+  - "\u7ACB\u8BDA"
+  - "\u5929\u4F51"
+  - "\u6668\u5149"
+  - "\u6D69\u7136"
+  - "\u542F\u660E"
+  - "\u5B88\u6B63"
+  - "\u6DA6\u6CFD"
+  - "\u6052\u6BC5"
+  - "\u5609\u8A00"
+  FemaleFirstNames:
+  - "\u5C0F\u6EE1"
+  - "\u541B\u8BED"
+  - "\u5B89\u79BE"
+  - "\u6E05\u8BB8"
+  - "\u5357\u661F"
+  - "\u82E5\u5170"
+  - "\u601D\u9F50"
+  - "\u9759\u59DD"
+  - "\u5609\u5B81"
+  - "\u6C90\u6668"
+  - "\u542C\u96E8"
+  - "\u77E5\u5FAE"
+  - "\u5FF5\u6148"
+  - "\u6620\u96EA"
+  - "\u4E66\u7434"
+  - "\u6000\u747E"
+  - "\u9526\u4E66"
+  - "\u60A6\u5FC3"
+  - "\u4E50\u8A00"
+  - "\u96C5\u671B"

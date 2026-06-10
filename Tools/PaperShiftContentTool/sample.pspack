@@ -1,0 +1,68 @@
+# Paper Shift Content Pack v1
+# 用法：node Tools/PaperShiftContentTool/convert.js Tools/PaperShiftContentTool/sample.pspack Tools/PaperShiftContentTool/output/PaperShiftContentPack.json
+MergeMode: merge
+
+@tag pressure_absorber
+name: 情绪稳定
+description: 遇到压力时不容易被带着走，但不代表永远不会崩。
+rarity: rare
+polarity: Positive
+effect: passive AddFitScore resilience 6
+effect: passive PassiveEventWeight stress_breakdown -12
+conditional: phase=Any workTags=high_pressure,customer_contact
+conditionalEffect: AddStress int=-6
+conditionalEffect: AddRecognition int=4
+@end
+
+@workTag night_shift
+name: 夜班
+description: 作息反人类，压力和健康风险更高。
+requirement: target=FitDimension dimension=Resilience int=55 passRecognition=4 failRecognition=-7 passStress=-2 failStress=9
+eventWeight: event=stress_breakdown delta=18
+eventWeightCondition: kind=StressAtLeast int=65
+@end
+
+@event night_shift_warning
+name: 夜班预警
+body: 连续倒班后，他发现自己白天越来越难集中。
+phase: Probation
+notice: Modal
+baseWeight: 16
+condition: kind=JobHasTag key=night_shift
+option: id=rest label=请一天假 checkpoint=true
+optionEffect: AddStress int=-12 text="他强行休息了一天，状态缓了一点。"
+optionEffect: AddRecognition int=-5
+option: id=push label=硬撑过去 checkpoint=true
+optionEffect: AddStress int=14 text="他硬撑了过去，但身体和情绪都更紧了。"
+optionEffect: AddRecognition int=7
+@end
+
+@flowMoment night_shift_small_save
+name: 夜班临时补救
+text: 他提前把交接表补了一遍，夜里少出了一次差错。
+action: WorkProbation
+baseWeight: 10
+condition: kind=JobHasTag key=night_shift
+effect: AddRecognition int=4
+effect: AddStress int=3
+@end
+
+@lifeRule night_shift_child_shadow
+name: 夜班家庭的作息阴影
+priority: 130
+condition: JobHasTag night_shift
+condition: RandomChance chance=0.45
+effect: AddLifePressure int=10
+effect: AddHeirStress int=8
+effect: AddMilestone text="倒班" secondary="昼夜颠倒"
+effect: AddStoryFragment text="夜班让家里的生活节奏总是慢半拍。"
+@end
+
+@company late_light_logistics
+name: 长明物流
+industry: 城市配送
+founded: 2024-06
+tags: local,high_pressure
+job: id=night_dispatcher name=夜班调度员 tags=night_shift,high_pressure,customer_contact salary=8000..12000 difficulty=48 threshold=70 intensity=66
+jobRequirement: stat=ability min=45 weight=2
+@end

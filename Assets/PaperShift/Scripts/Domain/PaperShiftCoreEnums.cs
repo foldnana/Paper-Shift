@@ -117,7 +117,17 @@ namespace PaperShift.Domain
         ResumeRiskAtLeast,
         StressAtLeast,
         StressAtMost,
-        RecognitionAtMost
+        RecognitionAtMost,
+        ResumeFieldMode,
+        ResumeFieldHidden,
+        ResumeFieldExaggerated,
+        AnyResumeFieldHidden,
+        AnyResumeFieldExaggerated,
+        ResumeTagHidden,
+        AnyResumeTagHidden,
+        ActionIs,
+        CurrentJobMonthsAtLeast,
+        CurrentJobMonthsAtMost
     }
 
     public enum EffectTiming

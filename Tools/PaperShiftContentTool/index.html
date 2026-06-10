@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paper Shift 内容编辑器</title>
+  <style>
+    :root {
+      --bg: #eef7fb;
+      --panel: #ffffff;
+      --ink: #2f343a;
+      --muted: #6a7480;
+      --line: #cbdde8;
+      --blue: #219fe3;
+      --purple: #9424e8;
+      --bad: #d54b4b;
+      --warn: #b87912;
+      --ok: #22875f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      backdrop-filter: blur(12px);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(420px, 1.15fr) minmax(360px, 0.85fr);
+      gap: 18px;
+      padding: 18px;
+      min-height: calc(100vh - 72px);
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button,
+    label.file-button {
+      border: 2px solid var(--ink);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 8px;
+      min-height: 36px;
+      padding: 0 13px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    button.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    button.purple {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #fff;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 680px;
+      resize: vertical;
+      border: 0;
+      outline: 0;
+      padding: 18px;
+      color: #24313c;
+      background: #fbfdff;
+      font: 14px/1.65 Consolas, "Cascadia Mono", "Microsoft YaHei", monospace;
+      tab-size: 2;
+    }
+
+    #jsonOutput {
+      min-height: 340px;
+      max-height: 520px;
+      border-top: 1px solid var(--line);
+      background: #f8fbfd;
+    }
+
+    .side {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #f8fcff;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 24px;
+      color: var(--blue);
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .messages {
+      padding: 0 16px 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .message {
+      border-radius: 8px;
+      padding: 10px 12px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .error {
+      color: var(--bad);
+      background: #fff0f0;
+      border: 1px solid #f1caca;
+    }
+
+    .warning {
+      color: var(--warn);
+      background: #fff8e8;
+      border: 1px solid #edd49d;
+    }
+
+    .success {
+      color: var(--ok);
+      background: #edf9f3;
+      border: 1px solid #bde6d3;
+    }
+
+    .templates {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f7fbfe;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      padding: 0 16px 14px;
+    }
+
+    @media (max-width: 980px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      textarea {
+        min-height: 520px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Paper Shift 内容编辑器</h1>
+    <div class="toolbar">
+      <button class="primary" id="parseButton">解析文本</button>
+      <label class="file-button" for="fileInput">导入文本</label>
+      <input id="fileInput" type="file" accept=".pspack,.txt,.md">
+      <label class="file-button" for="jsonFileInput">导入 JSON</label>
+      <input id="jsonFileInput" type="file" accept=".json,application/json">
+      <button id="jsonToTextButton">JSON 转文本</button>
+      <button id="downloadButton">下载 JSON</button>
+      <button class="purple" id="copyButton">复制 JSON</button>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="section-title">
+        <span>内容包文本</span>
+        <span id="lineCount">0 行</span>
+      </div>
+      <div class="templates">
+        <button data-template="tag">插入人物标签</button>
+        <button data-template="workTag">插入工作标签</button>
+        <button data-template="event">插入事件</button>
+        <button data-template="flowMoment">插入流程小插曲</button>
+        <button data-template="lifeRule">插入后半生规则</button>
+        <button data-template="company">插入公司岗位</button>
+      </div>
+      <p class="hint">左侧是可编辑文本包，右侧是 Unity JSON。可以导入 JSON 转回文本包继续编辑。</p>
+      <textarea id="sourceInput" spellcheck="false"></textarea>
+    </section>
+
+    <section class="side">
+      <div>
+        <div class="section-title">
+          <span>解析结果</span>
+          <span id="statusText">未解析</span>
+        </div>
+        <div class="summary" id="summary"></div>
+        <div class="messages" id="messages"></div>
+      </div>
+      <div class="section-title">
+        <span>Unity JSON</span>
+        <span>PaperShiftContentPack</span>
+      </div>
+      <textarea id="jsonOutput" spellcheck="false"></textarea>
+    </section>
+  </main>
+
+  <script src="./parser.js"></script>
+  <script>
+    const sample = `# Paper Shift Content Pack v1
+MergeMode: merge
+
+@tag pressure_absorber
+name: 情绪稳定
+description: 遇到压力时不容易被带着走，但不代表永远不会崩。
+rarity: rare
+polarity: Positive
+effect: passive AddFitScore resilience 6
+effect: passive PassiveEventWeight stress_breakdown -12
+conditional: phase=Any workTags=high_pressure,customer_contact
+conditionalEffect: AddStress int=-6
+conditionalEffect: AddRecognition int=4
+@end
+
+@workTag night_shift
+name: 夜班
+description: 作息反人类，压力和健康风险更高。
+requirement: target=FitDimension dimension=Resilience int=55 passRecognition=4 failRecognition=-7 passStress=-2 failStress=9
+eventWeight: event=stress_breakdown delta=18
+eventWeightCondition: kind=StressAtLeast int=65
+@end
+
+@event night_shift_warning
+name: 夜班预警
+body: 连续倒班后，他发现自己白天越来越难集中。
+phase: Probation
+notice: Modal
+baseWeight: 16
+condition: kind=JobHasTag key=night_shift
+option: id=rest label=请一天假 checkpoint=true
+optionEffect: AddStress int=-12 text="他强行休息了一天，状态缓了一点。"
+optionEffect: AddRecognition int=-5
+option: id=push label=硬撑过去 checkpoint=true
+optionEffect: AddStress int=14 text="他硬撑了过去，但身体和情绪都更紧了。"
+optionEffect: AddRecognition int=7
+@end
+
+@flowMoment night_shift_small_save
+name: 夜班临时补救
+text: 他提前把交接表补了一遍，夜里少出了一次差错。
+action: WorkProbation
+baseWeight: 10
+condition: kind=JobHasTag key=night_shift
+effect: AddRecognition int=4
+effect: AddStress int=3
+@end
+
+@lifeRule night_shift_child_shadow
+name: 夜班家庭的作息阴影
+priority: 130
+condition: JobHasTag night_shift
+condition: RandomChance chance=0.45
+effect: AddLifePressure int=10
+effect: AddHeirStress int=8
+effect: AddMilestone text="倒班" secondary="昼夜颠倒"
+effect: AddStoryFragment text="夜班让家里的生活节奏总是慢半拍。"
+@end
+
+@company late_light_logistics
+name: 长明物流
+industry: 城市配送
+founded: 2024-06
+tags: local,high_pressure
+job: id=night_dispatcher name=夜班调度员 tags=night_shift,high_pressure,customer_contact salary=8000..12000 difficulty=48 threshold=70 intensity=66
+jobRequirement: stat=ability min=45 weight=2
+@end
+`;
+
+    const templates = {
+      tag: `
+@tag new_worker_tag
+name: 新人物标签
+description: 这个人长期携带的一种特质。
+rarity: normal
+polarity: Mixed
+effect: passive AddFitScore execution 3
+conditional: phase=Any workTags=high_pressure
+conditionalEffect: AddStress int=-3
+@end
+`,
+      workTag: `
+@workTag new_work_tag
+name: 新工作标签
+description: 这份工作的一类环境、要求或风险。
+requirement: target=FitDimension dimension=Execution int=50 passRecognition=4 failRecognition=-5 passStress=0 failStress=4
+eventWeight: event=stress_breakdown delta=8
+eventWeightCondition: kind=StressAtLeast int=70
+@end
+`,
+      event: `
+@event new_event
+name: 新事件
+body: 这里写事件发生时玩家看到的描述。
+phase: Interview
+notice: Modal
+baseWeight: 12
+condition: kind=Always
+option: id=choice_a label=选择一 checkpoint=true
+optionEffect: AddRecognition int=6 text="选择一带来了一点认可。"
+option: id=choice_b label=选择二 checkpoint=true
+optionEffect: AddStress int=-8 text="选择二让压力下降了。"
+@end
+`,
+      flowMoment: `
+@flowMoment new_flow_moment
+name: 新流程小插曲
+text: 这里写玩家点击流程按钮后看到的日常反馈，不直接写数值变化。
+action: WorkProbation
+baseWeight: 10
+condition: kind=Always
+effect: AddRecognition int=3
+effect: AddStress int=2
+@end
+`,
+      lifeRule: `
+@lifeRule new_later_life_rule
+name: 新后半生规则
+priority: 150
+condition: ScoreAtLeast income 70
+condition: RandomChance chance=0.35
+effect: AddFamilyStability int=8
+effect: AddMilestone text="稳定" secondary="生活变稳"
+effect: AddStoryFragment text="那份工作让家里的底气多了一点。"
+@end
+`,
+      company: `
+@company new_company
+name: 新公司
+industry: 新行业
+founded: 2026-01
+tags: local
+job: id=new_job name=新岗位 tags=office,strict_rules salary=9000..14000 difficulty=45 threshold=70 intensity=42
+jobRequirement: stat=education min=45 weight=2
+jobRequirement: stat=ability min=45 weight=1
+@end
+`
+    };
+
+    const sourceInput = document.getElementById("sourceInput");
+    const jsonOutput = document.getElementById("jsonOutput");
+    const summary = document.getElementById("summary");
+    const messages = document.getElementById("messages");
+    const statusText = document.getElementById("statusText");
+    const lineCount = document.getElementById("lineCount");
+    let lastJson = "";
+
+    sourceInput.value = sample;
+    parseSource();
+
+    document.getElementById("parseButton").addEventListener("click", parseSource);
+    document.getElementById("downloadButton").addEventListener("click", downloadJson);
+    document.getElementById("copyButton").addEventListener("click", copyJson);
+    document.getElementById("jsonToTextButton").addEventListener("click", () => convertJsonToText(jsonOutput.value));
+    document.getElementById("fileInput").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        sourceInput.value = reader.result;
+        parseSource();
+      };
+      reader.readAsText(file, "utf-8");
+    });
+    document.getElementById("jsonFileInput").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => convertJsonToText(reader.result);
+      reader.readAsText(file, "utf-8");
+    });
+
+    document.querySelectorAll("[data-template]").forEach(button => {
+      button.addEventListener("click", () => {
+        const text = templates[button.dataset.template] || "";
+        sourceInput.setRangeText("\n" + text.trim() + "\n", sourceInput.selectionStart, sourceInput.selectionEnd, "end");
+        sourceInput.focus();
+        parseSource();
+      });
+    });
+
+    sourceInput.addEventListener("input", () => {
+      lineCount.textContent = sourceInput.value.split(/\n/).length + " 行";
+    });
+
+    function parseSource() {
+      const result = PaperShiftContentParser.parse(sourceInput.value);
+      lastJson = PaperShiftContentParser.stringify(result.pack);
+      jsonOutput.value = lastJson;
+      lineCount.textContent = sourceInput.value.split(/\n/).length + " 行";
+      renderSummary(result.pack);
+      renderMessages(result);
+    }
+
+    function renderSummary(pack) {
+      summary.innerHTML = "";
+      PaperShiftContentParser.summarize(pack).forEach(([label, value]) => {
+        const item = document.createElement("div");
+        item.className = "metric";
+        item.innerHTML = `<strong>${value}</strong><span>${label}</span>`;
+        summary.appendChild(item);
+      });
+    }
+
+    function renderMessages(result) {
+      messages.innerHTML = "";
+      if (result.errors.length === 0 && result.warnings.length === 0) {
+        statusText.textContent = "可导入";
+        addMessage("success", "没有发现格式错误。");
+        return;
+      }
+
+      statusText.textContent = result.errors.length > 0 ? "有错误" : "有提醒";
+      result.errors.forEach(text => addMessage("error", text));
+      result.warnings.forEach(text => addMessage("warning", text));
+    }
+
+    function addMessage(type, text) {
+      const item = document.createElement("div");
+      item.className = "message " + type;
+      item.textContent = text;
+      messages.appendChild(item);
+    }
+
+    function convertJsonToText(jsonText) {
+      try {
+        sourceInput.value = PaperShiftContentParser.toPspack(jsonText);
+        parseSource();
+        statusText.textContent = "已转文本";
+      } catch (error) {
+        messages.innerHTML = "";
+        statusText.textContent = "JSON 错误";
+        addMessage("error", "JSON 无法转换：" + error.message);
+      }
+    }
+
+    function downloadJson() {
+      parseSource();
+      const blob = new Blob([lastJson], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "PaperShiftContentPack.json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function copyJson() {
+      parseSource();
+      await navigator.clipboard.writeText(lastJson);
+      statusText.textContent = "已复制";
+    }
+  </script>
+</body>
+</html>

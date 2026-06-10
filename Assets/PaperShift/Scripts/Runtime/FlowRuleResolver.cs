@@ -15,7 +15,7 @@ namespace PaperShift.Runtime
             this.conditions = conditions;
         }
 
-        public FlowRuleResult Evaluate(PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random)
+        public FlowRuleResult Evaluate(PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random, FlowCheckpointAction? action = null)
         {
             var result = new FlowRuleResult();
             if (state == null || job == null || profile == null)
@@ -23,9 +23,9 @@ namespace PaperShift.Runtime
                 return result;
             }
 
-            ApplyWorkTags(result, state, company, job, profile, phase, random);
+            ApplyWorkTags(result, state, company, job, profile, phase, random, action);
             ApplyWorkerBaseEffects(result, state);
-            ApplyWorkerConditionalEffects(result, state, company, job, phase, random);
+            ApplyWorkerConditionalEffects(result, state, company, job, phase, random, action);
             return result;
         }
 
@@ -38,14 +38,14 @@ namespace PaperShift.Runtime
             return weight < 1 ? 1 : weight;
         }
 
-        private void ApplyWorkTags(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random)
+        private void ApplyWorkTags(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random, FlowCheckpointAction? action)
         {
             var appliedTagIds = new HashSet<string>();
-            ApplyWorkTagList(result, state, company, job, profile, phase, random, company == null ? null : company.TagIds, appliedTagIds);
-            ApplyWorkTagList(result, state, company, job, profile, phase, random, job.TagIds, appliedTagIds);
+            ApplyWorkTagList(result, state, company, job, profile, phase, random, action, company == null ? null : company.TagIds, appliedTagIds);
+            ApplyWorkTagList(result, state, company, job, profile, phase, random, action, job.TagIds, appliedTagIds);
         }
 
-        private void ApplyWorkTagList(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random, string[] tagIds, HashSet<string> appliedTagIds)
+        private void ApplyWorkTagList(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, FitProfile profile, GameEventPhase phase, System.Random random, FlowCheckpointAction? action, string[] tagIds, HashSet<string> appliedTagIds)
         {
             if (tagIds == null)
             {
@@ -68,7 +68,7 @@ namespace PaperShift.Runtime
 
                 ApplyRequirements(result, state, profile, workTag.Requirements);
                 ApplyEffects(result, workTag.Effects);
-                ApplyEventWeights(result, state, company, job, random, workTag.EventWeights);
+                ApplyEventWeights(result, state, company, job, random, action, workTag.EventWeights);
             }
         }
 
@@ -143,7 +143,7 @@ namespace PaperShift.Runtime
             }
         }
 
-        private void ApplyWorkerConditionalEffects(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, GameEventPhase phase, System.Random random)
+        private void ApplyWorkerConditionalEffects(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, GameEventPhase phase, System.Random random, FlowCheckpointAction? action)
         {
             for (var i = 0; i < state.Worker.Tags.Count; i++)
             {
@@ -166,7 +166,7 @@ namespace PaperShift.Runtime
                         continue;
                     }
 
-                    if (!conditions.AreMet(conditional.Conditions, state, company, job, random))
+                    if (!conditions.AreMet(conditional.Conditions, state, company, job, random, action))
                     {
                         continue;
                     }
@@ -284,7 +284,7 @@ namespace PaperShift.Runtime
             return false;
         }
 
-        private void ApplyEventWeights(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, System.Random random, EventWeightDefinition[] eventWeights)
+        private void ApplyEventWeights(FlowRuleResult result, PaperShiftRunState state, CompanyDefinition company, JobDefinition job, System.Random random, FlowCheckpointAction? action, EventWeightDefinition[] eventWeights)
         {
             if (eventWeights == null)
             {
@@ -294,7 +294,7 @@ namespace PaperShift.Runtime
             for (var i = 0; i < eventWeights.Length; i++)
             {
                 var modifier = eventWeights[i];
-                if (modifier == null || !conditions.AreMet(modifier.Conditions, state, company, job, random))
+                if (modifier == null || !conditions.AreMet(modifier.Conditions, state, company, job, random, action))
                 {
                     continue;
                 }
