@@ -23,6 +23,7 @@ namespace PaperShift.Presenter
         public float Offset = 18f;
         public float StartScale = 0.97f;
         public Ease Ease = Ease.OutCubic;
+        public bool PlayAutomatically = false;
         public bool OnlyActiveChildren = true;
         public bool UseUnscaledTime = true;
 
@@ -45,7 +46,10 @@ namespace PaperShift.Presenter
         private void OnEnable()
         {
             Capture();
-            Play();
+            if (PlayAutomatically)
+            {
+                Play();
+            }
         }
 
         private void OnDisable()
