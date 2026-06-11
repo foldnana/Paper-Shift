@@ -201,7 +201,6 @@ namespace PaperShift.Runtime
             }
 
             var pair = picker.Pick(random);
-            var salary = RollSalary(state, pair.Job);
             var initialRecognition = InitialRecognition(state, pair.Company, pair.Job);
             state.Interview = new InterviewState
             {
@@ -210,7 +209,7 @@ namespace PaperShift.Runtime
                 JobId = pair.Job.Id,
                 JobTitle = pair.Job.DisplayName,
                 OfferThreshold = pair.Job.OfferThreshold,
-                Salary = salary,
+                Salary = 0,
                 Recognition = initialRecognition
             };
             state.Phase = PaperShiftPhase.Interview;
@@ -251,7 +250,7 @@ namespace PaperShift.Runtime
                 CompanyName = company.DisplayName,
                 JobId = job.Id,
                 JobTitle = job.DisplayName,
-                Salary = state.Interview.Salary,
+                Salary = RollSalary(state, job),
                 Intensity = job.WorkIntensity,
                 Recognition = InitialProbationRecognition(state, company, job),
                 WorkYears = 0,
@@ -409,6 +408,11 @@ namespace PaperShift.Runtime
                     continue;
                 }
 
+                if (!AllowsCheckpointAction(gameEvent, action))
+                {
+                    continue;
+                }
+
                 if (!conditions.AreMet(gameEvent.Conditions, state, company, job, random, action))
                 {
                     continue;
@@ -440,11 +444,10 @@ namespace PaperShift.Runtime
                 state.SetEventCooldown(picked.Id, picked.CooldownYears);
             }
 
-            state.AddLog(picked.DisplayName + "：" + picked.Body, picked.NoticeType);
             return new TriggeredEvent(picked, AvailableOptions(picked, state, company, job, action));
         }
 
-        private TriggeredEvent ResolveTriggeredEvent(PaperShiftRunState state, GameEventPhase phase, CompanyDefinition company, JobDefinition job, FlowRuleResult flow, FlowCheckpointAction? action, int eventChancePercent)
+        private TriggeredEvent ResolveTriggeredEvent(PaperShiftRunState state, GameEventPhase phase, CompanyDefinition company, JobDefinition job, FlowRuleResult flow, FlowCheckpointAction? action)
         {
             if (flow != null && !string.IsNullOrEmpty(flow.TriggerEventId))
             {
@@ -453,6 +456,11 @@ namespace PaperShift.Runtime
                 {
                     return triggered;
                 }
+            }
+
+            if (action == FlowCheckpointAction.EventChoice)
+            {
+                return null;
             }
 
             if (state != null && state.Worker.Stress >= 100)
@@ -483,23 +491,18 @@ namespace PaperShift.Runtime
                 flow.AddEventWeight("resume_audit", state.Resume.DeceptionRisk);
             }
 
-            if (random.Next(0, 100) >= Clamp(eventChancePercent, 0, 100))
-            {
-                return null;
-            }
-
             return TryTriggerEvent(state, phase, company, job, flow, action);
         }
 
-        internal TriggeredEvent ResolveTriggeredEventForCheckpoint(PaperShiftRunState state, GameEventPhase phase, CompanyDefinition company, JobDefinition job, FlowRuleResult flow, FlowCheckpointAction action, int eventChancePercent)
+        internal TriggeredEvent ResolveTriggeredEventForCheckpoint(PaperShiftRunState state, GameEventPhase phase, CompanyDefinition company, JobDefinition job, FlowRuleResult flow, FlowCheckpointAction action)
         {
-            return ResolveTriggeredEvent(state, phase, company, job, flow, action, eventChancePercent);
+            return ResolveTriggeredEvent(state, phase, company, job, flow, action);
         }
 
         private TriggeredEvent TriggerEventById(PaperShiftRunState state, string eventId, CompanyDefinition company, JobDefinition job, FlowCheckpointAction? action)
         {
             var gameEvent = FindEvent(eventId);
-            if (gameEvent == null || !CanTriggerEvent(state, gameEvent) || !conditions.AreMet(gameEvent.Conditions, state, company, job, random, action))
+            if (gameEvent == null || !CanTriggerEvent(state, gameEvent) || !AllowsCheckpointAction(gameEvent, action) || !conditions.AreMet(gameEvent.Conditions, state, company, job, random, action))
             {
                 return null;
             }
@@ -510,8 +513,59 @@ namespace PaperShift.Runtime
                 state.SetEventCooldown(gameEvent.Id, gameEvent.CooldownYears);
             }
 
-            state.AddLog(gameEvent.DisplayName + "：" + gameEvent.Body, gameEvent.NoticeType);
             return new TriggeredEvent(gameEvent, AvailableOptions(gameEvent, state, company, job, action));
+        }
+
+        private static bool AllowsCheckpointAction(GameEventDefinition gameEvent, FlowCheckpointAction? action)
+        {
+            if (!action.HasValue || gameEvent == null)
+            {
+                return true;
+            }
+
+            if (action.Value != FlowCheckpointAction.PrepareInterview || gameEvent.Phase != GameEventPhase.Interview)
+            {
+                return true;
+            }
+
+            return HasActionCondition(gameEvent.Conditions, FlowCheckpointAction.PrepareInterview);
+        }
+
+        private static bool HasActionCondition(ConditionDefinition[] conditions, FlowCheckpointAction action)
+        {
+            if (conditions == null)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < conditions.Length; i++)
+            {
+                var condition = conditions[i];
+                if (condition != null && condition.Kind == ConditionKind.ActionIs && ActionConditionMatches(condition, action))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool ActionConditionMatches(ConditionDefinition condition, FlowCheckpointAction action)
+        {
+            var expected = string.IsNullOrEmpty(condition.TextValue) ? condition.Key : condition.TextValue;
+            if (!string.IsNullOrEmpty(expected))
+            {
+                if (Enum.TryParse(expected.Trim(), true, out FlowCheckpointAction parsed))
+                {
+                    return parsed == action;
+                }
+
+                var normalized = expected.Trim().ToLowerInvariant();
+                return action == FlowCheckpointAction.PrepareInterview
+                    && (normalized == "prepare" || normalized == "prepare_interview" || normalized == "interview_prepare");
+            }
+
+            return condition.IntValue >= 0 && condition.IntValue <= (int)FlowCheckpointAction.EventChoice && (FlowCheckpointAction)condition.IntValue == action;
         }
 
         private GameEventDefinition FindEvent(string eventId)
@@ -544,7 +598,7 @@ namespace PaperShift.Runtime
                 return false;
             }
 
-            return gameEvent.CooldownYears > 0 || !state.HasSeenEvent(gameEvent.Id);
+            return gameEvent.CooldownYears < 0 || gameEvent.CooldownYears > 0 || !state.HasSeenEvent(gameEvent.Id);
         }
 
         public EventOptionChoiceResult ChooseEventOption(PaperShiftRunState state, TriggeredEvent triggeredEvent, string optionId)
@@ -577,7 +631,7 @@ namespace PaperShift.Runtime
                 }
 
                 var optionFlow = BuildEventOptionFlow(option);
-                ApplyNonCheckpointOptionEffects(option.Effects, state);
+                ApplyNonCheckpointEffects(option.Effects, state);
                 var checkpoint = checkpoints.Resolve(state, FlowCheckpointAction.EventChoice, phase, optionFlow);
                 if (ShouldResolveSourceCheckpointAfterEvent(triggeredEvent, checkpoint, phase))
                 {
@@ -588,6 +642,31 @@ namespace PaperShift.Runtime
             }
 
             return EventOptionChoiceResult.Ignored();
+        }
+
+        public EventOptionChoiceResult ContinueEvent(PaperShiftRunState state, TriggeredEvent triggeredEvent)
+        {
+            if (triggeredEvent == null || triggeredEvent.Event == null)
+            {
+                return EventOptionChoiceResult.Ignored();
+            }
+
+            var phase = ResolveEventChoicePhase(state, triggeredEvent);
+            if (phase != GameEventPhase.Interview && phase != GameEventPhase.Probation)
+            {
+                effects.Apply(triggeredEvent.Event.Effects, state);
+                return EventOptionChoiceResult.Applied(null, null);
+            }
+
+            var eventFlow = BuildEventFlow(triggeredEvent.Event.Effects);
+            ApplyNonCheckpointEffects(triggeredEvent.Event.Effects, state);
+            var checkpoint = checkpoints.Resolve(state, FlowCheckpointAction.EventChoice, phase, eventFlow);
+            if (ShouldResolveSourceCheckpointAfterEvent(triggeredEvent, checkpoint, phase))
+            {
+                checkpoint = checkpoints.ResolveNaturalOnly(state, triggeredEvent.SourceAction, phase);
+            }
+
+            return EventOptionChoiceResult.Applied(null, checkpoint);
         }
 
         private static bool ShouldResolveSourceCheckpointAfterEvent(TriggeredEvent triggeredEvent, FlowCheckpointResult checkpoint, GameEventPhase phase)
@@ -611,7 +690,14 @@ namespace PaperShift.Runtime
             return result;
         }
 
-        private void ApplyNonCheckpointOptionEffects(EffectDefinition[] optionEffects, PaperShiftRunState state)
+        private static FlowRuleResult BuildEventFlow(EffectDefinition[] eventEffects)
+        {
+            var result = new FlowRuleResult();
+            FlowRuleResolver.ApplyEffects(result, eventEffects);
+            return result;
+        }
+
+        internal void ApplyNonCheckpointEffects(EffectDefinition[] optionEffects, PaperShiftRunState state)
         {
             if (optionEffects == null)
             {
@@ -752,7 +838,16 @@ namespace PaperShift.Runtime
 
         private int RollSalary(PaperShiftRunState state, JobDefinition job)
         {
-            var salary = random.Next(job.SalaryMin, job.SalaryMax + 1);
+            var min = Math.Max(0, job.SalaryMin);
+            var max = Math.Max(0, job.SalaryMax);
+            if (min > max)
+            {
+                var temp = min;
+                min = max;
+                max = temp;
+            }
+
+            var salary = min == max ? min : random.Next(min, max + 1);
             var percent = 0;
             for (var i = 0; i < job.TagIds.Length; i++)
             {

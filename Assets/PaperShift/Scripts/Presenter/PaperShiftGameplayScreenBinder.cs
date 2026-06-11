@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PaperShift.Data;
 using PaperShift.Domain;
 using PaperShift.Model;
 using PaperShift.Runtime;
@@ -507,6 +508,8 @@ namespace PaperShift.Presenter
 
         private CandidateUiData BuildInterviewCardData()
         {
+            var company = InterviewCompany();
+            var job = InterviewJob();
             return new CandidateUiData
             {
                 Badge = "推进",
@@ -517,12 +520,11 @@ namespace PaperShift.Presenter
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.Interview.CompanyName, "待投递")),
-                    new UiPair("经营", CompanyOperatingAgeLabel(State.Interview.CompanyId)),
+                    new UiPair("行业", CompanyIndustryLabel(company)),
+                    new UiPair("经营", CompanyOperatingAgeLabel(company)),
                     new UiPair("岗位", EmptyFallback(State.Interview.JobTitle, "未知")),
-                    new UiPair("月薪", State.Interview.Salary.ToString()),
-                    new UiPair("认可度", State.Interview.Recognition + "%"),
-                    new UiPair("简历风险", State.Resume.DeceptionRisk + "%"),
-                    new UiPair("状态", State.Interview.Recognition >= 70 ? "有希望" : "推进中")
+                    new UiPair("薪资", SalaryRangeLabel(job)),
+                    new UiPair("难度", JobDifficultyLabel(job))
                 },
                 Tags = InterviewTags(),
                 ProgressPercent = State.Interview.Recognition + "%",
@@ -547,9 +549,8 @@ namespace PaperShift.Presenter
             return "面试认可度";
         }
 
-        private string CompanyOperatingAgeLabel(string companyId)
+        private string CompanyOperatingAgeLabel(CompanyDefinition company)
         {
-            var company = Database == null ? null : Database.FindCompany(companyId);
             if (company == null)
             {
                 return "未知";
@@ -568,6 +569,8 @@ namespace PaperShift.Presenter
 
         private CandidateUiData BuildJobCardData()
         {
+            var company = CurrentCompany();
+            var job = CurrentJob();
             return new CandidateUiData
             {
                 Badge = State.HasActiveJob ? "试用" : "待业",
@@ -578,12 +581,11 @@ namespace PaperShift.Presenter
                 Rows = new List<UiPair>
                 {
                     new UiPair("公司", EmptyFallback(State.CurrentJob.CompanyName, "暂无")),
-                    new UiPair("经营", CompanyOperatingAgeLabel(State.CurrentJob.CompanyId)),
+                    new UiPair("行业", CompanyIndustryLabel(company)),
+                    new UiPair("经营", CompanyOperatingAgeLabel(company)),
                     new UiPair("岗位", EmptyFallback(State.CurrentJob.JobTitle, "暂无")),
                     new UiPair("月薪", State.CurrentJob.Salary.ToString()),
-                    new UiPair("阶段", "试用中"),
-                    new UiPair("认可度", State.CurrentJob.Recognition + "%"),
-                    new UiPair("状态", State.CurrentJob.Recognition >= 70 ? "有希望" : "观察中")
+                    new UiPair("强度", JobIntensityLabel(job))
                 },
                 Tags = CurrentJobTags(),
                 ProgressPercent = State.CurrentJob.Recognition + "%",
@@ -595,19 +597,16 @@ namespace PaperShift.Presenter
         private List<string> InterviewTags()
         {
             var tags = new List<string>();
-            var company = Database == null ? null : Database.FindCompany(State.Interview.CompanyId);
-            var job = Database == null ? null : Database.FindJob(State.Interview.CompanyId, State.Interview.JobId);
+            var company = InterviewCompany();
+            var job = InterviewJob();
             if (company != null)
             {
-                tags.Add(company.Industry);
+                AddWorkTags(tags, company.TagIds, 4);
             }
 
             if (job != null)
             {
-                for (var i = 0; i < job.TagIds.Length && tags.Count < 4; i++)
-                {
-                    tags.Add(JobTagLabel(job.TagIds[i]));
-                }
+                AddWorkTags(tags, job.TagIds, 4);
             }
 
             return tags;
@@ -616,16 +615,107 @@ namespace PaperShift.Presenter
         private List<string> CurrentJobTags()
         {
             var tags = new List<string>();
-            var job = Database == null ? null : Database.FindJob(State.CurrentJob.CompanyId, State.CurrentJob.JobId);
+            var company = CurrentCompany();
+            var job = CurrentJob();
+            if (company != null)
+            {
+                AddWorkTags(tags, company.TagIds, 4);
+            }
+
             if (job != null)
             {
-                for (var i = 0; i < job.TagIds.Length && tags.Count < 4; i++)
-                {
-                    tags.Add(JobTagLabel(job.TagIds[i]));
-                }
+                AddWorkTags(tags, job.TagIds, 4);
             }
 
             return tags;
+        }
+
+        private CompanyDefinition InterviewCompany()
+        {
+            return Database == null ? null : Database.FindCompany(State.Interview.CompanyId);
+        }
+
+        private JobDefinition InterviewJob()
+        {
+            return Database == null ? null : Database.FindJob(State.Interview.CompanyId, State.Interview.JobId);
+        }
+
+        private CompanyDefinition CurrentCompany()
+        {
+            return Database == null ? null : Database.FindCompany(State.CurrentJob.CompanyId);
+        }
+
+        private JobDefinition CurrentJob()
+        {
+            return Database == null ? null : Database.FindJob(State.CurrentJob.CompanyId, State.CurrentJob.JobId);
+        }
+
+        private static string CompanyIndustryLabel(CompanyDefinition company)
+        {
+            return company == null ? "未知" : EmptyFallback(company.Industry, "未知");
+        }
+
+        private static string SalaryRangeLabel(JobDefinition job)
+        {
+            if (job == null)
+            {
+                return "待定";
+            }
+
+            var min = Mathf.Max(0, job.SalaryMin);
+            var max = Mathf.Max(0, job.SalaryMax);
+            if (min <= 0 && max <= 0)
+            {
+                return "待定";
+            }
+
+            if (max > 0 && min > max)
+            {
+                var temp = min;
+                min = max;
+                max = temp;
+            }
+
+            if (max <= 0 || min == max)
+            {
+                return min.ToString();
+            }
+
+            return min + "-" + max;
+        }
+
+        private static string JobDifficultyLabel(JobDefinition job)
+        {
+            return job == null ? "未知" : job.Difficulty.ToString();
+        }
+
+        private string JobIntensityLabel(JobDefinition job)
+        {
+            var value = job == null ? State.CurrentJob.Intensity : job.WorkIntensity;
+            return value <= 0 ? "未知" : value.ToString();
+        }
+
+        private void AddWorkTags(List<string> tags, string[] tagIds, int maxCount)
+        {
+            if (tags == null || tagIds == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i < tagIds.Length && tags.Count < maxCount; i++)
+            {
+                var label = WorkTagLabel(tagIds[i]);
+                if (!string.IsNullOrEmpty(label) && !tags.Contains(label))
+                {
+                    tags.Add(label);
+                }
+            }
+        }
+
+        private string WorkTagLabel(string id)
+        {
+            var tag = Database == null ? null : Database.FindWorkTag(id);
+            return tag == null ? JobTagLabel(id) : EmptyFallback(tag.DisplayName, id);
         }
 
         private List<string> LastLogs(int count)

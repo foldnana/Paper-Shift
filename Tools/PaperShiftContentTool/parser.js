@@ -17,7 +17,6 @@
     WorkTags: [],
     Companies: [],
     Events: [],
-    FlowMoments: [],
     LaterLifeRules: [],
     LastNames: [],
     MaleFirstNames: [],
@@ -62,16 +61,6 @@
     IntValue: 0,
     TextValue: "",
     SecondaryText: ""
-  });
-
-  const flowMomentTemplate = id => ({
-    Id: id,
-    DisplayName: id,
-    Text: "",
-    Action: "",
-    BaseWeight: 10,
-    Conditions: [],
-    Effects: []
   });
 
   const enumMaps = {
@@ -288,11 +277,6 @@
         case "event":
           pack.Events.push(current.value);
           break;
-        case "flowmoment":
-        case "flow-moment":
-        case "flow_moment":
-          pack.FlowMoments.push(current.value);
-          break;
         case "liferule":
         case "life-rule":
         case "life_rule":
@@ -352,11 +336,6 @@
         case "event":
           applyEventLine(block, normalized, value, lineNo);
           break;
-        case "flowmoment":
-        case "flow-moment":
-        case "flow_moment":
-          applyFlowMomentLine(block, normalized, value);
-          break;
         case "liferule":
         case "life-rule":
         case "life_rule":
@@ -398,11 +377,7 @@
       case "company":
         return { Id: id, DisplayName: id, Industry: "", FoundedYear: 2026, FoundedMonth: 1, TagIds: [], Jobs: [] };
       case "event":
-        return { Id: id, DisplayName: id, Body: "", Phase: "Any", NoticeType: "Log", BaseWeight: 10, CooldownYears: 0, Conditions: [], Options: [] };
-      case "flowmoment":
-      case "flow-moment":
-      case "flow_moment":
-        return flowMomentTemplate(id);
+        return { Id: id, DisplayName: id, Body: "", Phase: "Any", NoticeType: "Log", BaseWeight: 10, CooldownYears: 0, Conditions: [], Effects: [], Options: [] };
       case "liferule":
       case "life-rule":
       case "life_rule":
@@ -545,6 +520,8 @@
       event.CooldownYears = toInt(value, event.CooldownYears);
     } else if (key === "condition") {
       event.Conditions.push(parseCondition(value));
+    } else if (key === "effect") {
+      event.Effects.push(parseEffect(value));
     } else if (key === "option") {
       const option = parseEventOption(value);
       event.Options.push(option);
@@ -553,25 +530,6 @@
       ensureLastOption(block, lineNo).Conditions.push(parseCondition(value));
     } else if (key === "optioneffect") {
       ensureLastOption(block, lineNo).Effects.push(parseEffect(value));
-    }
-  }
-
-  function applyFlowMomentLine(block, key, value) {
-    const moment = block.value;
-    if (setCommonText(moment, key, value)) {
-      return;
-    }
-
-    if (key === "text" || key === "body") {
-      moment.Text = value;
-    } else if (key === "action") {
-      moment.Action = value;
-    } else if (key === "baseweight" || key === "weight") {
-      moment.BaseWeight = toInt(value, moment.BaseWeight);
-    } else if (key === "condition") {
-      moment.Conditions.push(parseCondition(value));
-    } else if (key === "effect") {
-      moment.Effects.push(parseEffect(value));
     }
   }
 
@@ -846,10 +804,8 @@
     });
 
     pack.Events.forEach(event => {
-      if (!event.Options.length) {
-        warnings.push("事件 " + event.Id + " 没有选项，弹窗事件通常至少需要一个 option。");
-      }
       warnEventConditionMismatch(event, warnings);
+      event.Effects.forEach(effect => warnEffectReference(effect, tagIds, eventIds, warnings, "事件 " + event.Id));
       event.Options.forEach(option => option.Effects.forEach(effect => warnEffectReference(effect, tagIds, eventIds, warnings, "事件 " + event.Id)));
     });
 
@@ -970,15 +926,11 @@
       event.Phase = enumNumber("GameEventPhase", event.Phase);
       event.NoticeType = enumNumber("EventNoticeType", event.NoticeType);
       event.Conditions.forEach(convertConditionEnums);
+      event.Effects.forEach(convertEffectEnums);
       event.Options.forEach(option => {
         option.Conditions.forEach(convertConditionEnums);
         option.Effects.forEach(convertEffectEnums);
       });
-    });
-
-    pack.FlowMoments.forEach(moment => {
-      moment.Conditions.forEach(convertConditionEnums);
-      moment.Effects.forEach(convertEffectEnums);
     });
 
     pack.LaterLifeRules.forEach(rule => {
@@ -1199,7 +1151,6 @@
     arrayOf(pack.Tags).forEach(item => writeTag(lines, item));
     arrayOf(pack.WorkTags).forEach(item => writeWorkTag(lines, item));
     arrayOf(pack.Events).forEach(item => writeEvent(lines, item));
-    arrayOf(pack.FlowMoments).forEach(item => writeFlowMoment(lines, item));
     arrayOf(pack.LaterLifeRules).forEach(item => writeLifeRule(lines, item));
     arrayOf(pack.Companies).forEach(item => writeCompany(lines, item));
 
@@ -1309,26 +1260,12 @@
       writeTextLine(lines, "cooldown", event.CooldownYears);
     }
     arrayOf(event.Conditions).forEach(condition => lines.push(conditionLine("condition", condition)));
+    arrayOf(event.Effects).forEach(effect => lines.push(effectLine("effect", effect)));
     arrayOf(event.Options).forEach(option => {
       lines.push(optionLine(option));
       arrayOf(option.Conditions).forEach(condition => lines.push(conditionLine("optionCondition", condition)));
       arrayOf(option.Effects).forEach(effect => lines.push(effectLine("optionEffect", effect)));
     });
-    lines.push("@end", "");
-  }
-
-  function writeFlowMoment(lines, moment) {
-    if (!moment || !moment.Id) {
-      return;
-    }
-
-    lines.push("@flowMoment " + moment.Id);
-    writeTextLine(lines, "name", moment.DisplayName);
-    writeTextLine(lines, "text", moment.Text);
-    writeTextLine(lines, "action", moment.Action);
-    writeTextLine(lines, "baseWeight", valueOr(moment.BaseWeight, 10));
-    arrayOf(moment.Conditions).forEach(condition => lines.push(conditionLine("condition", condition)));
-    arrayOf(moment.Effects).forEach(effect => lines.push(effectLine("effect", effect)));
     lines.push("@end", "");
   }
 
@@ -1579,7 +1516,6 @@
       ["工作标签", arrayOf(pack.WorkTags).length],
       ["公司", arrayOf(pack.Companies).length],
       ["事件", arrayOf(pack.Events).length],
-      ["流程小插曲", arrayOf(pack.FlowMoments).length],
       ["后半生规则", arrayOf(pack.LaterLifeRules).length],
       ["稀有度", arrayOf(pack.Rarities).length],
     ];

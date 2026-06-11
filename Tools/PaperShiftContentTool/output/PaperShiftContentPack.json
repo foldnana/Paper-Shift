@@ -2838,6 +2838,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "admit_age",
@@ -2941,6 +2942,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "reveal",
@@ -3057,6 +3059,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "provide_real",
@@ -3173,6 +3176,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "bluff_through",
@@ -3289,6 +3293,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "come_clean",
@@ -3401,6 +3406,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "cooperate",
@@ -3517,6 +3523,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "own_it",
@@ -3633,6 +3640,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "dress_up",
@@ -3723,6 +3731,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "explain",
@@ -3813,6 +3822,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "prove_strength",
@@ -3893,6 +3903,7 @@
       "BaseWeight": 16,
       "CooldownYears": 0,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "fill_gap",
@@ -3983,6 +3994,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "accept",
@@ -4060,6 +4072,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "plead",
@@ -4150,6 +4163,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "push_harder",
@@ -4240,6 +4254,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "wing_it",
@@ -4320,6 +4335,7 @@
       "BaseWeight": 20,
       "CooldownYears": 2,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "work",
@@ -4400,6 +4416,7 @@
       "BaseWeight": 12,
       "CooldownYears": 0,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "endure",
@@ -4490,6 +4507,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "apologize_client",
@@ -4589,6 +4607,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "own_up",
@@ -4669,6 +4688,7 @@
       "BaseWeight": 18,
       "CooldownYears": 1,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "agree",
@@ -4759,6 +4779,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "confront_salary",
@@ -4849,6 +4870,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "join",
@@ -4929,6 +4951,7 @@
       "BaseWeight": 10,
       "CooldownYears": 0,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "speak_up",
@@ -5009,6 +5032,7 @@
       "BaseWeight": 12,
       "CooldownYears": 0,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "compete",
@@ -5089,6 +5113,7 @@
       "BaseWeight": 8,
       "CooldownYears": 0,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "accept",
@@ -5169,6 +5194,7 @@
       "BaseWeight": 10,
       "CooldownYears": 0,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "volunteer",
@@ -5281,6 +5307,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "cooperate",
@@ -5384,6 +5411,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "embrace",
@@ -5474,6 +5502,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "take_break",
@@ -5564,6 +5593,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "walk_away",
@@ -5654,6 +5684,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "see_doctor",
@@ -5744,6 +5775,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "apologize",
@@ -5843,6 +5875,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "sleep_aids",
@@ -5942,6 +5975,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "accept_pass",
@@ -6028,6 +6062,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "argue",
@@ -6108,6 +6143,7 @@
       "BaseWeight": 3,
       "CooldownYears": 0,
       "Conditions": [],
+      "Effects": [],
       "Options": [
         {
           "Id": "ride_luck",
@@ -6198,6 +6234,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "handle",
@@ -6288,6 +6325,7 @@
           "Invert": false
         }
       ],
+      "Effects": [],
       "Options": [
         {
           "Id": "adapt",
@@ -6358,16 +6396,26 @@
           ]
         }
       ]
-    }
-  ],
-  "FlowMoments": [
+    },
     {
       "Id": "prepare_company_notes",
       "DisplayName": "梳理公司信息",
-      "Text": "他把公司和岗位信息重新梳理了一遍，回答时心里有了底。",
-      "Action": "PrepareInterview",
-      "BaseWeight": 12,
-      "Conditions": [],
+      "Body": "他把公司和岗位信息重新梳理了一遍，回答时心里有了底。",
+      "Phase": 1,
+      "NoticeType": 0,
+      "BaseWeight": 120,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "PrepareInterview",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6395,15 +6443,27 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "prepare_overthinking",
       "DisplayName": "准备过头",
-      "Text": "资料越查越多，他反而开始担心自己准备错了方向。",
-      "Action": "PrepareInterview",
-      "BaseWeight": 8,
+      "Body": "资料越查越多，他反而开始担心自己准备错了方向。",
+      "Phase": 1,
+      "NoticeType": 0,
+      "BaseWeight": 80,
+      "CooldownYears": -1,
       "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "PrepareInterview",
+          "Invert": false
+        },
         {
           "Kind": 17,
           "Key": "",
@@ -6441,15 +6501,28 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "prepare_mock_answer",
       "DisplayName": "练顺说法",
-      "Text": "他提前把一段经历讲顺了，至少不再像背稿。",
-      "Action": "PrepareInterview",
-      "BaseWeight": 10,
-      "Conditions": [],
+      "Body": "他提前把一段经历讲顺了，至少不再像背稿。",
+      "Phase": 1,
+      "NoticeType": 0,
+      "BaseWeight": 100,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "PrepareInterview",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6477,15 +6550,28 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "interview_clear_case",
       "DisplayName": "案例讲清楚",
-      "Text": "他把一个具体案例讲清楚了，面试官开始追问细节。",
-      "Action": "AttendInterview",
-      "BaseWeight": 12,
-      "Conditions": [],
+      "Body": "他把一个具体案例讲清楚了，面试官开始追问细节。",
+      "Phase": 1,
+      "NoticeType": 0,
+      "BaseWeight": 120,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "AttendInterview",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6513,15 +6599,28 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "interview_stumble",
       "DisplayName": "回答卡壳",
-      "Text": "问到关键细节时他卡了一下，气氛短暂地冷了下来。",
-      "Action": "AttendInterview",
-      "BaseWeight": 10,
-      "Conditions": [],
+      "Body": "问到关键细节时他卡了一下，气氛短暂地冷了下来。",
+      "Phase": 1,
+      "NoticeType": 0,
+      "BaseWeight": 100,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "AttendInterview",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6549,15 +6648,27 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "interview_honest_limit",
       "DisplayName": "承认短板",
-      "Text": "他承认自己有一块短板，但顺手讲了补救办法。",
-      "Action": "AttendInterview",
-      "BaseWeight": 8,
+      "Body": "他承认自己有一块短板，但顺手讲了补救办法。",
+      "Phase": 1,
+      "NoticeType": 0,
+      "BaseWeight": 80,
+      "CooldownYears": -1,
       "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "AttendInterview",
+          "Invert": false
+        },
         {
           "Kind": 19,
           "Key": "",
@@ -6595,15 +6706,28 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "probation_clean_delivery",
       "DisplayName": "交付干净",
-      "Text": "今天交出去的活很干净，主管没有多说，但明显少皱了几次眉。",
-      "Action": "WorkProbation",
-      "BaseWeight": 12,
-      "Conditions": [],
+      "Body": "今天交出去的活很干净，主管没有多说，但明显少皱了几次眉。",
+      "Phase": 2,
+      "NoticeType": 0,
+      "BaseWeight": 120,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "WorkProbation",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6631,15 +6755,28 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "probation_small_miss",
       "DisplayName": "小错误",
-      "Text": "一个小错误被指出来了，问题不大，但他得把坑补上。",
-      "Action": "WorkProbation",
-      "BaseWeight": 12,
-      "Conditions": [],
+      "Body": "一个小错误被指出来了，问题不大，但他得把坑补上。",
+      "Phase": 2,
+      "NoticeType": 0,
+      "BaseWeight": 120,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "WorkProbation",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6667,15 +6804,27 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "probation_helped_by_peer",
       "DisplayName": "同事提醒",
-      "Text": "旁边的老员工顺手提醒了一句，他少走了一段弯路。",
-      "Action": "WorkProbation",
-      "BaseWeight": 7,
+      "Body": "旁边的老员工顺手提醒了一句，他少走了一段弯路。",
+      "Phase": 2,
+      "NoticeType": 0,
+      "BaseWeight": 70,
+      "CooldownYears": -1,
       "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "WorkProbation",
+          "Invert": false
+        },
         {
           "Kind": 19,
           "Key": "",
@@ -6713,15 +6862,27 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "probation_expectation_rises",
       "DisplayName": "期待升高",
-      "Text": "前几天表现不错后，主管开始把更麻烦的活也交给他。",
-      "Action": "WorkProbation",
-      "BaseWeight": 8,
+      "Body": "前几天表现不错后，主管开始把更麻烦的活也交给他。",
+      "Phase": 2,
+      "NoticeType": 0,
+      "BaseWeight": 80,
+      "CooldownYears": -1,
       "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "WorkProbation",
+          "Invert": false
+        },
         {
           "Kind": 15,
           "Key": "",
@@ -6759,15 +6920,28 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "regularization_materials_checked",
       "DisplayName": "材料流转",
-      "Text": "申请递上去后，人事把材料转给主管确认。",
-      "Action": "ApplyRegularization",
-      "BaseWeight": 12,
-      "Conditions": [],
+      "Body": "申请递上去后，人事把材料转给主管确认。",
+      "Phase": 2,
+      "NoticeType": 0,
+      "BaseWeight": 120,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "ApplyRegularization",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6782,15 +6956,27 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "regularization_recent_work_speaks",
       "DisplayName": "表现帮忙",
-      "Text": "最近几次稳定交付帮他说了话，主管的态度缓和了一些。",
-      "Action": "ApplyRegularization",
-      "BaseWeight": 8,
+      "Body": "最近几次稳定交付帮他说了话，主管的态度缓和了一些。",
+      "Phase": 2,
+      "NoticeType": 0,
+      "BaseWeight": 80,
+      "CooldownYears": -1,
       "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "ApplyRegularization",
+          "Invert": false
+        },
         {
           "Kind": 15,
           "Key": "",
@@ -6828,15 +7014,28 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     },
     {
       "Id": "regularization_extra_question",
       "DisplayName": "临门一问",
-      "Text": "临到转正前，主管又补问了一个之前没谈清楚的问题。",
-      "Action": "ApplyRegularization",
-      "BaseWeight": 8,
-      "Conditions": [],
+      "Body": "临到转正前，主管又补问了一个之前没谈清楚的问题。",
+      "Phase": 2,
+      "NoticeType": 0,
+      "BaseWeight": 80,
+      "CooldownYears": -1,
+      "Conditions": [
+        {
+          "Kind": 27,
+          "Key": "",
+          "Operator": 2,
+          "IntValue": 0,
+          "FloatValue": 0,
+          "TextValue": "ApplyRegularization",
+          "Invert": false
+        }
+      ],
       "Effects": [
         {
           "Timing": 0,
@@ -6864,7 +7063,8 @@
           "Temporary": false,
           "DurationYears": 0
         }
-      ]
+      ],
+      "Options": []
     }
   ],
   "LaterLifeRules": [

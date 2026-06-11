@@ -14,7 +14,6 @@ namespace PaperShift.Data
         public WorkTagDefinition[] WorkTags = new WorkTagDefinition[0];
         public CompanyDefinition[] Companies = new CompanyDefinition[0];
         public GameEventDefinition[] Events = new GameEventDefinition[0];
-        public FlowMomentDefinition[] FlowMoments = new FlowMomentDefinition[0];
         public LaterLifeRuleDefinition[] LaterLifeRules = new LaterLifeRuleDefinition[0];
         public string[] LastNames = new string[0];
         public string[] MaleFirstNames = new string[0];
@@ -278,6 +277,7 @@ namespace PaperShift.Data
         public int BaseWeight = 10;
         public int CooldownYears = 0;
         public ConditionDefinition[] Conditions = new ConditionDefinition[0];
+        public EffectDefinition[] Effects = new EffectDefinition[0];
         public EventOptionDefinition[] Options = new EventOptionDefinition[0];
     }
 
@@ -287,18 +287,6 @@ namespace PaperShift.Data
         public string Id;
         public string Label;
         public bool RunCheckpointAfterChoice;
-        public ConditionDefinition[] Conditions = new ConditionDefinition[0];
-        public EffectDefinition[] Effects = new EffectDefinition[0];
-    }
-
-    [Serializable]
-    public sealed class FlowMomentDefinition
-    {
-        public string Id;
-        public string DisplayName;
-        [TextArea] public string Text;
-        public string Action;
-        public int BaseWeight = 10;
         public ConditionDefinition[] Conditions = new ConditionDefinition[0];
         public EffectDefinition[] Effects = new EffectDefinition[0];
     }

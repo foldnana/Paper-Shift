@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using PaperShift.Domain;
 using UnityEngine;
 
@@ -15,7 +16,6 @@ namespace PaperShift.Data
             database.WorkTags = CreateWorkTags();
             database.Companies = CreateCompanies();
             database.Events = CreateEvents();
-            database.FlowMoments = CreateFlowMoments();
             database.LaterLifeRules = CreateLaterLifeRules();
             database.LastNames = new[] { "李", "王", "林", "赵", "陈", "周", "顾", "许" };
             database.MaleFirstNames = new[] { "知行", "安和", "星远", "景明", "修远" };
@@ -50,16 +50,17 @@ namespace PaperShift.Data
             }
             else
             {
-                MergeEventRuntimeDefaults(database.Events, CreateEvents());
+                var defaultEvents = CreateEvents();
+                MergeEventRuntimeDefaults(database.Events, defaultEvents);
                 if (!HasEvent(database.Events, "stress_breakdown"))
                 {
-                    database.Events = Append(database.Events, FindEvent(CreateEvents(), "stress_breakdown"));
+                    database.Events = Append(database.Events, FindEvent(defaultEvents, "stress_breakdown"));
                 }
-            }
 
-            if (database.FlowMoments == null || database.FlowMoments.Length == 0)
-            {
-                database.FlowMoments = CreateFlowMoments();
+                AppendMissingEvent(ref database.Events, defaultEvents, "prepare_company_news");
+                AppendMissingEvent(ref database.Events, defaultEvents, "prepare_mock_interview");
+                AppendMissingEvent(ref database.Events, defaultEvents, "prepare_material_update");
+                AppendMissingRepeatableActionEvents(ref database.Events, defaultEvents);
             }
 
             if (database.LaterLifeRules == null || database.LaterLifeRules.Length == 0)
@@ -327,12 +328,61 @@ namespace PaperShift.Data
                     Phase = GameEventPhase.Interview,
                     NoticeType = EventNoticeType.Modal,
                     BaseWeight = 25,
-                    Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.ResumeRiskAtLeast, IntValue = 20 } },
+                    Conditions = new[]
+                    {
+                        new ConditionDefinition { Kind = ConditionKind.ActionIs, TextValue = "AttendInterview" },
+                        new ConditionDefinition { Kind = ConditionKind.ResumeRiskAtLeast, IntValue = 20 }
+                    },
                     Options = new[]
                     {
                         CheckedOption("confess", "坦白解释", Effect(EffectKind.AddRecognition, "", -8), Effect(EffectKind.AddStress, "", 4), Log("你解释了包装痕迹，面试官有点失望。")),
                         CheckedOption("double_down", "继续圆谎", Effect(EffectKind.AddRecognition, "", 10), Effect(EffectKind.AddResumeRisk, "", 15), Log("你暂时圆过去了，但被识破的风险更高。")),
                         CheckedOption("caught", "被当场识破", Effect(EffectKind.AddRecognition, "", -25), AddTag("dishonest_resume"), Banner("你获得了负面标签：不诚实"))
+                    }
+                },
+                new GameEventDefinition
+                {
+                    Id = "prepare_company_news",
+                    DisplayName = "临时消息",
+                    Body = "准备资料时，他刷到这家公司最近刚调整业务方向，原来的准备可能不够用了。",
+                    Phase = GameEventPhase.Interview,
+                    NoticeType = EventNoticeType.Modal,
+                    BaseWeight = 14,
+                    Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.ActionIs, TextValue = "PrepareInterview" } },
+                    Options = new[]
+                    {
+                        Option("follow_news", "重查业务变化", Effect(EffectKind.AddRecognition, "", 6), Effect(EffectKind.AddStress, "", 4), Log("他把新业务补进准备里，回答时更贴近对方关心的问题。")),
+                        Option("keep_old_notes", "沿用原来的笔记", Effect(EffectKind.AddRecognition, "", -3), Effect(EffectKind.AddStress, "", -1), Log("他省下了精力，但准备内容有点过时。"))
+                    }
+                },
+                new GameEventDefinition
+                {
+                    Id = "prepare_mock_interview",
+                    DisplayName = "模拟面试",
+                    Body = "一个朋友愿意抽时间帮他模拟面试，只是问题会问得很尖锐。",
+                    Phase = GameEventPhase.Interview,
+                    NoticeType = EventNoticeType.Modal,
+                    BaseWeight = 12,
+                    Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.ActionIs, TextValue = "PrepareInterview" } },
+                    Options = new[]
+                    {
+                        Option("practice_hard", "认真模拟一轮", Effect(EffectKind.AddRecognition, "", 5), Effect(EffectKind.AddStress, "", 5), Log("他被问住了几次，但也提前补上了漏洞。")),
+                        Option("save_energy", "只简单过一遍", Effect(EffectKind.AddRecognition, "", 2), Effect(EffectKind.AddStress, "", -2), Log("他保留了状态，但准备深度一般。"))
+                    }
+                },
+                new GameEventDefinition
+                {
+                    Id = "prepare_material_update",
+                    DisplayName = "材料变更",
+                    Body = "招聘页面临时补了一条材料要求，他得决定要不要现在补齐。",
+                    Phase = GameEventPhase.Interview,
+                    NoticeType = EventNoticeType.Modal,
+                    BaseWeight = 10,
+                    Conditions = new[] { new ConditionDefinition { Kind = ConditionKind.ActionIs, TextValue = "PrepareInterview" } },
+                    Options = new[]
+                    {
+                        Option("complete_materials", "马上补材料", Effect(EffectKind.AddRecognition, "", 4), Effect(EffectKind.AddStress, "", 6), Log("材料补齐了，但他明显更紧绷。")),
+                        Option("risk_it", "赌对方不会细看", Effect(EffectKind.AddRecognition, "", -4), Effect(EffectKind.AddResumeRisk, "", 5), Effect(EffectKind.AddStress, "", 2), Log("他暂时跳过了材料，但心里多了一点风险。"))
                     }
                 },
                 new GameEventDefinition
@@ -396,55 +446,48 @@ namespace PaperShift.Data
                         Option("date", "去见一面", Effect(EffectKind.AddStress, "", -6), Effect(EffectKind.AddHeir, "", 0, "未来后代", "未知"), Log("你认真经营关系，未来多了一种可能。")),
                         Option("save", "先专注攒钱", Effect(EffectKind.AddMoney, "", 1000), Log("你把时间换成了存款。"))
                     }
-                }
-            };
-        }
-
-        private static FlowMomentDefinition[] CreateFlowMoments()
-        {
-            return new[]
-            {
-                Moment("prepare_company_notes", "PrepareInterview", "他把公司和岗位信息重新梳理了一遍，回答时心里有了底。", 12, null,
+                },
+                MomentEvent("prepare_company_notes", "PrepareInterview", "他把公司和岗位信息重新梳理了一遍，回答时心里有了底。", 120, null,
                     Effect(EffectKind.AddRecognition, "", 4),
                     Effect(EffectKind.AddStress, "", 1)),
-                Moment("prepare_overthinking", "PrepareInterview", "资料越查越多，他反而开始担心自己准备错了方向。", 8,
+                MomentEvent("prepare_overthinking", "PrepareInterview", "资料越查越多，他反而开始担心自己准备错了方向。", 80,
                     Conditions(Condition(ConditionKind.StressAtLeast, 45)),
                     Effect(EffectKind.AddRecognition, "", -2),
                     Effect(EffectKind.AddStress, "", 5)),
-                Moment("prepare_mock_answer", "PrepareInterview", "他提前把一段经历讲顺了，至少不再像背稿。", 10, null,
+                MomentEvent("prepare_mock_answer", "PrepareInterview", "他提前把一段经历讲顺了，至少不再像背稿。", 100, null,
                     Effect(EffectKind.AddRecognition, "", 3),
                     Effect(EffectKind.AddStress, "", -1)),
-                Moment("interview_clear_case", "AttendInterview", "他把一个具体案例讲清楚了，面试官开始追问细节。", 12, null,
+                MomentEvent("interview_clear_case", "AttendInterview", "他把一个具体案例讲清楚了，面试官开始追问细节。", 120, null,
                     Effect(EffectKind.AddRecognition, "", 6),
                     Effect(EffectKind.AddStress, "", 2)),
-                Moment("interview_stumble", "AttendInterview", "问到关键细节时他卡了一下，气氛短暂地冷了下来。", 10, null,
+                MomentEvent("interview_stumble", "AttendInterview", "问到关键细节时他卡了一下，气氛短暂地冷了下来。", 100, null,
                     Effect(EffectKind.AddRecognition, "", -5),
                     Effect(EffectKind.AddStress, "", 5)),
-                Moment("interview_honest_limit", "AttendInterview", "他承认自己有一块短板，但顺手讲了补救办法。", 8,
+                MomentEvent("interview_honest_limit", "AttendInterview", "他承认自己有一块短板，但顺手讲了补救办法。", 80,
                     Conditions(Condition(ConditionKind.RecognitionAtMost, 65)),
                     Effect(EffectKind.AddRecognition, "", 3),
                     Effect(EffectKind.AddStress, "", 3)),
-                Moment("probation_clean_delivery", "WorkProbation", "今天交出去的活很干净，主管没有多说，但明显少皱了几次眉。", 12, null,
+                MomentEvent("probation_clean_delivery", "WorkProbation", "今天交出去的活很干净，主管没有多说，但明显少皱了几次眉。", 120, null,
                     Effect(EffectKind.AddRecognition, "", 5),
                     Effect(EffectKind.AddStress, "", 4)),
-                Moment("probation_small_miss", "WorkProbation", "一个小错误被指出来了，问题不大，但他得把坑补上。", 12, null,
+                MomentEvent("probation_small_miss", "WorkProbation", "一个小错误被指出来了，问题不大，但他得把坑补上。", 120, null,
                     Effect(EffectKind.AddRecognition, "", -4),
                     Effect(EffectKind.AddStress, "", 5)),
-                Moment("probation_helped_by_peer", "WorkProbation", "旁边的老员工顺手提醒了一句，他少走了一段弯路。", 7,
+                MomentEvent("probation_helped_by_peer", "WorkProbation", "旁边的老员工顺手提醒了一句，他少走了一段弯路。", 70,
                     Conditions(Condition(ConditionKind.RecognitionAtMost, 70)),
                     Effect(EffectKind.AddRecognition, "", 4),
                     Effect(EffectKind.AddStress, "", -2)),
-                Moment("probation_expectation_rises", "WorkProbation", "前几天表现不错后，主管开始把更麻烦的活也交给他。", 8,
+                MomentEvent("probation_expectation_rises", "WorkProbation", "前几天表现不错后，主管开始把更麻烦的活也交给他。", 80,
                     Conditions(Condition(ConditionKind.RecognitionAtLeast, 75)),
                     Effect(EffectKind.AddRecognition, "", 2),
                     Effect(EffectKind.AddStress, "", 7)),
-                Moment("regularization_materials_checked", "ApplyRegularization", "申请递上去后，人事把材料转给主管确认。", 12, null,
+                MomentEvent("regularization_materials_checked", "ApplyRegularization", "申请递上去后，人事把材料转给主管确认。", 120, null,
                     Effect(EffectKind.AddStress, "", 2)),
-                Moment("regularization_recent_work_speaks", "ApplyRegularization", "最近几次稳定交付帮他说了话，主管的态度缓和了一些。", 8,
+                MomentEvent("regularization_recent_work_speaks", "ApplyRegularization", "最近几次稳定交付帮他说了话，主管的态度缓和了一些。", 80,
                     Conditions(Condition(ConditionKind.RecognitionAtLeast, 65)),
                     Effect(EffectKind.AddRecognition, "", 3),
                     Effect(EffectKind.AddStress, "", 1)),
-                Moment("regularization_extra_question", "ApplyRegularization", "临到转正前，主管又补问了一个之前没谈清楚的问题。", 8, null,
+                MomentEvent("regularization_extra_question", "ApplyRegularization", "临到转正前，主管又补问了一个之前没谈清楚的问题。", 80, null,
                     Effect(EffectKind.AddRecognition, "", -3),
                     Effect(EffectKind.AddStress, "", 4))
             };
@@ -633,8 +676,11 @@ namespace PaperShift.Data
                 }
 
                 target.Phase = defaults[i].Phase;
+                target.NoticeType = defaults[i].NoticeType;
                 target.BaseWeight = defaults[i].BaseWeight;
+                target.CooldownYears = defaults[i].CooldownYears;
                 target.Conditions = defaults[i].Conditions;
+                target.Effects = defaults[i].Effects;
                 target.Options = defaults[i].Options;
             }
         }
@@ -655,6 +701,35 @@ namespace PaperShift.Data
             }
 
             return null;
+        }
+
+        private static void AppendMissingEvent(ref GameEventDefinition[] events, GameEventDefinition[] defaults, string id)
+        {
+            if (HasEvent(events, id))
+            {
+                return;
+            }
+
+            events = Append(events, FindEvent(defaults, id));
+        }
+
+        private static void AppendMissingRepeatableActionEvents(ref GameEventDefinition[] events, GameEventDefinition[] defaults)
+        {
+            if (defaults == null)
+            {
+                return;
+            }
+
+            for (var i = 0; i < defaults.Length; i++)
+            {
+                var gameEvent = defaults[i];
+                if (gameEvent == null || gameEvent.CooldownYears >= 0 || gameEvent.NoticeType != EventNoticeType.Log)
+                {
+                    continue;
+                }
+
+                AppendMissingEvent(ref events, defaults, gameEvent.Id);
+            }
         }
 
         private static GameEventDefinition[] Append(GameEventDefinition[] events, GameEventDefinition item)
@@ -775,18 +850,50 @@ namespace PaperShift.Data
             return new EventOptionDefinition { Id = id, Label = label, Effects = effects, RunCheckpointAfterChoice = true };
         }
 
-        private static FlowMomentDefinition Moment(string id, string action, string text, int weight, ConditionDefinition[] conditions, params EffectDefinition[] effects)
+        private static GameEventDefinition MomentEvent(string id, string action, string text, int weight, ConditionDefinition[] conditions, params EffectDefinition[] effects)
         {
-            return new FlowMomentDefinition
+            return new GameEventDefinition
             {
                 Id = id,
-                DisplayName = id,
-                Text = text,
-                Action = action,
+                DisplayName = "进展",
+                Body = text,
+                Phase = PhaseForAction(action),
+                NoticeType = EventNoticeType.Log,
                 BaseWeight = weight,
-                Conditions = conditions ?? new ConditionDefinition[0],
+                CooldownYears = -1,
+                Conditions = ActionConditions(action, conditions),
                 Effects = effects ?? new EffectDefinition[0]
             };
+        }
+
+        private static GameEventPhase PhaseForAction(string action)
+        {
+            switch (action)
+            {
+                case "PrepareInterview":
+                case "AttendInterview":
+                    return GameEventPhase.Interview;
+                case "WorkProbation":
+                case "ApplyRegularization":
+                    return GameEventPhase.Probation;
+                default:
+                    return GameEventPhase.Any;
+            }
+        }
+
+        private static ConditionDefinition[] ActionConditions(string action, ConditionDefinition[] conditions)
+        {
+            var result = new List<ConditionDefinition>
+            {
+                new ConditionDefinition { Kind = ConditionKind.ActionIs, TextValue = action }
+            };
+
+            if (conditions != null)
+            {
+                result.AddRange(conditions);
+            }
+
+            return result.ToArray();
         }
 
         private static ConditionDefinition[] Conditions(params ConditionDefinition[] conditions)

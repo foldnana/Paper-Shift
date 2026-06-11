@@ -76,27 +76,20 @@ namespace PaperShift.Runtime
                 return directed;
             }
 
-            if (ShouldTriggerCheckpointEvent(action))
+            var eventText = string.Empty;
+            var eventResult = ResolveActionEvent(state, action, phase, company, job, flow, ref snapshot, out eventText);
+            if (eventResult != null)
             {
-                var triggered = service.ResolveTriggeredEventForCheckpoint(state, phase, company, job, flow, action, CheckpointEventChance(action, state));
-                if (triggered != null)
-                {
-                    return FlowCheckpointResult.Event(action, phase, WithCheckpointSource(triggered, action, phase), snapshot);
-                }
+                return eventResult;
             }
 
-            var momentText = ApplyFlowMoment(state, action, company, job, phase, flow);
-            if (momentText != null)
+            directed = ResolveDirectedOutcome(state, action, phase, company, job, flow, snapshot);
+            if (directed != null)
             {
-                snapshot.CaptureAfter(state, phase);
-                directed = ResolveDirectedOutcome(state, action, phase, company, job, flow, snapshot);
-                if (directed != null)
-                {
-                    return directed;
-                }
+                return directed;
             }
 
-            return ResolveNaturalOutcome(state, action, phase, company, job, snapshot, momentText);
+            return ResolveNaturalOutcome(state, action, phase, company, job, snapshot, eventText);
         }
 
         internal FlowCheckpointResult ResolveNaturalOnly(PaperShiftRunState state, FlowCheckpointAction action, GameEventPhase phase)
@@ -195,58 +188,42 @@ namespace PaperShift.Runtime
             }
         }
 
-        private string ApplyFlowMoment(
+        private FlowCheckpointResult ResolveActionEvent(
             PaperShiftRunState state,
             FlowCheckpointAction action,
+            GameEventPhase phase,
             CompanyDefinition company,
             JobDefinition job,
-            GameEventPhase phase,
-            FlowRuleResult flow)
+            FlowRuleResult flow,
+            ref FlowCheckpointSnapshot snapshot,
+            out string eventText)
         {
-            var moment = PickFlowMoment(state, action, company, job);
-            if (moment == null)
+            eventText = string.Empty;
+            var triggered = service.ResolveTriggeredEventForCheckpoint(state, phase, company, job, flow, action);
+            if (triggered == null || triggered.Event == null)
             {
                 return null;
             }
 
-            var momentFlow = new FlowRuleResult();
-            FlowRuleResolver.ApplyEffects(momentFlow, moment.Effects);
-            var momentText = Fallback(moment.Text, moment.DisplayName);
-            if (momentFlow.Directive != FlowDirective.None && string.IsNullOrEmpty(momentFlow.DirectiveMessage))
+            var sourced = WithCheckpointSource(triggered, action, phase);
+            if (ShouldPauseForEvent(sourced))
             {
-                momentFlow.DirectiveMessage = momentText;
+                return FlowCheckpointResult.Event(action, phase, sourced, snapshot);
             }
 
-            MergeFlowResult(flow, momentFlow, preferSourceDirective: false);
-            ApplyFlowResult(state, momentFlow, phase);
-            return momentText;
-        }
-
-        private FlowMomentDefinition PickFlowMoment(PaperShiftRunState state, FlowCheckpointAction action, CompanyDefinition company, JobDefinition job)
-        {
-            if (database.FlowMoments == null || database.FlowMoments.Length == 0)
+            eventText = EventText(triggered.Event);
+            var eventFlow = new FlowRuleResult();
+            FlowRuleResolver.ApplyEffects(eventFlow, triggered.Event.Effects);
+            if (eventFlow.Directive != FlowDirective.None && string.IsNullOrEmpty(eventFlow.DirectiveMessage))
             {
-                return null;
+                eventFlow.DirectiveMessage = eventText;
             }
 
-            var picker = new WeightedPicker<FlowMomentDefinition>();
-            for (var i = 0; i < database.FlowMoments.Length; i++)
-            {
-                var moment = database.FlowMoments[i];
-                if (moment == null || !ActionMatches(moment.Action, action))
-                {
-                    continue;
-                }
-
-                if (!conditions.AreMet(moment.Conditions, state, company, job, Random, action))
-                {
-                    continue;
-                }
-
-                picker.Add(moment, moment.BaseWeight);
-            }
-
-            return picker.Pick(Random);
+            MergeFlowResult(flow, eventFlow, preferSourceDirective: false);
+            service.ApplyNonCheckpointEffects(triggered.Event.Effects, state);
+            ApplyFlowResult(state, eventFlow, phase);
+            snapshot.CaptureAfter(state, phase);
+            return null;
         }
 
         private FlowCheckpointResult ResolveDirectedOutcome(
@@ -435,133 +412,16 @@ namespace PaperShift.Runtime
                 : GameEventPhase.Probation;
         }
 
-        private static bool ActionMatches(string actionText, FlowCheckpointAction action)
-        {
-            if (string.IsNullOrEmpty(actionText))
-            {
-                return true;
-            }
-
-            var parts = actionText.Split(',');
-            for (var i = 0; i < parts.Length; i++)
-            {
-                var part = parts[i].Trim();
-                if (string.IsNullOrEmpty(part))
-                {
-                    continue;
-                }
-
-                if (Enum.TryParse(part, true, out FlowCheckpointAction parsed) && parsed == action)
-                {
-                    return true;
-                }
-
-                switch (part.ToLowerInvariant())
-                {
-                    case "prepare":
-                    case "prepare_interview":
-                    case "interview_prepare":
-                        if (action == FlowCheckpointAction.PrepareInterview)
-                        {
-                            return true;
-                        }
-
-                        break;
-                    case "attend":
-                    case "interview":
-                    case "attend_interview":
-                    case "interview_attend":
-                        if (action == FlowCheckpointAction.AttendInterview)
-                        {
-                            return true;
-                        }
-
-                        break;
-                    case "work":
-                    case "probation":
-                    case "work_probation":
-                    case "probation_work":
-                        if (action == FlowCheckpointAction.WorkProbation)
-                        {
-                            return true;
-                        }
-
-                        break;
-                    case "apply":
-                    case "regularization":
-                    case "apply_regularization":
-                    case "regularize":
-                        if (action == FlowCheckpointAction.ApplyRegularization)
-                        {
-                            return true;
-                        }
-
-                        break;
-                    case "event":
-                    case "event_choice":
-                    case "choice":
-                        if (action == FlowCheckpointAction.EventChoice)
-                        {
-                            return true;
-                        }
-
-                        break;
-                }
-            }
-
-            return false;
-        }
-
         private static TriggeredEvent WithCheckpointSource(TriggeredEvent triggered, FlowCheckpointAction action, GameEventPhase phase)
         {
             return triggered == null ? null : new TriggeredEvent(triggered.Event, triggered.Options, action, phase);
         }
 
-        private static bool ShouldTriggerCheckpointEvent(FlowCheckpointAction action)
+        private static bool ShouldPauseForEvent(TriggeredEvent triggered)
         {
-            return action != FlowCheckpointAction.PrepareInterview;
-        }
-
-        private static int CheckpointEventChance(FlowCheckpointAction action, PaperShiftRunState state)
-        {
-            if (state == null)
-            {
-                return 0;
-            }
-
-            var stress = state.Worker == null ? 0 : state.Worker.Stress;
-            var resumeRisk = state.Resume == null ? 0 : state.Resume.DeceptionRisk;
-            var recognition = state.CurrentJob == null ? 0 : state.CurrentJob.Recognition;
-            switch (action)
-            {
-                case FlowCheckpointAction.AttendInterview:
-                    return Clamp(35 + resumeRisk / 3 + stress / 8, 15, 85);
-                case FlowCheckpointAction.WorkProbation:
-                    return Clamp(35 + stress / 5 + Math.Max(0, 55 - recognition) / 3, 15, 80);
-                case FlowCheckpointAction.ApplyRegularization:
-                    return RegularizationEventChance(state);
-                case FlowCheckpointAction.EventChoice:
-                    return 25;
-                default:
-                    return 0;
-            }
-        }
-
-        private static int RegularizationEventChance(PaperShiftRunState state)
-        {
-            var recognition = state == null || state.CurrentJob == null ? 0 : state.CurrentJob.Recognition;
-            var stress = state == null || state.Worker == null ? 0 : state.Worker.Stress;
-            var resumeRisk = state == null || state.Resume == null ? 0 : state.Resume.DeceptionRisk;
-            var chance = 65 - recognition * 3 / 5;
-            chance += stress / 8;
-            chance += resumeRisk / 8;
-
-            if (stress >= 90)
-            {
-                chance += 20;
-            }
-
-            return Clamp(chance, 3, 80);
+            return triggered != null &&
+                triggered.Event != null &&
+                (triggered.Event.NoticeType == EventNoticeType.Modal || (triggered.Options != null && triggered.Options.Length > 0));
         }
 
         private static string ContinueMessage(FlowCheckpointAction action)
@@ -775,6 +635,16 @@ namespace PaperShift.Runtime
         private static string Fallback(string value, string fallback)
         {
             return string.IsNullOrEmpty(value) ? fallback : value;
+        }
+
+        private static string EventText(GameEventDefinition gameEvent)
+        {
+            if (gameEvent == null)
+            {
+                return string.Empty;
+            }
+
+            return Fallback(gameEvent.Body, gameEvent.DisplayName);
         }
 
         private static int Clamp(int value, int min, int max)

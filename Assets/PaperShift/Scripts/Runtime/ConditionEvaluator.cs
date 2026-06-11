@@ -149,7 +149,7 @@ namespace PaperShift.Runtime
                 return false;
             }
 
-            return condition.IntValue > 0 && condition.IntValue <= (int)FlowCheckpointAction.EventChoice && action.Value == (FlowCheckpointAction)condition.IntValue;
+            return condition.IntValue >= 0 && condition.IntValue <= (int)FlowCheckpointAction.EventChoice && action.Value == (FlowCheckpointAction)condition.IntValue;
         }
 
         private static int CurrentJobMonths(PaperShiftRunState state)

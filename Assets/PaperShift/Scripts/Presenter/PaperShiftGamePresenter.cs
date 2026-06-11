@@ -411,6 +411,21 @@ namespace PaperShift.Presenter
             ShowNews();
         }
 
+        public void ContinuePendingEvent()
+        {
+            if (pendingEvent == null)
+            {
+                return;
+            }
+
+            var sourceEvent = pendingEvent;
+            var logStart = State == null || State.Logs == null ? 0 : State.Logs.Count;
+            var result = service.ContinueEvent(State, sourceEvent);
+            pendingEvent = null;
+            StageEventChoiceResult(sourceEvent, null, result, logStart);
+            ShowNews();
+        }
+
         public void ContinueAfterEventResult()
         {
             var result = pendingEventResultNavigation;

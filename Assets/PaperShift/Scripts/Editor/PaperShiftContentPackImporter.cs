@@ -126,7 +126,6 @@ namespace PaperShift.Editor
             database.WorkTags = MergeById(database.WorkTags, pack.WorkTags, item => item == null ? string.Empty : item.Id, replace);
             database.Companies = MergeById(database.Companies, pack.Companies, item => item == null ? string.Empty : item.Id, replace);
             database.Events = MergeById(database.Events, pack.Events, item => item == null ? string.Empty : item.Id, replace);
-            database.FlowMoments = MergeById(database.FlowMoments, pack.FlowMoments, item => item == null ? string.Empty : item.Id, replace);
             database.LaterLifeRules = MergeById(database.LaterLifeRules, pack.LaterLifeRules, item => item == null ? string.Empty : item.Id, replace);
             database.LastNames = MergeStrings(database.LastNames, pack.LastNames, replace);
             database.MaleFirstNames = MergeStrings(database.MaleFirstNames, pack.MaleFirstNames, replace);
@@ -141,7 +140,6 @@ namespace PaperShift.Editor
             database.WorkTags = new WorkTagDefinition[0];
             database.Companies = new CompanyDefinition[0];
             database.Events = new GameEventDefinition[0];
-            database.FlowMoments = new FlowMomentDefinition[0];
             database.LaterLifeRules = new LaterLifeRuleDefinition[0];
             database.LastNames = new string[0];
             database.MaleFirstNames = new string[0];

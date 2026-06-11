@@ -49,6 +49,15 @@ namespace PaperShift.Presenter
         {
             Set(TitleText, pending.Event == null ? "事件" : pending.Event.DisplayName);
             Set(BodyText, pending.Event == null ? string.Empty : pending.Event.Body);
+            if (pending.Options == null || pending.Options.Length == 0)
+            {
+                ShowContinueOnly("继续", () =>
+                {
+                    Presenter.ContinuePendingEvent();
+                    RefreshAll();
+                });
+                return;
+            }
 
             for (var i = 0; i < OptionButtons.Length; i++)
             {
